@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Advanced Search</title>
+  <link rel="icon" type="image/png" href="../pictures/icon.png">
+  <link rel="stylesheet" href="../css/main-style.css">
+  <link rel="stylesheet" href="../css/footer.css">
+  <link rel="stylesheet" href="../css/widgets.css">
+  <link id="dark-mode-css" rel="stylesheet" href="../css/dark-mode.css" disabled>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+
+<body class="advanced-body">
+
+  <main>
+    <nav class="search-nav">
+      <div class="search-dropdown">
+        <span class="search-label">Search Options</span>
+
+        <div class="search-menu">
+          <a href="image.html">Image Search</a>
+          <a href="web.html">Web Search</a>
+        </div>
+      </div>
+    </nav>
+
+    <div id="widget-container"></div>
+
+    <div class="advanced-container">
+      <h3>Find pages containing:</h3>
+
+      <form action="https://www.google.com/search">
+        <div class="row">
+          <label for="all">All these words: </label>
+          <input class="search_bar" id="all" type="text" name="as_q" maxlength="50" autocomplete="off" />
+        </div>
+
+        <div class="row">
+          <label for="exact"> Exact word or phrase: </label>
+          <input class="search_bar" id="exact" type="text" name="as_epq" maxlength="50" autocomplete="off" />
+        </div>
+
+        <div class="row">
+          <label for="any"> Any of these words: </label>
+          <input class="search_bar" id="any" type="text" name="as_oq" maxlength="50" autocomplete="off" />
+        </div>
+
+        <div class="row">
+          <label for="none"> None of these words: </label>
+          <input class="search_bar" id="none" type="text" name="as_eq" maxlength="50" autocomplete="off" />
+        </div>
+
+        <input id="search_button" type="submit" value="Advanced Search" />
+      </form>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <span id="full-date"></span>
+
+    <div class="footer-right">
+
+      <!-- Widget Switcher -->
+      <div class="widget-dropdown">
+        <span class="widget-label">
+          <i class="fas fa-layer-group"></i> Widgets
+        </span>
+
+        <div class="widget-options">
+          <span onclick="setWidget('weather')">Weather</span>
+          <span onclick="setWidget('crypto')">Crypto</span>
+          <span onclick="setWidget('DailyTask')">Task</span>
+          <span onclick="setWidget('quick-links')">Quick links</span>
+          <span onclick="setWidget('ping')">Ping</span>
+        </div>
+      </div>
+
+      <!-- Theme Toggle -->
+      <button id="theme-toggle" aria-label="Toggle Dark/Light Mode">
+        <i id="theme-icon" class="fas fa-sun"></i>
+      </button>
+
+      <!-- Social -->
+      <div class="social-icons">
+        <a href="https://github.com/KooshaMajl" target="_blank" title="GitHub" rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/koosha-majlessi-3b609038b" target="_blank" title="LinkedIn" rel="noopener">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+
+</body>
+
+<script src="../js/footer.js"></script>
+<script src="../js/weather.js"></script>
+<script src="../js/crypto.js"></script>
+<script src="../js/DailyTask.js"></script>
+<script src="../js/ping.js"></script>
+
+
+<script>
+  let currentWidgetScript = null;
+
+  function setWidget(widgetName) {
+
+    const container = document.getElementById("widget-container");
+
+    fetch(`widgets/${widgetName}.html`)
+      .then(response => response.text())
+      .then(data => {
+
+        container.innerHTML = data;
+
+        const initFunctionName =
+          "init" + widgetName.charAt(0).toUpperCase() + widgetName.slice(1) + "Widget";
+
+        if (typeof window[initFunctionName] === "function") {
+          window[initFunctionName]();
+        }
+
+        localStorage.setItem("activeWidget", widgetName);
+      })
+      .catch(error => {
+        container.innerHTML = "Error loading widget";
+        console.error(error);
+      });
+  }
+
+  renderHistory();
+</script>
+
+</html>

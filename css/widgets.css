@@ -1,0 +1,406 @@
+#weather {
+  background: rgba(246, 244, 244, 0.25);
+  padding: 7px 10px;
+  color: #fff;
+  width: 140px;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+
+#weather #city {
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 4px;
+  margin-top: 8px;
+}
+
+#weather #temp {
+  font-weight: 600;
+  margin: 2px 0;
+}
+
+#weather #time {
+  opacity: 0.8;
+  font-size: 12px;
+}
+
+
+
+#weather:hover {
+  background: rgba(209, 221, 223, 0.265);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  transform: translateY(-0.3px) scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+@keyframes subtle-shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-3px);
+  }
+
+  50% {
+    transform: translateX(3px);
+  }
+
+  75% {
+    transform: translateX(-2px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.shake {
+  animation: subtle-shake 0.25s ease;
+}
+
+
+
+
+#pingWidget {
+  padding: 7px 10px;
+  color: #fff;
+  width: 140px;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#pingWidget:hover {
+  background: rgba(209, 221, 223, 0.265);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  transform: translateY(-0.3px) scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+
+.ping-title {
+  font-size: 12px;
+  opacity: .6;
+  letter-spacing: 1px;
+}
+
+.ping-divider {
+  height: 1px;
+  margin: 5px 0;
+  background: linear-gradient(to right,
+      rgba(204, 204, 204, 0.05),
+      rgba(204, 204, 204, 0.854),
+      rgba(204, 204, 204, 0.05));
+}
+
+
+.ping-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ping-info {
+  text-align: left;
+  margin: 3px 0;
+  line-height: 1.1;
+}
+
+.ping-icon {
+  background: #58a3c558;
+  border-radius: 5px;
+  padding: 2px 2.5px;
+  border: #425f761f solid 1.2px;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  margin-top: 2px;
+  font-size: 18px;
+  margin-right: 1.5px;
+}
+
+#pingValue {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#pingStatus {
+  font-size: 10px;
+  margin: 1px 0px;
+  opacity: 0.7;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.03);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.ping-animate {
+  animation: pulse .3s ease;
+}
+
+#tasksWidget {
+  padding: 7px 10px;
+  color: #fff;
+  width: 190px;
+  font-size: 13px;
+transition: transform 0.2s ease;
+}
+
+#tasksWidget:hover,
+#tasksWidget:focus-within {
+  transform: scale(1.07);
+}
+
+.tasks-divider {
+  height: 1px;
+  margin: 5px 0;
+  background: linear-gradient(to right,
+      rgba(204, 204, 204, 0.15),
+      rgba(204, 204, 204, 0.894),
+      rgba(204, 204, 204, 0.15));
+}
+
+.tasks-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+
+.tasks-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  opacity: .85;
+  overflow: hidden;
+}
+
+.task-text {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: default;
+  transition: all 0.25s ease;
+
+
+
+  font-family:
+    'Vazirmatn',
+    'Inter',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
+
+.task-item.done .task-text {
+  text-decoration: line-through;
+  opacity: 0.6;
+  color: #c8d0da;
+  letter-spacing: 0.3px;
+}
+
+
+.tasks-list input[type="checkbox"] {
+  accent-color: #062e62b1;
+}
+
+.tasks-list input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  color: inherit;
+  outline: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-item.done input[type="text"] {
+  text-decoration: line-through;
+}
+
+
+.task-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #062747;
+  opacity: .6;
+  flex-shrink: 0;
+  transition: transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+.task-delete:hover {
+  opacity: 0.8;
+  transform: scale(1.2);
+  transition: all 0.2s ease;
+}
+
+#taskInput {
+  width: 100%;
+  background: #0f568d1f;
+  border: 1px solid #1c1c1c27;
+  padding: 4px;
+  border-radius: 6px;
+  color: white;
+}
+
+.glass-widget input:focus {
+  outline: none;
+}
+
+.tasks-empty {
+  text-align: center;
+  font-size: 12px;
+  opacity: .6;
+  padding: 6px 0;
+}
+
+#taskInput.limit {
+  animation: shake .25s linear;
+}
+
+#taskInput::placeholder {
+  color: #07305889;
+}
+
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-3px);
+  }
+
+  50% {
+    transform: translateX(3px);
+  }
+
+  75% {
+    transform: translateX(-3px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+#quickLinks {
+  padding: 8px 12px;
+  color: #fff;
+  width: auto;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  transition: .2s ease;
+}
+
+#quickLinks:hover {
+  transform: scale(1.05);
+}
+
+#quickLinks a {
+  text-decoration: none;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  transition: transform 0.2s ease-in-out;
+}
+
+#quickLinks a:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+}
+
+
+
+#cryptoWidget {
+  color: #fff;
+  width: 140px;
+  padding: 5px 6px;
+  text-align: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#cryptoWidget:hover {
+  transform: translateY(-1.5px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+#cryptoName {
+  font-size: 9px;
+  margin: 0;
+  font-weight: 500;
+  color: #555961;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#cryptoPrice {
+  font-size: 18px;
+  font-weight: 500;
+  color: #161e2e;
+  opacity: 0.75;
+  margin: 2px 0 0 0;
+}
+
+#cryptoChange {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 1px 0 0 0;
+  opacity: 0.9;
+}
+
+.chart-container {
+  width: 100%;
+  height: 45px;
+  margin: 3px 0 0 0;
+  border-radius: 6px;
+  border: 1.2px solid #2755a02f;
+  background: rgba(0, 19, 36, 0.463);
+  box-shadow: 0 2px 8px rgba(184, 174, 174, 0.08);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.25s ease-in-out,
+    box-shadow 0.25s ease-in-out;
+}
+
+.chart-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-0.3px) scale(1.01);
+}
+
+#cryptoChart {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Web Search</title>
+  <link rel="icon" type="image/png" href="../pictures/icon.png">
+  <link rel="stylesheet" href="../css/main-style.css">
+  <link rel="stylesheet" href="../css/footer.css">
+  <link rel="stylesheet" href="../css/widgets.css">
+  <link rel="stylesheet" href="../css/history-search.css">
+  <link id="dark-mode-css" rel="stylesheet" href="../css/dark-mode.css" disabled>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+  <main>
+    <nav class="search-nav">
+      <div class="search-dropdown">
+        <span class="search-label">Search Options</span>
+
+        <div class="search-menu">
+          <a href="advanced.html">Advanced Search</a>
+          <a href="image.html">Image Search</a>
+        </div>
+      </div>
+    </nav>
+
+
+    <div id="widget-container"></div>
+
+    <div class="container">
+      <form id="searchForm">
+        <div class="search-wrapper">
+          <input id="searchInput" class="search_bar" placeholder="Search or enter a URL" type="text" maxlength="50"
+            autocomplete="off">
+          <button type="submit" class="Search-but" id="search_button">
+            <i class="fa-solid fa-magnifying-glass"></i> Search
+          </button>
+          <button type="button" id="toggleHistory" title="Shortcut: Ctrl+H">
+            <i class="fa-solid fa-clock-rotate-left"></i> History
+          </button>
+        </div>
+        <ul id="historyList"></ul>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <span id="full-date"></span>
+
+    <div class="footer-right">
+
+      <!-- Widget Switcher -->
+      <div class="widget-dropdown">
+        <span class="widget-label">
+          <i class="fas fa-layer-group"></i> Widgets
+        </span>
+
+        <div class="widget-options">
+          <span onclick="setWidget('weather')">Weather</span>
+          <span onclick="setWidget('crypto')">Crypto</span>
+          <span onclick="setWidget('DailyTask')">Task</span>
+          <span onclick="setWidget('quick-links')">Quick links</span>
+          <span onclick="setWidget('ping')">Ping</span>
+        </div>
+      </div>
+
+      <!-- Theme Toggle -->
+      <button id="theme-toggle" aria-label="Toggle Dark/Light Mode">
+        <i id="theme-icon" class="fas fa-sun"></i>
+      </button>
+
+      <!-- Social -->
+      <div class="social-icons">
+        <a href="https://github.com/KooshaMajl" target="_blank" title="GitHub" rel="noopener">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/koosha-majlessi-3b609038b" target="_blank" title="LinkedIn" rel="noopener">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+
+</body>
+
+<script src="../js/footer.js"></script>
+<script src="../js/weather.js"></script>
+<script src="../js/crypto.js"></script>
+<script src="../js/DailyTask.js"></script>
+<script src="../js/ping.js"></script>
+
+<script>
+  const form = document.getElementById("searchForm");
+  const searchInput = document.getElementById("searchInput");
+  const historyList = document.getElementById("historyList");
+  const toggleHistoryBtn = document.getElementById("toggleHistory");
+
+  searchInput.focus();
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const input = searchInput.value.trim();
+
+    if (!input) {
+      searchInput.classList.add("shake");
+      setTimeout(() => searchInput.classList.remove("shake"), 300);
+      return;
+    }
+
+    saveSearch(input);
+    renderHistory();
+
+    if (input.startsWith("http") || input.includes(".")) {
+      window.location.href = input.startsWith("http")
+        ? input
+        : "https://" + input;
+    } else {
+      window.location.href =
+        "https://www.google.com/search?q=" + encodeURIComponent(input);
+    }
+  });
+
+  function saveSearch(value) {
+    let history = JSON.parse(localStorage.getItem("history")) || [];
+    history.unshift(value);
+    history = [...new Set(history)];
+    history = history.slice(0, 5);
+    localStorage.setItem("history", JSON.stringify(history));
+  }
+
+  function renderHistory() {
+    const history = JSON.parse(localStorage.getItem("history")) || [];
+    historyList.innerHTML = "";
+
+    if (history.length === 0) {
+      const li = document.createElement("li");
+      li.textContent = "History is empty";
+      li.style.listStyle = "none";
+      li.style.opacity = "0.7";
+      li.style.cursor = "default";
+      historyList.appendChild(li);
+      return;
+    }
+
+    history.forEach((item, index) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+
+      li.addEventListener("click", () => {
+        searchInput.value = item;
+        form.requestSubmit();
+      });
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "×";
+      deleteBtn.className = "delete-btn";
+
+      deleteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        let current = JSON.parse(localStorage.getItem("history")) || [];
+        current.splice(index, 1);
+        localStorage.setItem("history", JSON.stringify(current));
+        renderHistory();
+      });
+
+      li.appendChild(deleteBtn);
+      historyList.appendChild(li);
+    });
+  }
+
+  toggleHistoryBtn.addEventListener("click", () => {
+    historyList.classList.toggle("show");
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === "h") {
+      e.preventDefault();
+      historyList.classList.toggle("show");
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (
+      historyList.classList.contains("show") &&
+      !historyList.contains(e.target) &&
+      !toggleHistoryBtn.contains(e.target) &&
+      !searchInput.contains(e.target)
+    ) {
+      historyList.classList.remove("show");
+    }
+  });
+
+  let currentWidgetScript = null;
+
+function setWidget(widgetName) {
+
+  const container = document.getElementById("widget-container");
+
+  fetch(`widgets/${widgetName}.html`)
+    .then(response => response.text())
+    .then(data => {
+
+      container.innerHTML = data;
+
+      const initFunctionName =
+        "init" + widgetName.charAt(0).toUpperCase() + widgetName.slice(1) + "Widget";
+
+      if (typeof window[initFunctionName] === "function") {
+        window[initFunctionName]();
+      }
+
+      localStorage.setItem("activeWidget", widgetName);
+    })
+    .catch(error => {
+      container.innerHTML = "Error loading widget";
+      console.error(error);
+    });
+}
+
+  renderHistory();
+
+</script>
+
+</html>
