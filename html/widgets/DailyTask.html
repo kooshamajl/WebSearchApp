@@ -1,16 +1,18 @@
 <div class="glass-widget" id="tasksWidget">
   <div class="tasks-header">
+    <i class="fa-solid fa-list-check" aria-hidden="true"></i>
     <span>Daily Tasks</span>
+    <span class="tasks-count" id="tasksCount"></span>
   </div>
 
   <div class="tasks-divider"></div>
 
   <ul class="tasks-list" id="tasksList"></ul>
 
-  <input class="task-input"
-    type="text"
-    id="taskInput"
-    placeholder="Add new task..."
-    maxlength="40"
-  />
+  <div class="task-input-row">
+    <input class="task-input" type="text" id="taskInput" placeholder="Add new task..." maxlength="40" />
+    <button type="button" class="task-add-btn" id="taskAddBtn" aria-label="Add task">
+      <i class="fa-solid fa-plus" aria-hidden="true"></i>
+    </button>
+  </div>
 </div>

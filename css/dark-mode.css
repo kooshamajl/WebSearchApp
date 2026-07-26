@@ -1,7 +1,14 @@
+/* ============================
+   Dark Mode Overrides
+   This stylesheet is loaded as a disabled <link> in every page's <head>
+   and toggled on/off by js/footer.js (see initFooter -> applyTheme).
+   It only needs to redefine the tokens/rules that actually differ from
+   the light theme in main-style.css.
+   ============================ */
 :root {
   --bg-main: #1e1f23;
   --text-main: #e0e0e0;
-  --text-soft: #a0a0a0;
+  --text-soft: #A9B7BD;
 
   --glass-light: rgba(50, 50, 50, 0.7);
   --glass-strong: rgba(40, 40, 40, 0.9);
@@ -14,12 +21,20 @@
   --footer-bg: rgba(60, 61, 61, 0.096);
   --footer-text: #e0e0e0;
 
+  --widget-text: #eef4f7;
+  --widget-text-muted: #a9bcc4;
+  --accent-rgb: 47, 64, 99;
+
   --advanced-bg: rgba(255, 255, 255, 0.1);
 
   --advanced-bg-dark: rgba(64, 64, 64, 0.85);
   --advanced-text: #f9f9fa;
   --advanced-placeholder: #9ca3af;
   --advanced-input-border: rgba(255, 255, 255, 0.1);
+
+  --success: #6FC7A9;
+  --warning: #E8B95F;
+  --danger: #E2807A;
 }
 
 body {
@@ -119,62 +134,53 @@ main {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.footer-links a {
-  color: var(--footer-text);
-}
-
-.footer-links a:hover {
-  background-color: rgba(255, 255, 255, 0.08);
-  color: #fff;
-}
-
 .social-icons a {
   color: var(--footer-text);
 }
 
 #theme-toggle {
-  background: linear-gradient(
-    145deg,
-    rgba(55, 72, 83, 0.429),
-    rgba(38, 51, 59, 0.395)
-  );}
+  background: linear-gradient(145deg,
+      rgba(55, 72, 83, 0.429),
+      rgba(38, 51, 59, 0.395));
+}
 
 #theme-toggle:hover {
-  background: linear-gradient(
-    145deg,
-    rgba(41, 53, 61, 0.461),
-    rgba(49, 66, 75, 0.34)
-  );}
+  background: linear-gradient(145deg,
+      rgba(41, 53, 61, 0.461),
+      rgba(49, 66, 75, 0.34));
+}
+
+
+.glass-widget {
+  background: rgba(246, 244, 244, 0.25);
+  border-color: transparent;
+}
 
 .widget-dropdown {
   display: inline-flex;
   align-items: center;
 
-  background: linear-gradient(
-    145deg,
-    rgba(33, 45, 57, 0.66),
-    rgba(48, 64, 76, 0.58)
-  );
+  background: linear-gradient(145deg,
+      rgba(33, 45, 57, 0.66),
+      rgba(48, 64, 76, 0.58));
 
   border: 1px solid rgba(120, 170, 200, 0.25);
 
 
   transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              background 0.3s ease,
-              border 0.3s ease,
-              box-shadow 0.3s ease;
+    background 0.3s ease,
+    border 0.3s ease,
+    box-shadow 0.3s ease;
 
-  box-shadow: 
+  box-shadow:
     0 6px 18px rgba(0, 0, 0, 0.45),
-    inset 0 0 0 1px rgba(255,255,255,0.04);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .widget-dropdown:hover {
-  background: linear-gradient(
-    145deg,
-    rgba(55, 72, 83, 0.429),
-    rgba(38, 51, 59, 0.395)
-  );
+  background: linear-gradient(145deg,
+      rgba(55, 72, 83, 0.429),
+      rgba(38, 51, 59, 0.395));
 
   border: 1px solid rgba(67, 103, 133, 0.45);
 }
@@ -230,33 +236,24 @@ main {
   outline: none;
 }
 
-.chart-container {
-  background-color: #606060;
-  border: 1.2px solid #00000011;
-}
-
-
-.ping-icon {
-  background: #5b5b5b41;
-  border: #425f761f solid 1.2px;
-}
-
-
-
-.tasks-list input[type="checkbox"] {
-  accent-color: #0000009c;
-}
-
 .task-delete {
-  color: #000000;
+  color: var(--danger);
 }
 
-#taskInput {
-  background: #36353579;
-  border: 1px solid #1c1c1c27;
-  color: white;
+.autocomplete-list {
+  background: rgba(40, 40, 40, 0.95);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-#taskInput::placeholder {
-  color: #a0a0a0;
+.autocomplete-list li {
+  color: var(--text-main);
+}
+
+.autocomplete-list li mark {
+  color: #8ecbe8;
+}
+
+.autocomplete-list li:hover,
+.autocomplete-list li.active {
+  background: rgba(107, 114, 128, 0.25);
 }

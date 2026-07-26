@@ -1,6 +1,8 @@
-const dateElem = document.getElementById("full-date");
-const now = new Date();
-let isPersian = true;
+/* ===============================
+   Footer Behavior
+   Handles the two interactive pieces of the footer: the date display
+   (Persian/Gregorian toggle) and the light/dark theme switch.
+   =============================== */
 
 const persianMonths = [
   "Farvardin", "Ordibehesht", "Khordad", "Tir",
@@ -16,97 +18,94 @@ function formatPersian(date) {
   const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const dayOfWeek = weekdays[date.getDay()];
 
-  const formatter = new Intl.DateTimeFormat('fa-IR', { 
+  const formatter = new Intl.DateTimeFormat('fa-IR', {
     calendar: 'persian',
     year: 'numeric',
     month: 'numeric',
     day: 'numeric'
   });
-  
+
   const formatted = formatter.format(date);
   const parts = formatted.split('/');
-  
+
   if (parts.length === 3) {
     const year = toEnglishNumber(parts[0]);
     const month = parseInt(toEnglishNumber(parts[1]), 10);
     const day = toEnglishNumber(parts[2]);
-    
+
     const monthName = persianMonths[month - 1] || "Farvardin";
-    
+
     return `${dayOfWeek}, ${day} ${monthName}, ${year}`;
   }
-  
+
   try {
-    const parts = new Intl.DateTimeFormat('en-US-u-ca-persian', { 
+    const parts = new Intl.DateTimeFormat('en-US-u-ca-persian', {
       year: 'numeric',
       month: 'numeric',
       day: 'numeric'
     }).formatToParts(date);
-    
+
     const year = parts.find(p => p.type === 'year')?.value || "1400";
     const month = parseInt(parts.find(p => p.type === 'month')?.value || "1", 10);
     const day = parts.find(p => p.type === 'day')?.value || "1";
     const monthName = persianMonths[month - 1] || "Farvardin";
-    
+
     return `${dayOfWeek}, ${day} ${monthName}, ${year}`;
   } catch (error) {
     return `${dayOfWeek}, 1 Farvardin, 1400`;
   }
 }
 
-
 function formatGregorian(date) {
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   return date.toLocaleDateString('en-US', options);
 }
 
-dateElem.textContent = formatPersian(now);
+/**
+ * Wires up all footer behavior (date toggle + theme toggle).
+ * Called by footer-loader.js once the footer markup has been injected into the page.
+ */
+function initFooter() {
+  const dateElem = document.getElementById("full-date");
+  const now = new Date();
+  let isPersian = true;
 
-dateElem.addEventListener("click", () => {
-  if (isPersian) {
-    dateElem.textContent = formatGregorian(now);
-  } else {
+  if (dateElem) {
     dateElem.textContent = formatPersian(now);
+
+    dateElem.addEventListener("click", () => {
+      dateElem.textContent = isPersian ? formatGregorian(now) : formatPersian(now);
+      isPersian = !isPersian;
+    });
   }
-  isPersian = !isPersian;
-});
 
+  const themeToggle = document.getElementById("theme-toggle");
+  const darkCss = document.getElementById("dark-mode-css");
+  const themeIcon = document.getElementById("theme-icon");
 
+  if (!themeToggle || !darkCss || !themeIcon) return;
 
+  /**
+   * Enables/disables the dark-mode stylesheet and updates the toggle
+   * icon. Also broadcasts a "themechange" event on `document` so other
+   * scripts (e.g. crypto.js) can redraw anything that reads CSS
+   * variables immediately, instead of waiting for their own next
+   * refresh cycle.
+   */
+  function applyTheme(isDark) {
+    darkCss.disabled = !isDark;
+    themeIcon.classList.toggle("fa-moon", isDark);
+    themeIcon.classList.toggle("fa-sun", !isDark);
+    themeIcon.style.color = isDark ? "#bdb6b6ff" : "#ffffffff";
+    themeIcon.style.transition = "color 0.5s ease";
+    document.dispatchEvent(new CustomEvent("themechange", { detail: { isDark } }));
+  }
 
-const themeToggle = document.getElementById("theme-toggle");
-const darkCss = document.getElementById("dark-mode-css");
-const themeIcon = document.getElementById("theme-icon");
+  applyTheme(localStorage.getItem("theme") === "dark");
 
-if (localStorage.getItem("theme") === "dark") {
-  darkCss.disabled = false;
-  themeIcon.classList.remove("fa-sun");
-  themeIcon.classList.add("fa-moon");
-  themeIcon.style.color = "#ccc";
-  themeIcon.style.transition = "color 0.5s ease";
-} else {
-  darkCss.disabled = true;
-  themeIcon.classList.remove("fa-moon");
-  themeIcon.classList.add("fa-sun");
-  themeIcon.style.color = "#ffffffff";
-  themeIcon.style.transition = "color 0.5s ease";
+  themeToggle.addEventListener("click", () => {
+    const goingDark = darkCss.disabled;
+    applyTheme(goingDark);
+    localStorage.setItem("theme", goingDark ? "dark" : "light");
+  });
 }
-
-themeToggle.addEventListener("click", () => {
-  if (darkCss.disabled) {
-    darkCss.disabled = false;
-    localStorage.setItem("theme", "dark");
-    themeIcon.classList.remove("fa-sun");
-    themeIcon.classList.add("fa-moon");
-    themeIcon.style.color = "#bdb6b6ff";
-    themeIcon.style.transition = "color 0.5s ease";
-  } else {
-    darkCss.disabled = true;
-    localStorage.setItem("theme", "light");
-    themeIcon.classList.remove("fa-moon");
-    themeIcon.classList.add("fa-sun");
-    themeIcon.style.color = "#ffffffff";
-    themeIcon.style.transition = "color 0.5s ease";
-  }
-});
-

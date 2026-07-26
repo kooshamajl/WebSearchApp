@@ -2,15 +2,22 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Image Search</title>
+  <meta name="description" content="Search Google Images directly from a clean, minimal search bar.">
   <link rel="icon" type="image/png" href="../pictures/icon.png">
   <link rel="stylesheet" href="../css/main-style.css" />
   <link rel="stylesheet" href="../css/footer.css" />
   <link rel="stylesheet" href="../css/widgets.css" />
   <link id="dark-mode-css" rel="stylesheet" href="../css/dark-mode.css" disabled>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/solid.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/brands.min.css">
 </head>
 
 <body>
@@ -33,52 +40,17 @@
         <input class="search_bar" type="text" name="q" placeholder="Search Google Images..." maxlength="50"
           autocomplete="off" /><br>
         <input type="hidden" name="tbm" value="isch" />
-        <input id="search_button" type="submit" value="Image Search" />
+        <button type="submit" id="search_button" class="search-but">
+          <i class="fa-solid fa-image"></i> Image Search
+        </button>
       </form>
     </div>
 
   </main>
 
-  <footer class="site-footer">
-    <span id="full-date"></span>
+  <div id="footer-placeholder"></div>
 
-    <div class="footer-right">
-
-      <!-- Widget Switcher -->
-      <div class="widget-dropdown">
-        <span class="widget-label">
-          <i class="fas fa-layer-group"></i> Widgets
-        </span>
-
-        <div class="widget-options">
-          <span onclick="setWidget('weather')">Weather</span>
-          <span onclick="setWidget('crypto')">Crypto</span>
-          <span onclick="setWidget('DailyTask')">Task</span>
-          <span onclick="setWidget('quick-links')">Quick links</span>
-          <span onclick="setWidget('ping')">Ping</span>
-        </div>
-      </div>
-
-      <!-- Theme Toggle -->
-      <button id="theme-toggle" aria-label="Toggle Dark/Light Mode">
-        <i id="theme-icon" class="fas fa-sun"></i>
-      </button>
-
-      <!-- Social -->
-      <div class="social-icons">
-        <a href="https://github.com/KooshaMajl" target="_blank" title="GitHub" rel="noopener">
-          <i class="fab fa-github"></i>
-        </a>
-        <a href="https://www.linkedin.com/in/koosha-majlessi-3b609038b" target="_blank" title="LinkedIn" rel="noopener">
-          <i class="fab fa-linkedin"></i>
-        </a>
-      </div>
-
-    </div>
-  </footer>
-
-</body>
-
+  
 <script>
   const form = document.querySelector("form");
   const searchInput = document.querySelector(".search_bar");
@@ -103,43 +75,13 @@
 
 
 <script src="../js/footer.js"></script>
+<script src="../js/footer-loader.js"></script>
+<script src="../js/widget-loader.js"></script>
 <script src="../js/weather.js"></script>
 <script src="../js/crypto.js"></script>
 <script src="../js/DailyTask.js"></script>
 <script src="../js/ping.js"></script>
 
-
-<script>
-  let currentWidgetScript = null;
-
-  function setWidget(widgetName) {
-
-    const container = document.getElementById("widget-container");
-
-    fetch(`widgets/${widgetName}.html`)
-      .then(response => response.text())
-      .then(data => {
-
-        container.innerHTML = data;
-
-        const initFunctionName =
-          "init" + widgetName.charAt(0).toUpperCase() + widgetName.slice(1) + "Widget";
-
-        if (typeof window[initFunctionName] === "function") {
-          window[initFunctionName]();
-        }
-
-        localStorage.setItem("activeWidget", widgetName);
-      })
-      .catch(error => {
-        container.innerHTML = "Error loading widget";
-        console.error(error);
-      });
-  }
-
-  renderHistory();
-</script>
-
-
+</body>
 
 </html>

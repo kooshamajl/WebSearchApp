@@ -1,14 +1,21 @@
+/* ============================
+   Widget Styles
+   Each widget (weather, ping, tasks, crypto, quick links) is loaded into
+   #widget-container by js/widget-loader.js and shares the base
+   .glass-widget look defined in main-style.css.
+   ============================ */
+
+/* ---------- Weather Widget ---------- */
 #weather {
   background: rgba(246, 244, 244, 0.25);
   padding: 7px 10px;
-  color: #fff;
+  color: var(--widget-text);
   width: 140px;
   text-align: center;
   font-size: 14px;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
-
 
 #weather #city {
   font-weight: 500;
@@ -23,51 +30,32 @@
 }
 
 #weather #time {
-  opacity: 0.8;
+  opacity: 0.75;
   font-size: 12px;
 }
 
-
-
 #weather:hover {
   background: rgba(209, 221, 223, 0.265);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   transform: translateY(-0.3px) scale(1.02);
-  transition: transform 0.3s ease;
 }
 
 @keyframes subtle-shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-3px);
-  }
-
-  50% {
-    transform: translateX(3px);
-  }
-
-  75% {
-    transform: translateX(-2px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
 }
 
 .shake {
   animation: subtle-shake 0.25s ease;
 }
 
-
-
-
+/* ---------- Ping / Connection Widget ---------- */
 #pingWidget {
   padding: 7px 10px;
-  color: #fff;
+  color: var(--widget-text);
   width: 140px;
   text-align: center;
   font-size: 14px;
@@ -76,16 +64,13 @@
 }
 
 #pingWidget:hover {
-  background: rgba(209, 221, 223, 0.265);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
   transform: translateY(-0.3px) scale(1.02);
-  transition: transform 0.3s ease;
 }
-
 
 .ping-title {
   font-size: 12px;
-  opacity: .6;
+  opacity: .65;
   letter-spacing: 1px;
 }
 
@@ -93,11 +78,10 @@
   height: 1px;
   margin: 5px 0;
   background: linear-gradient(to right,
-      rgba(204, 204, 204, 0.05),
-      rgba(204, 204, 204, 0.854),
-      rgba(204, 204, 204, 0.05));
+      transparent,
+      rgba(var(--accent-rgb), 0.4),
+      transparent);
 }
-
 
 .ping-row {
   display: flex;
@@ -113,11 +97,10 @@
 }
 
 .ping-icon {
-  background: #58a3c558;
-  border-radius: 5px;
+  background: rgba(var(--accent-rgb), 0.18);
+  border-radius: var(--radius-sm);
   padding: 2px 2.5px;
-  border: #425f761f solid 1.2px;
-  text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  border: 1.2px solid rgba(var(--accent-rgb), 0.3);
   margin-top: 2px;
   font-size: 18px;
   margin-right: 1.5px;
@@ -131,47 +114,65 @@
 #pingStatus {
   font-size: 10px;
   margin: 1px 0px;
-  opacity: 0.7;
+  opacity: 0.75;
 }
 
 @keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.03);
-  }
-
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
 }
 
 .ping-animate {
   animation: pulse .3s ease;
 }
 
+/* ---------- Daily Task Widget ---------- */
 #tasksWidget {
-  padding: 7px 10px;
-  color: #fff;
-  width: 190px;
-  font-size: 13px;
-transition: transform 0.2s ease;
+  padding: 6px 8px;
+  color: var(--widget-text);
+  width: 155px;
+  font-size: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease, height 0.2s ease;
 }
 
 #tasksWidget:hover,
 #tasksWidget:focus-within {
-  transform: scale(1.07);
+  transform: scale(1.04);
+}
+
+.tasks-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--widget-text);
+  padding: 0 2px;
+}
+
+.tasks-header i {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.tasks-count {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.6;
 }
 
 .tasks-divider {
   height: 1px;
   margin: 5px 0;
   background: linear-gradient(to right,
-      rgba(204, 204, 204, 0.15),
-      rgba(204, 204, 204, 0.894),
-      rgba(204, 204, 204, 0.15));
+      transparent,
+      currentColor,
+      transparent);
+  opacity: 0.18;
 }
 
 .tasks-list {
@@ -198,8 +199,6 @@ transition: transform 0.2s ease;
   cursor: default;
   transition: all 0.25s ease;
 
-
-
   font-family:
     'Vazirmatn',
     'Inter',
@@ -211,59 +210,83 @@ transition: transform 0.2s ease;
 
 .task-item.done .task-text {
   text-decoration: line-through;
-  opacity: 0.6;
-  color: #c8d0da;
+  opacity: 0.55;
+  color: var(--widget-text-muted);
   letter-spacing: 0.3px;
 }
 
-
 .tasks-list input[type="checkbox"] {
-  accent-color: #062e62b1;
+  accent-color: var(--accent);
 }
-
-.tasks-list input[type="text"] {
-  flex: 1;
-  min-width: 0;
-  background: transparent;
-  border: none;
-  color: inherit;
-  outline: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.task-item.done input[type="text"] {
-  text-decoration: line-through;
-}
-
 
 .task-delete {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 14px;
-  color: #062747;
-  opacity: .6;
+  color: var(--danger);
+  opacity: .7;
   flex-shrink: 0;
   transition: transform 0.2s ease,
     opacity 0.2s ease;
 }
 
-
 .task-delete:hover {
-  opacity: 0.8;
-  transform: scale(1.2);
+  opacity: 1;
+  transform: scale(1.15);
   transition: all 0.2s ease;
+}
+
+.task-input-row {
+  position: relative;
+  margin-top: 4px;
 }
 
 #taskInput {
   width: 100%;
-  background: #0f568d1f;
-  border: 1px solid #1c1c1c27;
-  padding: 4px;
-  border-radius: 6px;
-  color: white;
+  background: rgba(var(--accent-rgb), 0.3);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
+  border-radius: var(--radius-pill);
+  padding: 5px 30px 5px 12px;
+  color: var(--widget-text);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+#taskInput:focus {
+  border-color: rgba(var(--accent-rgb), 0.5);
+  background: rgba(var(--accent-rgb), 0.45);
+}
+
+.task-add-btn {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  width: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.3px solid rgba(var(--accent-rgb), 0.55);
+  border-radius: 50%;
+  background: rgba(var(--accent-rgb), 0.5);
+  color: var(--widget-text);
+  cursor: pointer;
+  font-size: 9px;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.task-add-btn:hover:not(:disabled) {
+  background: rgba(var(--accent-rgb), 0.7);
+  border-color: rgba(var(--accent-rgb), 0.5);
+}
+
+.task-add-btn:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.task-add-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 .glass-widget input:focus {
@@ -271,10 +294,19 @@ transition: transform 0.2s ease;
 }
 
 .tasks-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   text-align: center;
   font-size: 12px;
-  opacity: .6;
-  padding: 6px 0;
+  opacity: .55;
+  padding: 8px 0;
+}
+
+.tasks-empty i {
+  font-size: 16px;
+  opacity: 0.6;
 }
 
 #taskInput.limit {
@@ -282,35 +314,22 @@ transition: transform 0.2s ease;
 }
 
 #taskInput::placeholder {
-  color: #07305889;
+  color: var(--widget-text-muted);
+  opacity: 0.7;
 }
-
 
 @keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-3px);
-  }
-
-  50% {
-    transform: translateX(3px);
-  }
-
-  75% {
-    transform: translateX(-3px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  50% { transform: translateX(3px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
 }
 
+/* ---------- Quick Links Widget ---------- */
 #quickLinks {
   padding: 8px 12px;
-  color: #fff;
+  color: var(--widget-text);
   width: auto;
   display: flex;
   gap: 8px;
@@ -328,21 +347,20 @@ transition: transform 0.2s ease;
   text-decoration: none;
   font-size: 12px;
   padding: 6px 10px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
-  transition: transform 0.2s ease-in-out;
+  border-radius: var(--radius-sm);
+  background: rgba(var(--accent-rgb), 0.14);
+  color: var(--widget-text);
+  transition: transform 0.2s ease-in-out, background 0.2s ease;
 }
 
 #quickLinks a:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(var(--accent-rgb), 0.28);
   transform: translateY(-2px);
 }
 
-
-
+/* ---------- Crypto (Neon Chart) Widget ---------- */
 #cryptoWidget {
-  color: #fff;
+  color: var(--widget-text);
   width: 140px;
   padding: 5px 6px;
   text-align: center;
@@ -360,16 +378,21 @@ transition: transform 0.2s ease;
   font-size: 9px;
   margin: 0;
   font-weight: 500;
-  color: #555961;
+  color: var(--widget-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+#cryptoName.demo-label {
+  color: var(--warning);
+  opacity: 0.9;
 }
 
 #cryptoPrice {
   font-size: 18px;
   font-weight: 500;
-  color: #161e2e;
-  opacity: 0.75;
+  color: var(--widget-text);
+  opacity: 0.9;
   margin: 2px 0 0 0;
 }
 
@@ -377,17 +400,20 @@ transition: transform 0.2s ease;
   font-size: 12px;
   font-weight: 600;
   margin: 1px 0 0 0;
-  opacity: 0.9;
+  opacity: 0.95;
 }
+
+#cryptoChange.trend-up   { color: var(--neon-success); }
+#cryptoChange.trend-down { color: var(--neon-danger); }
 
 .chart-container {
   width: 100%;
   height: 45px;
   margin: 3px 0 0 0;
-  border-radius: 6px;
-  border: 1.2px solid #2755a02f;
-  background: rgba(0, 19, 36, 0.463);
-  box-shadow: 0 2px 8px rgba(184, 174, 174, 0.08);
+  border-radius: var(--radius-sm);
+  border: 1.2px solid rgba(var(--accent-rgb), 0.3);
+  background: rgba(14, 28, 40, 0.45);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   position: relative;
   transition: transform 0.25s ease-in-out,
@@ -395,7 +421,7 @@ transition: transform 0.2s ease;
 }
 
 .chart-container:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   transform: translateY(-0.3px) scale(1.01);
 }
 
@@ -403,4 +429,13 @@ transition: transform 0.2s ease;
   display: block;
   width: 100%;
   height: 100%;
+}
+
+#widget-container .glass-widget {
+  animation: widget-fade-in 0.25s ease;
+}
+
+@keyframes widget-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
 }

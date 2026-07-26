@@ -1,88 +1,114 @@
+/* ===============================
+   Connection (Ping) Widget
+   Estimates network latency by timing a small, cached-bypassed request
+   to a public CDN file, since there's no backend of our own to ping.
+   =============================== */
+
+/**
+ * Times a no-cors fetch to a public CDN asset and returns the elapsed
+ * time in milliseconds, or "Offline" if it times out / fails.
+ * `mode: "no-cors"` means we can't read the response body or status,
+ * but we don't need to -- only the round-trip time matters here.
+ */
 async function pingFetch() {
-    try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 4000);
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 4000);
 
-        const start = performance.now();
+    const start = performance.now();
 
-        await fetch(
-            "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css",
-            {
-                cache: "no-store",
-                mode: "no-cors",
-                signal: controller.signal
-            }
-        );
+    await fetch(
+      "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css",
+      {
+        cache: "no-store",
+        mode: "no-cors",
+        signal: controller.signal
+      }
+    );
 
-        const end = performance.now();
-        clearTimeout(timeout);
+    const end = performance.now();
+    clearTimeout(timeout);
 
-        return Math.round(end - start);
-    } catch (e) {
-        return "Offline";
-    }
+    return Math.round(end - start);
+  } catch (e) {
+    return "Offline";
+  }
 }
 
-function getColor(ping) {
-    if (typeof ping !== "number") return "#777";
-    if (ping < 150) return "#00ff9d";
-    if (ping < 300) return "#f9d000";
-    return "#ff5b5b";
+/** Maps a ping value to the CSS class used to color the widget. */
+function getPingClass(ping) {
+  if (typeof ping !== "number") return "ping-offline";
+  if (ping < 150) return "ping-good";
+  if (ping < 300) return "ping-warn";
+  return "ping-bad";
 }
 
+/** Maps a ping value to a short human-readable status label. */
 function getStatus(ping) {
-    if (typeof ping !== "number") return "Offline";
-    if (ping < 100) return "Excellent";
-    if (ping < 300) return "Normal";
-    return "Bad";
+  if (typeof ping !== "number") return "Offline";
+  if (ping < 100) return "Excellent";
+  if (ping < 300) return "Normal";
+  return "Bad";
 }
 
+/**
+ * Icon for the current connection state. Font Awesome's free tier only
+ * ships one wifi glyph, so "good" and "warn" intentionally share it --
+ * the color (via getPingClass) is what communicates severity.
+ */
 function getIcon(ping) {
-    if (typeof ping !== "number") return "fa-solid fa-wifi-slash";
-    if (ping < 100) return "fa-solid fa-wifi";
-    if (ping < 300) return "fa-solid fa-wifi";
-    return "fa-solid fa-wifi";
+  return typeof ping === "number" ? "fa-solid fa-wifi" : "fa-solid fa-triangle-exclamation";
 }
 
+/**
+ * Runs a ping check and updates the widget's value/status/icon,
+ * replaying a small "pulse" animation on every refresh.
+ */
 async function updatePing() {
-    const el = document.getElementById("pingValue");
-    const icon = document.getElementById("pingIcon");
-    const status = document.getElementById("pingStatus");
+  const el = document.getElementById("pingValue");
+  const icon = document.getElementById("pingIcon");
+  const status = document.getElementById("pingStatus");
 
-    if (!el || !icon || !status) return;
+  if (!el || !icon || !status) return;
 
-    const ping = await pingFetch();
+  const ping = await pingFetch();
 
-    if (typeof ping === "number") {
-        const safePing = Math.min(ping, 999);
+  const applyClass = (cls) => {
+    [el, icon, status].forEach(node => {
+      node.classList.remove("ping-good", "ping-warn", "ping-bad", "ping-offline");
+      node.classList.add(cls);
+    });
+  };
 
-        el.textContent = safePing + " ms";
-        status.textContent = getStatus(safePing);
-        icon.className = getIcon(safePing);
+  if (typeof ping === "number") {
+    const safePing = Math.min(ping, 999);
 
-        const color = getColor(safePing);
-        el.style.color = color;
-        el.style.opacity = 0.9;
-        icon.style.color = color;
-        icon.style.opacity = 0.7;
-        status.style.color = color;
-        status.style.opacity = 0.8;
-    } 
-    else {
-        el.textContent = "Offline";
-        status.textContent = "Disconnected";
-        icon.className = getIcon(ping);
-        el.style.color = "#777";
-        icon.style.color = "#777";
-        status.style.color = "#777";
-    }
+    el.textContent = safePing + " ms";
+    status.textContent = getStatus(safePing);
+    icon.className = getIcon(safePing);
+    applyClass(getPingClass(safePing));
+  } else {
+    el.textContent = "Offline";
+    status.textContent = "Disconnected";
+    icon.className = getIcon(ping);
+    applyClass("ping-offline");
+  }
 
-    el.classList.remove("ping-animate");
-    void el.offsetWidth;
-    el.classList.add("ping-animate");
+  // Re-trigger the CSS pulse animation by removing and re-adding the class.
+  el.classList.remove("ping-animate");
+  void el.offsetWidth;
+  el.classList.add("ping-animate");
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    updatePing();
-    setInterval(updatePing, 4000);
-});
+let pingIntervalId;
+
+/**
+ * Entry point called by widget-loader.js once ping.html has been
+ * injected into #widget-container.
+ */
+function initPingWidget() {
+  updatePing();
+
+  if (pingIntervalId) clearInterval(pingIntervalId);
+  pingIntervalId = setInterval(updatePing, 4000);
+}

@@ -1,3 +1,8 @@
+/* ============================
+   Site Footer
+   Markup for this is injected at runtime from html/partials/footer.html
+   by js/footer-loader.js, then wired up by js/footer.js.
+   ============================ */
 .footer-right {
   display: flex;
   align-items: center;
@@ -8,7 +13,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 13px 24px;
+  padding: 14px 24px;
   font-size: 14px;
   color: #eee;
   background: rgba(87, 86, 86, 0.137);
@@ -24,27 +29,6 @@
   backdrop-filter: blur(10px) saturate(120%);
   -webkit-backdrop-filter: blur(10px) saturate(120%);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-}
-
-
-.footer-links {
-  margin-left: auto;
-  display: flex;
-  gap: 10px;
-}
-
-.footer-links a {
-  background-color: rgba(106, 104, 104, 0.6);
-  color: #fff;
-  padding: 7px 10px;
-  border-radius: 12px;
-  text-decoration: none;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.footer-links a:hover {
-  background-color: rgba(170, 169, 169, 0.655);
-  color: #313131;
 }
 
 #full-date {
@@ -63,8 +47,8 @@
   display: inline-flex;
   align-items: center;
 
-  background: rgba(75, 138, 180, 0.35);
-  border: 1px solid rgba(120, 150, 170, 0.6);
+  background: rgba(83, 146, 188, 0.35);
+  border: 0.8px solid rgba(107, 145, 171, 0.6);
 
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.08) inset;
@@ -72,7 +56,7 @@
   -webkit-backdrop-filter: blur(6px) saturate(150%);
 
   border-radius: 8px;
-  padding: 6px 12px;
+  padding: 5px 10px;
   overflow: hidden;
   white-space: nowrap;
 
@@ -84,8 +68,14 @@
 
 .widget-dropdown:hover {
   max-width: 600px;
-  background: rgba(96, 176, 196, 0.15);
+  background: rgba(108, 197, 219, 0.15);
   border: 1px solid rgba(96, 176, 196, 0.35);
+}
+
+.widget-options span.active-widget {
+  color: #fff;
+  font-weight: 600;
+  background: rgba(96, 176, 196, 0.4);
 }
 
 .widget-label {
@@ -129,9 +119,11 @@
     color 0.25s ease;
 }
 
-.widget-options span:hover {
+.widget-options span:hover,
+.widget-options span:focus-visible {
   background-color: rgba(96, 176, 196, 0.45);
   color: #326060;
+  outline: none;
 }
 
 .social-icons {
@@ -151,6 +143,8 @@
 }
 
 #theme-toggle {
+  height: 32px;
+  width: 32px;
   background: rgba(75, 138, 180, 0.35);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.08) inset;
@@ -161,7 +155,6 @@
   cursor: pointer;
   font-size: 20px;
   color: #888;
-  padding: 5px 6px;
   transition: color 0.3s ease, transform 0.3s ease, background 0.3s ease;
 }
 

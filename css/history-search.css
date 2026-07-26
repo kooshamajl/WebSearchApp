@@ -1,5 +1,9 @@
+/* ============================
+   Search History Button + Dropdown
+   Rendered/updated by js/search.js (renderHistory / saveSearch).
+   ============================ */
 #toggleHistory {
-  background: #7FA6BC;
+  background: #6e8fa3;
   border-radius: 80px;
   border: 1px solid rgba(255, 255, 255, 0.01);
   color: #fff;
@@ -13,7 +17,7 @@
 }
 
 #toggleHistory:hover {
-  background: #739BB1;
+  background: #648699ef;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   transform: translateY(-1.5px) scale(1.02);
 }
@@ -28,7 +32,7 @@
   list-style-position: inside;
   padding: 4px;
   margin-top: 10px;
-  margin-left: 94.5px;
+  margin-left: 144px;
   max-width: 240px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 14px;
@@ -76,6 +80,12 @@
   transform: translateX(0.5px);
 }
 
+#historyList li:focus-visible {
+  outline: 2px solid var(--color-accent, #5b7d92);
+  outline-offset: -2px;
+  background: rgba(138, 204, 251, 0.25);
+}
+
 .delete-btn {
   float: right;
   border: none;
@@ -102,4 +112,102 @@
 .delete-btn:active {
   background: rgba(255, 75, 75, 0.35);
   color: #ff2a2a;
+}
+
+/* ============================
+   Autocomplete Dropdown
+   ============================ */
+.search-input-wrap {
+  position: relative;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+
+  transition: max-height 0.25s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+.autocomplete-list.show {
+  max-height: 260px;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.autocomplete-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 14px;
+  text-align: left;
+  color: #444;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.autocomplete-list .ac-icon {
+  flex: none;
+  width: 14px;
+  font-size: 12px;
+  opacity: 0.55;
+}
+
+.autocomplete-list .ac-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.autocomplete-list .ac-url {
+  flex: none;
+  font-size: 12px;
+  opacity: 0.5;
+  white-space: nowrap;
+}
+
+.autocomplete-list li mark {
+  background: transparent;
+  color: var(--color-accent, #5b7d92);
+  font-weight: 600;
+}
+
+.autocomplete-list li:hover,
+.autocomplete-list li.active {
+  background: rgba(138, 204, 251, 0.25);
+}
+
+/* ============================
+   Responsive Adjustments
+   ============================ */
+@media (max-width: 600px) {
+  /* #historyList uses a fixed 144px left margin to sit roughly under the
+     "History" button on desktop. Once .search-wrapper wraps its items on
+     narrow screens that fixed offset no longer lines up with anything,
+     so we drop it and just center the dropdown instead. */
+  #historyList {
+    margin-left: 0;
+    max-width: calc(100vw - 32px);
+  }
 }
