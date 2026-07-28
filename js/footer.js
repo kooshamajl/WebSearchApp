@@ -61,21 +61,45 @@ function formatGregorian(date) {
   return date.toLocaleDateString('en-US', options);
 }
 
+function formatTime(date) {
+  return date.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+}
+
 /**
  * Wires up all footer behavior (date toggle + theme toggle).
  * Called by footer-loader.js once the footer markup has been injected into the page.
  */
 function initFooter() {
   const dateElem = document.getElementById("full-date");
-  const now = new Date();
+  const dateCard = document.querySelector(".footer-date-card");
+  const timeElem = document.getElementById("full-time");
   let isPersian = true;
 
-  if (dateElem) {
-    dateElem.textContent = formatPersian(now);
+  function updateClock() {
+    const now = new Date();
 
-    dateElem.addEventListener("click", () => {
-      dateElem.textContent = isPersian ? formatGregorian(now) : formatPersian(now);
+    if (timeElem) {
+      timeElem.textContent = formatTime(now);
+    }
+
+    if (dateElem) {
+      dateElem.textContent = isPersian
+        ? formatPersian(now)
+        : formatGregorian(now);
+    }
+  }
+
+  if (dateElem) {
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    dateCard.addEventListener("click", () => {
       isPersian = !isPersian;
+      updateClock();
     });
   }
 

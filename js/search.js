@@ -345,6 +345,17 @@
     }
   });
 
+
+  // Focus the search input via the "/" keyboard shortcut.
+  document.addEventListener("keydown", (e) => {
+  if (e.key === "/" && document.activeElement !== searchInput) {
+    e.preventDefault();
+    searchInput.focus();
+  }
+  });
+
+
+
   // Close either dropdown when the user clicks outside of it.
   document.addEventListener("click", (e) => {
     if (

@@ -4,7 +4,19 @@
   toggle, theme toggle) is wired up afterwards by js/footer.js.
 -->
 <footer class="site-footer">
-  <span id="full-date"></span>
+  <div class="footer-left">
+
+    <div class="footer-date-card" tabindex="0">
+      <i class="fa-solid fa-calendar-days"></i>
+      <span id="full-date"></span>
+    </div>
+
+    <div class="footer-time-card">
+      <i class="fa-solid fa-clock"></i>
+      <span id="full-time"></span>
+    </div>
+
+  </div>
 
   <div class="footer-right">
 
@@ -27,6 +39,10 @@
     <button id="theme-toggle" aria-label="Toggle Dark/Light Mode">
       <i id="theme-icon" class="fas fa-sun"></i>
     </button>
+
+    
+    <div class="footer-divider-vertical"></div>
+
 
     <!-- Social -->
     <div class="social-icons">
