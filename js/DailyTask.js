@@ -54,7 +54,11 @@ function initDailyTaskWidget() {
 
   function addTask() {
     const value = input.value.trim();
-    if (!value || tasks.length >= MAX_TASKS) return;
+    if (!value || tasks.length >= MAX_TASKS) {
+      input.classList.add("limit");
+      setTimeout(() => input.classList.remove("limit"), 250);
+      return;
+    }
 
     tasks.push({ text: value, done: false });
     input.value = "";

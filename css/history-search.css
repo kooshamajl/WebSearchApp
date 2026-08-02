@@ -11,9 +11,9 @@
   height: 48px;
   margin-top: 50px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 400;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
-  transition: box-shadow 0.3s ease, transform 0.3s ease, background 0.3s ease;
+  transition: box-shadow var(--transition-med), transform var(--transition-med), background var(--transition-med);
 }
 
 #toggleHistory:hover {
@@ -45,8 +45,8 @@
 
   transition:
     max-height 0.4s ease,
-    opacity 0.2s ease,
-    transform 0.2s ease;
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 #historyList.show {
@@ -68,7 +68,7 @@
   margin-left: -1px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 12px;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background var(--transition-fast), transform var(--transition-fast);
 }
 
 #historyList li:last-child {
@@ -101,7 +101,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
 }
 
 .delete-btn:hover {
@@ -142,7 +142,7 @@
   transform: translateY(-6px);
   pointer-events: none;
 
-  transition: max-height 0.25s ease, opacity 0.2s ease, transform 0.2s ease;
+  transition: max-height 0.25s ease, opacity var(--transition-fast), transform var(--transition-fast);
 }
 
 .autocomplete-list.show {
@@ -209,5 +209,13 @@
   #historyList {
     margin-left: 0;
     max-width: calc(100vw - 32px);
+  }
+
+  /* This file loads after main-style.css, so its unconditional
+     margin-top: 50px on #toggleHistory (same ID-selector specificity)
+     would otherwise win the cascade and override main-style.css's mobile
+     reset there, leaving History out of line with the Search button. */
+  #toggleHistory {
+    margin-top: 0;
   }
 }

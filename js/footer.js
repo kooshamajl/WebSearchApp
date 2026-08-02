@@ -18,15 +18,15 @@ function formatPersian(date) {
   const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const dayOfWeek = weekdays[date.getDay()];
 
-  const formatter = new Intl.DateTimeFormat('fa-IR', {
-    calendar: 'persian',
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric'
+  const formatter = new Intl.DateTimeFormat("fa-IR", {
+    calendar: "persian",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric"
   });
 
   const formatted = formatter.format(date);
-  const parts = formatted.split('/');
+  const parts = formatted.split("/");
 
   if (parts.length === 3) {
     const year = toEnglishNumber(parts[0]);
@@ -39,15 +39,15 @@ function formatPersian(date) {
   }
 
   try {
-    const parts = new Intl.DateTimeFormat('en-US-u-ca-persian', {
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric'
+    const parts = new Intl.DateTimeFormat("en-US-u-ca-persian", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric"
     }).formatToParts(date);
 
-    const year = parts.find(p => p.type === 'year')?.value || "1400";
-    const month = parseInt(parts.find(p => p.type === 'month')?.value || "1", 10);
-    const day = parts.find(p => p.type === 'day')?.value || "1";
+    const year = parts.find(p => p.type === "year")?.value || "1400";
+    const month = parseInt(parts.find(p => p.type === "month")?.value || "1", 10);
+    const day = parts.find(p => p.type === "day")?.value || "1";
     const monthName = persianMonths[month - 1] || "Farvardin";
 
     return `${dayOfWeek}, ${day} ${monthName}, ${year}`;
@@ -57,8 +57,8 @@ function formatPersian(date) {
 }
 
 function formatGregorian(date) {
-  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString('en-US', options);
+  const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+  return date.toLocaleDateString("en-US", options);
 }
 
 function formatTime(date) {
@@ -122,6 +122,7 @@ function initFooter() {
     themeIcon.classList.toggle("fa-sun", !isDark);
     themeIcon.style.color = isDark ? "#bdb6b6ff" : "#ffffffff";
     themeIcon.style.transition = "color 0.5s ease";
+    themeToggle.setAttribute("aria-pressed", String(isDark));
     document.dispatchEvent(new CustomEvent("themechange", { detail: { isDark } }));
   }
 

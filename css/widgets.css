@@ -7,18 +7,18 @@
 
 /* ---------- Weather Widget ---------- */
 #weather {
-  background: rgba(246, 244, 244, 0.25);
-  padding: 7px 10px;
-  color: var(--widget-text);
   width: 140px;
   text-align: center;
   font-size: 14px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition:
+    box-shadow var(--transition-med),
+    transform var(--transition-med);
+
 }
 
 #weather #city {
-  font-weight: 500;
+  font-weight: 400;
   font-size: 14px;
   margin-bottom: 4px;
   margin-top: 8px;
@@ -32,12 +32,6 @@
 #weather #time {
   opacity: 0.75;
   font-size: 12px;
-}
-
-#weather:hover {
-  background: rgba(209, 221, 223, 0.265);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-  transform: translateY(-0.3px) scale(1.02);
 }
 
 @keyframes subtle-shake {
@@ -68,23 +62,18 @@
 
 /* ---------- Ping / Connection Widget ---------- */
 #pingWidget {
-  padding: 7px 10px;
-  color: var(--widget-text);
   width: 140px;
   text-align: center;
   font-size: 14px;
   cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-#pingWidget:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-  transform: translateY(-0.3px) scale(1.02);
+  transition:
+    box-shadow var(--transition-med),
+    transform var(--transition-med);
 }
 
 .ping-title {
   font-size: 12px;
-  opacity: .65;
+  opacity: .78;
   letter-spacing: 1px;
 }
 
@@ -154,17 +143,14 @@
 
 /* ---------- Daily Task Widget ---------- */
 #tasksWidget {
-  padding: 6px 8px;
-  color: var(--widget-text);
   width: 155px;
   font-size: 12px;
   overflow: hidden;
-  transition: transform 0.2s ease, height 0.2s ease;
-}
+  transition:
+    height var(--transition-fast),
+    box-shadow var(--transition-med),
+    transform var(--transition-med);
 
-#tasksWidget:hover,
-#tasksWidget:focus-within {
-  transform: scale(1.04);
 }
 
 .tasks-header {
@@ -186,7 +172,7 @@
 .tasks-count {
   margin-left: auto;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 400;
   opacity: 0.6;
 }
 
@@ -222,8 +208,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: default;
-  transition: all 0.25s ease;
-
+  transition:
+    opacity .25s ease,
+    letter-spacing .25s ease,
+    color .25s ease;
+    
   font-family:
     'Vazirmatn',
     'Inter',
@@ -241,7 +230,7 @@
 }
 
 .tasks-list input[type="checkbox"] {
-  accent-color: var(--accent);
+  accent-color: var(--color-accent);
 }
 
 .task-delete {
@@ -252,14 +241,14 @@
   color: var(--danger);
   opacity: .85;
   flex-shrink: 0;
-  transition: transform 0.2s ease,
-    opacity 0.2s ease;
+  transition:
+    transform var(--transition-fast),
+    opacity var(--transition-fast);
 }
 
 .task-delete:hover {
   opacity: 1;
-  transform: scale(1.15);
-  transition: all 0.2s ease;
+  transform: scale(1.1);
 }
 
 .task-input-row {
@@ -270,7 +259,7 @@
 #taskInput {
   width: 100%;
   padding: 5px 30px 5px 12px;
-  color: #333;
+  color: var(--widget-text);
   font-size: 12px;
   border-radius: 20px;
 
@@ -319,7 +308,7 @@
   border: 1px solid rgba(181, 230, 255, 0.4);
   cursor: pointer;
   font-size: 9px;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  transition: background var(--transition-fast), border-color var(--transition-fast), transform 0.15s ease;
 }
 
 .task-add-btn:hover:not(:disabled) {
@@ -361,7 +350,7 @@
 }
 
 #taskInput.limit {
-  animation: shake .25s linear;
+  animation: subtle-shake .25s linear;
 }
 
 #taskInput::placeholder {
@@ -369,53 +358,28 @@
   opacity: 0.7;
 }
 
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-3px);
-  }
-
-  50% {
-    transform: translateX(3px);
-  }
-
-  75% {
-    transform: translateX(-3px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
 /* ---------- Quick Links Widget ---------- */
 #quickLinks {
-  padding: 8px 12px;
-  color: var(--widget-text);
   width: auto;
   display: flex;
   gap: 8px;
   justify-content: center;
   align-items: center;
   font-size: 13px;
-  transition: .2s ease;
+  transition: 
+    box-shadow var(--transition-med),
+    transform var(--transition-med);
 }
 
-#quickLinks:hover {
-  transform: scale(1.05);
-}
 
 #quickLinks a {
   text-decoration: none;
   font-size: 12px;
   padding: 6px 10px;
   border-radius: var(--radius-sm);
-  background: rgba(var(--accent-rgb), 0.14);
+  background: rgba(var(--accent-rgb), 0.25);
   color: var(--widget-text);
-  transition: transform 0.2s ease-in-out, background 0.2s ease;
+  transition: transform 0.2s ease-in-out, background var(--transition-fast);
 }
 
 #quickLinks a:hover {
@@ -425,24 +389,20 @@
 
 /* ---------- Crypto (Neon Chart) Widget ---------- */
 #cryptoWidget {
-  color: var(--widget-text);
   width: 140px;
-  padding: 5px 6px;
   text-align: center;
   font-size: 12px;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+  transition:
+    box-shadow var(--transition-med),
+    transform var(--transition-med);
 
-#cryptoWidget:hover {
-  transform: translateY(-1.5px) scale(1.02);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 #cryptoName {
-  font-size: 9px;
+  font-size: 9.5px;
   margin: 0;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--widget-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -455,9 +415,8 @@
 
 #cryptoPrice {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--widget-text);
-  opacity: 0.9;
   margin: 2px 0 0 0;
 }
 
@@ -492,7 +451,7 @@
 
 .chart-container:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  transform: translateY(-0.3px) scale(1.01);
+  transform: translateY(-0.5px);
 }
 
 #cryptoChart {
@@ -502,17 +461,19 @@
 }
 
 #widget-container .glass-widget {
-  animation: widget-fade-in 0.25s ease;
+  animation: widget-fade-in 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 @keyframes widget-fade-in {
   from {
     opacity: 0;
-    transform: translateY(-4px);
+    transform: translateY(-6px);
+    filter: blur(2px);
   }
 
   to {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
 }

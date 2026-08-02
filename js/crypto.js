@@ -22,8 +22,8 @@ function cssVar(name, fallback) {
 
 /** Converts a "#RRGGBB" hex color into an "R,G,B" string for rgba(). */
 function hexToRgb(hex) {
-  const m = hex.replace('#', '').match(/.{1,2}/g);
-  return m.map(x => parseInt(x, 16)).join(',');
+  const m = hex.replace("#", "").match(/.{1,2}/g);
+  return m.map(x => parseInt(x, 16)).join(",");
 }
 
 /* ---------- Init ---------- */
@@ -71,6 +71,15 @@ async function initCryptoWidget(days = 30) {
   // back doesn't stack up multiple concurrent pollers.
   if (intervalId) clearInterval(intervalId);
   intervalId = setInterval(fetchLivePrice, 100000);
+
+  // The widget is styled with cursor: pointer (see css/widgets.css) to invite
+  // a click-through to the full chart, same as the weather widget does.
+  const widget = document.getElementById("cryptoWidget");
+  if (widget) {
+    widget.addEventListener("click", () => {
+      window.open("https://www.coingecko.com/en/coins/bitcoin", "_blank");
+    });
+  }
 }
 
 /* ---------- Live Price ---------- */
@@ -165,7 +174,7 @@ function drawSparkline(data) {
   }));
 
   const up = data[data.length - 1] >= data[0];
-  const mainColor = up ? cssVar('--neon-success', '#39ff8c') : cssVar('--neon-danger', '#ff5c5c');
+  const mainColor = up ? cssVar("--neon-success", "#39ff8c") : cssVar("--neon-danger", "#ff5c5c");
   const mainRgb = hexToRgb(mainColor);
 
   /* path: a smoothed curve through all points using Catmull-Rom-derived

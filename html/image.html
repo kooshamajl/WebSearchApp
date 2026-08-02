@@ -37,10 +37,10 @@
 
     <div class="container">
       <form action="https://www.google.com/search">
-        <input class="search_bar" type="text" name="q" placeholder="Search Google Images..." maxlength="50"
-          autocomplete="off" /><br>
+        <input class="search-bar" type="text" name="q" placeholder="Search Google Images..." maxlength="50"
+          autocomplete="off" aria-label="Search Google Images" /><br>
         <input type="hidden" name="tbm" value="isch" />
-        <button type="submit" id="search_button" class="search-but">
+        <button type="submit" id="search-button" class="search-but">
           <i class="fa-solid fa-image"></i> Image Search
         </button>
       </form>
@@ -53,7 +53,7 @@
   
 <script>
   const form = document.querySelector("form");
-  const searchInput = document.querySelector(".search_bar");
+  const searchInput = document.querySelector(".search-bar");
 
   form.addEventListener("submit", (e) => {
     if (searchInput.value.trim() === "") {
@@ -68,9 +68,7 @@
   });
 
 
-
-
-  document.querySelector(".search_bar").focus();
+  document.querySelector(".search-bar").focus();
 </script>
 
 

@@ -13,7 +13,7 @@
  */
 function setWidget(widgetName) {
   const container = document.getElementById("widget-container");
-  container.innerHTML = '<div class="glass-widget widget-loading">Loading...</div>';
+  container.innerHTML = `<div class="glass-widget widget-loading">Loading...</div>`;
 
   fetch(`widgets/${widgetName}.html`)
     .then(response => response.text())

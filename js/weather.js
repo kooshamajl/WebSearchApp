@@ -56,12 +56,12 @@ function fetchWeather() {
 /** Updates the widget's clock text to the current local time (HH:MM). */
 function updateClock() {
   const now = new Date();
-  const timeStr = now.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit'
+  const timeStr = now.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit"
   });
 
-  const timeEl = document.getElementById('time');
+  const timeEl = document.getElementById("time");
   if (!timeEl) return;
 
   timeEl.innerText = timeStr;

@@ -18,14 +18,14 @@
   --accent: #434f63b6;
   --accent-hover: #555e70;
 
-  --footer-bg: rgba(60, 61, 61, 0.096);
+  --footer-bg: rgba(30, 30, 30, .18);
   --footer-text: #e0e0e0;
 
   --widget-text: #eef4f7;
   --widget-text-muted: #a9bcc4;
   --accent-rgb: 47, 64, 99;
 
-  --advanced-bg: rgba(255, 255, 255, 0.1);
+  --color-accent: rgba(56, 74, 85, 0.858);
 
   --advanced-bg-dark: rgba(64, 64, 64, 0.85);
   --advanced-text: #f9f9fa;
@@ -34,17 +34,13 @@
 
   --success: #6FC7A9;
   --warning: #E8B95F;
-  --danger: #E2807A;
+  --danger: #a13832e3;
 }
 
 body {
   background-image: url("../pictures/dark.jpg");
   background-color: var(--bg-main);
   color: var(--text-main);
-}
-
-main {
-  min-height: calc(100vh - 178px);
 }
 
 .search-dropdown {
@@ -67,33 +63,33 @@ main {
 }
 
 .search-menu a:hover {
-  background: var(--accent);
+  background: var(--accent-hover);
   color: #fff;
 }
 
 
-.search_bar {
+.search-bar {
   background-color: var(--glass-light);
   color: var(--text-main);
   border: 1px solid var(--border-soft);
 }
 
-.search_bar::placeholder {
+.search-bar::placeholder {
   color: var(--text-soft);
 }
 
-.search_bar:hover {
+.search-bar:hover {
   box-shadow: 0 0 6px rgba(107, 114, 128, 0.25);
 }
 
-#search_button,
+#search-button,
 #toggleHistory {
   background: var(--accent);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-#search_button:hover,
+#search-button:hover,
 #toggleHistory:hover {
   background: var(--accent-hover);
 }
@@ -110,14 +106,6 @@ main {
   background: rgba(107, 114, 128, 0.2);
 }
 
-.delete-btn {
-  color: rgb(240, 111, 111);
-}
-
-.delete-btn:hover {
-  color: #ff4b4b;
-}
-
 .ping-icon {
   color: rgb(227, 241, 255);
   background: linear-gradient(145deg,
@@ -125,16 +113,6 @@ main {
       rgba(48, 64, 76, 0.58));
 
   border: 1px solid rgba(120, 170, 200, 0.22);
-}
-
-#weather {
-  background: rgba(0, 0, 0, 0.35);
-  color: #fff;
-}
-
-#weather:hover {
-  background: rgba(8, 8, 8, 0.35);
-  color: #fff;
 }
 
 #taskInput {
@@ -213,29 +191,35 @@ main {
 .site-footer {
   background: var(--footer-bg);
   color: var(--footer-text);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.site-footer:hover {
+    background: rgba(30, 30, 30, .35);
 }
 
 .social-icons a {
   color: var(--footer-text);
 }
 
-#theme-toggle {
-  background: linear-gradient(145deg,
-      rgba(55, 72, 83, 0.429),
-      rgba(38, 51, 59, 0.395));
+#cryptoName {
+  color: var(--widget-text);
 }
-
-#theme-toggle:hover {
-  background: linear-gradient(145deg,
-      rgba(41, 53, 61, 0.461),
-      rgba(49, 66, 75, 0.34));
-}
-
 
 .glass-widget {
-  background: rgba(246, 244, 244, 0.25);
-  border-color: transparent;
+  background: rgba(170, 170, 172, 0.30);
+  
+  border: 1px solid rgba(255, 255, 255, .28);
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, .30),
+    inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+
+.glass-widget::before {
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, .25),
+      transparent 45%);
 }
 
 .widget-dropdown {
@@ -303,22 +287,22 @@ main {
   color: var(--advanced-text);
 }
 
-.advanced-container .search_bar {
+.advanced-container .search-bar {
   background-color: rgba(50, 50, 50, 0.75);
   color: var(--advanced-text);
   border: 1px solid var(--advanced-input-border);
 }
 
-.advanced-container .search_bar::placeholder {
+.advanced-container .search-bar::placeholder {
   color: var(--advanced-placeholder);
   opacity: 0.8;
 }
 
-.advanced-container .search_bar:hover {
+.advanced-container .search-bar:hover {
   box-shadow: 0 0 6px rgba(107, 114, 128, 0.25);
 }
 
-.advanced-container .search_bar:focus {
+.advanced-container .search-bar:focus {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   transform: scale(1.01);
   outline: none;
@@ -329,7 +313,7 @@ main {
 }
 
 .autocomplete-list {
-  background: rgba(40, 40, 40, 0.95);
+  background: var(--glass-strong);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
@@ -372,20 +356,12 @@ main {
 
 }
 
-.site-footer {
-
-  background: rgba(30, 30, 30, .18);
-
-  border-top: 1px solid rgba(255, 255, 255, .08);
-
-}
-
 .footer-date-card:hover,
 .footer-time-card:hover {
 
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.08);
 
-  border-color: rgba(125, 195, 255, 0.45);
+  border-color: rgba(125, 195, 255, 0.32);
 
   backdrop-filter: blur(10px) saturate(160%);
   -webkit-backdrop-filter: blur(10px) saturate(160%);

@@ -35,14 +35,6 @@ async function pingFetch() {
   }
 }
 
-/** Maps a ping value to the CSS class used to color the widget. */
-function getPingClass(ping) {
-  if (typeof ping !== "number") return "ping-offline";
-  if (ping < 150) return "ping-good";
-  if (ping < 300) return "ping-warn";
-  return "ping-bad";
-}
-
 /** Maps a ping value to a short human-readable status label. */
 function getStatus(ping) {
   if (typeof ping !== "number") return "Offline";
@@ -54,7 +46,6 @@ function getStatus(ping) {
 /**
  * Icon for the current connection state. Font Awesome's free tier only
  * ships one wifi glyph, so "good" and "warn" intentionally share it --
- * the color (via getPingClass) is what communicates severity.
  */
 function getIcon(ping) {
   return typeof ping === "number" ? "fa-solid fa-wifi" : "fa-solid fa-triangle-exclamation";
@@ -73,25 +64,16 @@ async function updatePing() {
 
   const ping = await pingFetch();
 
-  const applyClass = (cls) => {
-    [el, icon, status].forEach(node => {
-      node.classList.remove("ping-good", "ping-warn", "ping-bad", "ping-offline");
-      node.classList.add(cls);
-    });
-  };
-
   if (typeof ping === "number") {
     const safePing = Math.min(ping, 999);
 
     el.textContent = safePing + " ms";
     status.textContent = getStatus(safePing);
     icon.className = getIcon(safePing);
-    applyClass(getPingClass(safePing));
   } else {
     el.textContent = "Offline";
     status.textContent = "Disconnected";
     icon.className = getIcon(ping);
-    applyClass("ping-offline");
   }
 
   // Re-trigger the CSS pulse animation by removing and re-adding the class.
@@ -111,4 +93,11 @@ function initPingWidget() {
 
   if (pingIntervalId) clearInterval(pingIntervalId);
   pingIntervalId = setInterval(updatePing, 4000);
+
+  // The widget is styled with cursor: pointer (see css/widgets.css) to invite
+  // a manual refresh instead of waiting up to 4s for the next scheduled tick.
+  const widget = document.getElementById("pingWidget");
+  if (widget) {
+    widget.addEventListener("click", () => updatePing());
+  }
 }
