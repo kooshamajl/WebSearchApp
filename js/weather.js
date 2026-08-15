@@ -1,6 +1,7 @@
 /* ===============================
-   Weather + Clock Widget
-   Shows the current temperature for a fixed city plus a live clock.
+   Weather Widget
+   Shows current conditions (temp, clouds, humidity) for a fixed city,
+   plus a "View forecast" link out to OpenWeatherMap.
    =============================== */
 
 /**
@@ -18,7 +19,7 @@ const WEATHER_CITY = "Tehran";
 
 /**
  * Fetches current weather for WEATHER_CITY and updates the widget's
- * city/temperature text and tooltip. Fails silently in the UI (the
+ * city/temperature/clouds/humidity text. Fails silently in the UI (the
  * widget just keeps its last known values) but logs the error.
  */
 function fetchWeather() {
@@ -26,67 +27,51 @@ function fetchWeather() {
     .then(res => res.json())
     .then(data => {
       const temp = Math.round(data.main.temp);
-      const hum = data.main.humidity;
-      const cond = data.weather[0].main;
+      const clouds = data.clouds && typeof data.clouds.all === "number" ? data.clouds.all : null;
+      const humidity = data.main.humidity;
       const cityName = data.name;
 
       const cityEl = document.getElementById("city");
-      const tempEl = document.getElementById("temp");
-      const weatherDiv = document.getElementById("weather");
+      const tempValueEl = document.getElementById("tempValue");
+      const tempUnitEl = document.getElementById("tempUnit");
+      const cloudsEl = document.getElementById("weatherClouds");
+      const humidityEl = document.getElementById("weatherHumidity");
 
-      if (!cityEl || !tempEl || !weatherDiv) return;
+      if (!cityEl || !tempValueEl) return;
 
       cityEl.innerText = cityName;
-      tempEl.textContent = temp + "°C";
-
-      weatherDiv.title = `${cond} · ${temp}°C\nHumidity: ${hum}%\nClick for forecast`;
+      tempValueEl.textContent = temp;
+      if (tempUnitEl) tempUnitEl.style.display = "";
+      if (cloudsEl) cloudsEl.textContent = clouds === null ? "--" : clouds + "%";
+      if (humidityEl) humidityEl.textContent = humidity + "%";
     })
     .catch(err => {
       console.error("Weather fetch failed:", err);
 
       const cityEl = document.getElementById("city");
-      const tempEl = document.getElementById("temp");
-      if (cityEl && tempEl) {
+      const tempValueEl = document.getElementById("tempValue");
+      const tempUnitEl = document.getElementById("tempUnit");
+      if (cityEl && tempValueEl) {
         cityEl.textContent = WEATHER_CITY;
-        tempEl.textContent = "N/A";
+        tempValueEl.textContent = "N/A";
+        if (tempUnitEl) tempUnitEl.style.display = "none";
       }
     });
 }
 
-/** Updates the widget's clock text to the current local time (HH:MM). */
-function updateClock() {
-  const now = new Date();
-  const timeStr = now.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-
-  const timeEl = document.getElementById("time");
-  if (!timeEl) return;
-
-  timeEl.innerText = timeStr;
-}
-
-let weatherClockIntervalId;
-
 /**
  * Entry point called by widget-loader.js once weather.html has been
- * injected into #widget-container. Starts the clock ticker and wires
- * up the click-to-open-forecast behavior.
+ * injected into #widget-container. Fetches weather and wires up the
+ * "View forecast" link.
  */
 function initWeatherWidget() {
   fetchWeather();
-  updateClock();
 
-  // Re-create the interval on every init so switching widgets away and
-  // back doesn't stack up multiple ticking clocks.
-  if (weatherClockIntervalId) clearInterval(weatherClockIntervalId);
-  weatherClockIntervalId = setInterval(updateClock, 1000);
-
-  const weatherDiv = document.getElementById("weather");
-  if (weatherDiv) {
-    weatherDiv.addEventListener("click", () => {
-      const cityName = encodeURIComponent(document.getElementById("city").innerText);
+  const forecastLink = document.getElementById("weatherForecastLink");
+  if (forecastLink) {
+    forecastLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      const cityName = encodeURIComponent(document.getElementById("city").innerText || WEATHER_CITY);
       window.open(`https://openweathermap.org/find?q=${cityName}`, "_blank");
     });
   }

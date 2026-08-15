@@ -1,7 +1,31 @@
-    <div id="weather" class="glass-widget">
-      <p id="city"></p>
-      <p id="temp"></p>
-      <p id="time"></p>
+<div id="weather" class="glass-widget">
+  <p id="city"></p>
+
+  <p id="temp">
+    <span id="tempValue"></span>
+    <span id="tempUnit" class="weather-unit">°C</span>
+  </p>
+
+  <div class="weather-divider"></div>
+
+  <div class="weather-details">
+    <div class="weather-detail">
+      <span class="weather-detail-label">Cloud</span>
+      <span class="weather-detail-value" id="weatherClouds">--</span>
     </div>
 
-    
+    <div class="weather-detail-sep" aria-hidden="true"></div>
+
+    <div class="weather-detail">
+      <span class="weather-detail-label">Humidity</span>
+      <span class="weather-detail-value" id="weatherHumidity">--</span>
+    </div>
+  </div>
+
+  <div class="weather-divider"></div>
+
+  <a href="#" id="weatherForecastLink" class="weather-forecast-link">
+    <span>View forecast</span>
+    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+  </a>
+</div>

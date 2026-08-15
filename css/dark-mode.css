@@ -207,6 +207,11 @@ body {
   color: var(--widget-text);
 }
 
+.weather-divider,
+.weather-detail-sep {
+  background: rgba(255, 255, 255, 0.14);
+}
+
 .glass-widget {
   background: rgba(170, 170, 172, 0.30);
   
@@ -332,7 +337,7 @@ body {
 }
 
 /* ============================
-   Search Engine Selector
+   Search Engine Selector (dark mode)
    ============================ */
 .engine-select-btn {
   background: var(--glass-light);

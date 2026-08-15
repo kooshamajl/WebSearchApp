@@ -10,29 +10,113 @@
   width: 140px;
   text-align: center;
   font-size: 14px;
-  cursor: pointer;
   transition:
     box-shadow var(--transition-med),
     transform var(--transition-med);
-
 }
 
 #weather #city {
   font-weight: 400;
   font-size: 14px;
-  margin-bottom: 4px;
-  margin-top: 8px;
+  margin: 6px 0 1px;
 }
 
 #weather #temp {
   font-weight: 600;
-  margin: 2px 0;
+  font-size: 24px;
+  line-height: 1;
+  margin: 0 0 7px;
 }
 
-#weather #time {
-  opacity: 0.75;
-  font-size: 12px;
+/* Smaller temperature unit */
+.weather-unit {
+  font-size: 0.55em;
+  font-weight: 500;
+  margin-left: 0.5px;
 }
+
+/* Subtle separators */
+.weather-divider {
+  height: 1px;
+  margin: 6px 4px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.weather-details {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.weather-detail {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.weather-detail-sep {
+  width: 1px;
+  align-self: stretch;
+  margin: 0 6px;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.weather-detail-label {
+  font-size: 8.5px;
+  font-weight: 400;
+  opacity: 0.8;
+  color: var(--widget-text-muted);
+  white-space: nowrap;
+}
+
+.weather-detail-value {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Forecast link */
+.weather-forecast-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  color: var(--color-accent);
+  font-size: 10px;
+  font-weight: 500;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.weather-forecast-link i {
+  font-size: 7px;
+  padding-top: 2.5px;
+  transition: transform var(--transition-fast);
+}
+
+.weather-forecast-link:hover {
+  opacity: 0.8;
+}
+
+.weather-forecast-link:hover i,
+.weather-forecast-link:focus-visible i {
+  transform: translateX(2px);
+}
+
+.weather-forecast-link:focus-visible {
+  outline: 2px solid var(--focus-blue);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
 
 @keyframes subtle-shake {
   0% {
