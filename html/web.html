@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../css/footer.css">
   <link rel="stylesheet" href="../css/widgets.css">
   <link rel="stylesheet" href="../css/history-search.css">
+  <link rel="stylesheet" href="../css/search-engine.css">
   <link id="dark-mode-css" rel="stylesheet" href="../css/dark-mode.css" disabled>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +26,7 @@
   <main>
     <nav class="search-nav">
       <div class="search-dropdown">
-        <span class="search-label"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Search Options</span>
+        <span class="search-label"> Search Options <i class="fa-solid fa-chevron-down search-chevron" aria-hidden="true"></i></span>
 
         <div class="search-menu">
           <a href="advanced.html">Advanced Search</a>
@@ -41,10 +42,49 @@
       <form id="searchForm">
         <div class="search-wrapper">
           <div class="search-input-wrap">
-            <input id="searchInput" class="search-bar" placeholder="Search or enter a URL" type="text" maxlength="50"
+            <input id="searchInput" class="search-bar" placeholder="Search or enter a URL" type="text" maxlength="32"
               autocomplete="off" role="combobox" aria-expanded="false" aria-controls="autocompleteList"
               aria-autocomplete="list">
             <ul id="autocompleteList" class="autocomplete-list" role="listbox"></ul>
+
+            <div class="engine-select" id="engineSelect">
+              <button type="button" class="engine-select-btn" id="engineSelectBtn" aria-haspopup="listbox"
+                aria-expanded="false" aria-label="Choose search engine">
+                <span class="engine-icon-slot" id="engineIconSlot" aria-hidden="true">
+                  <i class="fa-brands fa-google"></i>
+                </span>
+                <span class="engine-name" id="engineName">Google</span>
+                <i class="fa-solid fa-chevron-down engine-chevron" aria-hidden="true"></i>
+              </button>
+
+              <ul class="engine-menu" id="engineMenu" role="listbox" aria-label="Search engine">
+                <li role="option" data-engine="google" aria-selected="true" tabindex="0">
+                  <span class="engine-menu-icon"><i class="fa-brands fa-google"></i></span>
+                  <span class="engine-menu-name">Google</span>
+                  <i class="fa-solid fa-check engine-check" aria-hidden="true"></i>
+                </li>
+                <li role="option" data-engine="bing" aria-selected="false" tabindex="-1">
+                  <span class="engine-menu-icon">
+                    <svg class="engine-badge engine-badge-bing" viewBox="0 0 16 16" aria-hidden="true">
+                      <circle class="engine-badge-circle" cx="8" cy="8" r="8" />
+                      <text class="engine-badge-text" x="8" y="11.5">b</text>
+                    </svg>
+                  </span>
+                  <span class="engine-menu-name">Bing</span>
+                  <i class="fa-solid fa-check engine-check" aria-hidden="true"></i>
+                </li>
+                <li role="option" data-engine="duckduckgo" aria-selected="false" tabindex="-1">
+                  <span class="engine-menu-icon">
+                    <svg class="engine-badge engine-badge-ddg" viewBox="0 0 16 16" aria-hidden="true">
+                      <circle class="engine-badge-circle" cx="8" cy="8" r="8" />
+                      <text class="engine-badge-text" x="8" y="11.5">D</text>
+                    </svg>
+                  </span>
+                  <span class="engine-menu-name">DuckDuckGo</span>
+                  <i class="fa-solid fa-check engine-check" aria-hidden="true"></i>
+                </li>
+              </ul>
+            </div>
           </div>
           <button type="submit" class="search-but" id="search-button">
             <i class="fa-solid fa-magnifying-glass"></i> Search
@@ -68,6 +108,7 @@
   <script src="../js/crypto.js"></script>
   <script src="../js/DailyTask.js"></script>
   <script src="../js/ping.js"></script>
+  <script src="../js/search-engine.js"></script>
   <script src="../js/search.js"></script>
 
 

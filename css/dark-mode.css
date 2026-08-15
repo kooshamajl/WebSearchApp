@@ -45,6 +45,7 @@ body {
 
 .search-dropdown {
   background: var(--glass-light);
+  border-color: var(--border-soft);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
 }
 
@@ -328,6 +329,39 @@ body {
 .autocomplete-list li:hover,
 .autocomplete-list li.active {
   background: rgba(107, 114, 128, 0.25);
+}
+
+/* ============================
+   Search Engine Selector
+   ============================ */
+.engine-select-btn {
+  background: var(--glass-light);
+  border-color: var(--border-soft);
+  color: var(--text-main);
+}
+
+.engine-select-btn:hover,
+.engine-select.open .engine-select-btn {
+  background: var(--glass-strong);
+}
+
+.engine-menu {
+  background: var(--glass-strong);
+  border-color: var(--border-soft);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.engine-menu li {
+  color: var(--text-main);
+}
+
+.engine-menu li:hover,
+.engine-menu li:focus-visible {
+  background: rgba(107, 114, 128, 0.25);
+}
+
+.engine-check {
+  color: #8ecbe8;
 }
 
 

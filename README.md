@@ -1,112 +1,101 @@
 # 🔎 Modern Search Web App
 
-A modern and minimal front-end search application built using **HTML, CSS, and JavaScript**.
+A modern and minimal front-end search application built with **HTML, CSS, and JavaScript**.
+The project includes multiple search modes, dynamic widgets, theme support, search history, autocomplete, and a modular structure.
 
-This project includes multiple search pages, dynamic widgets, dark/light theme support, search history management, and a modular folder structure.
-
-It was developed as a hands-on practice project to strengthen front-end fundamentals and UI design skills.
+Developed as a hands-on project to strengthen **front-end development and UI/UX skills**.
 
 ---
 
 ## 📌 Features
 
-### 🔍 Search Pages
+### 🔍 Search
 
-The application contains three main pages:
+Three search modes are available:
 
-- Web Search
-- Image Search
-- Advanced Search
+* **Web Search**
+* **Image Search**
+* **Advanced Search**
 
----
+The Web Search page supports multiple search engines:
 
-### 🧠 Advanced Search Options
+* Google
+* Bing
+* DuckDuckGo
 
-The Advanced Search page allows users to search for pages containing:
+Users can manually select their preferred search engine.
 
-- All these words
-- Exact word or phrase
-- Any of these words
-- None of these words
+### 🧠 Advanced Search
 
----
+Supports:
+
+* All these words
+* Exact word or phrase
+* Any of these words
+* None of these words
 
 ### 🌓 Theme Support
 
-- Light Mode
-- Dark Mode
-- Theme preference stored using `localStorage`
-- Smooth UI transitions between themes
-
----
+* Light / Dark mode
+* Theme preference stored in `localStorage`
+* Smooth theme transitions
 
 ### 🕓 Search History
 
-- Stores last 5 searches
-- Prevents duplicate entries
-- Click (or focus + Enter/Space) on a history item to re-search
-- Delete individual history items
-- Toggle history visibility with button or shortcut: **Ctrl + H**
-- Fully keyboard-accessible (tabbable, `aria-label`s for screen readers)
-
----
+* Stores the last 5 searches
+* Prevents duplicates
+* Re-search and delete individual entries
+* Toggle with button or **Ctrl + H**
+* Keyboard and screen-reader accessible
 
 ### ✨ Autocomplete
 
-As you type in the search bar, a dropdown suggests:
+Suggestions are generated from:
 
-- Matches from your own search history (highlighted match, up to 4)
-- Matches from a small curated list of popular sites (YouTube, GitHub, Digikala, etc.), filling any remaining slots
-- Full keyboard navigation: `↓` / `↑` to move, `Enter` to select, `Esc` to close
-- Mouse click also works, and it stays in sync with the history dropdown so only one is open at a time
+* Search history with highlighted matches
+* A curated list of popular websites such as YouTube, GitHub, and Digikala
 
----
+Supports keyboard navigation (`↑`, `↓`, `Enter`, `Esc`) and mouse interaction.
 
 ### 📅 Date Display
 
-The footer dynamically displays:
-
-- Current **Gregorian (Miladi)** date
-- Current **Persian (Shamsi)** date
-
-Both are generated and updated using JavaScript, and the display can be toggled by clicking the date text.
-
----
+The footer displays the current **Gregorian** and **Persian (Shamsi)** dates.
+The displayed format can be toggled by clicking the date.
 
 ### 📦 Widget System
 
-The project includes a dynamic widget loader using `fetch()` and modular initialization functions. Widgets are loaded on demand from `html/widgets/` and injected into the page.
+Widgets are dynamically loaded using `fetch()`.
 
 Available widgets:
 
-- 🌤 Weather
-- 💰 Crypto (Bitcoin live price with a glowing sparkline chart using Canvas API; falls back to clearly-labeled demo data if the API is unreachable)
-- ✅ Daily Tasks (resets automatically at the start of each new day)
-- ⚡ Ping
-- 🔗 Quick Links (YouTube, Instagram, etc.)
+* 🌤 Weather
+* 💰 Crypto — Bitcoin price and Canvas sparkline
+* ✅ Daily Tasks
+* ⚡ Ping
+* 🔗 Quick Links
 
-The selected widget is saved in `localStorage` and restored after page reload.
+The selected widget is saved in `localStorage` and restored after reload.
 
 ---
 
-## 🛠 Technologies Used
+## 🛠 Technologies
 
-- HTML5
-- CSS3 (Modular structure)
-- Vanilla JavaScript (ES6+)
-- Fetch API
-- LocalStorage API
-- Canvas API
-- OpenWeatherMap API (Live weather data)
-- CoinGecko API (Live cryptocurrency data)
-- Font Awesome (icons)
-- Google Fonts — Inter
+* HTML5
+* CSS3
+* Vanilla JavaScript (ES6+)
+* Fetch API
+* LocalStorage API
+* Canvas API
+* OpenWeatherMap API
+* CoinGecko API
+* Font Awesome
+* Google Fonts — Inter
 
 ---
 
 ## 📂 Project Structure
 
-```
+```text
 WebSearchApp/
 │
 ├── html/
@@ -127,10 +116,12 @@ WebSearchApp/
 │   ├── dark-mode.css
 │   ├── widgets.css
 │   ├── history-search.css
+│   ├── search-engine.css
 │   └── footer.css
 │
 ├── js/
 │   ├── search.js
+│   ├── search-engine.js
 │   ├── weather.js
 │   ├── crypto.js
 │   ├── DailyTask.js
@@ -147,87 +138,83 @@ WebSearchApp/
 └── README.md
 ```
 
-The project is structured in separate folders to keep the code modular, organized, and maintainable.
+The modular structure keeps the project organized, maintainable, and easy to extend.
 
 ---
 
-## 🧩 Key Concepts Practiced
+## 🧩 Key Concepts
 
-- DOM Manipulation
-- Event Handling
-- Modular JavaScript
-- Async / Await
-- Working with REST APIs
-- Local Storage Management
-- Canvas Drawing & Data Visualization
-- UI/UX Design Principles
-- Dynamic Component Loading
-- Accessibility (keyboard navigation, ARIA roles/labels)
+* DOM Manipulation & Event Handling
+* Modular JavaScript
+* Async/Await & REST APIs
+* Local Storage
+* Canvas Data Visualization
+* Dynamic Component Loading
+* UI/UX Design
+* Accessibility & ARIA
 
 ---
 
-## 🎨 Design Philosophy
+## 🎨 Design
 
-- Minimal & Clean UI
-- Glass-style widgets
-- Soft hover animations
-- Modern typography (Inter font)
-- Lightweight and readable structure
+The interface follows a **minimal, clean, and modern** design approach with:
+
+* Glass-style widgets
+* Soft hover animations
+* Modern typography
+* Lightweight and readable structure
 
 ---
 
 ## 🚀 How to Run
 
-⚠️ **Note:** This project uses `fetch()` to dynamically load the footer and widgets (`footer-loader.js`, `widget-loader.js`). Because of browser CORS restrictions on the `file://` protocol, opening the HTML files directly (double-click) will **not** work — the footer and widgets will fail to load silently.
+Because the project uses `fetch()` to load widgets and the footer dynamically, it must be served through a **local web server** instead of opening files directly with `file://`.
 
-To run the project correctly, serve it through a local server:
+### Clone the repository
 
-1. Clone the repository:
+```bash
+git clone https://github.com/kooshamajl/WebSearchApp.git
+```
 
-   ```
-   git clone https://github.com/kooshamajl/WebSearchApp.git
-   ```
+### Run with VS Code
 
-2. Start a local server from the project root. For example:
+Use the **Live Server** extension and open:
 
-   - **VS Code:** install the "Live Server" extension, right-click `html/web.html` → "Open with Live Server"
-   - **Terminal (Python):**
-     ```
-     python -m http.server 8000
-     ```
-     then open `http://localhost:8000/html/web.html` in your browser
+```text
+html/web.html
+```
 
-No backend, build step, or npm installation required — just a static file server.
+### Or use Python
+
+```bash
+python -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000/html/web.html
+```
+
+No backend, build step, or npm installation is required.
 
 ---
 
 ## 🔐 Configuration & Security
 
-The weather widget (`js/weather.js`) calls the OpenWeatherMap API with a key
-defined directly in the client-side code:
+The Weather widget uses an OpenWeatherMap API key directly in `js/weather.js`.
 
-```js
-const WEATHER_API_KEY = "...";
-```
-
-Because this project has no backend, **any key placed there is publicly
-visible** to anyone who views the page source or this repository. Before
-deploying your own copy:
-
-- Get your own free key at [openweathermap.org](https://openweathermap.org/api) and swap it in.
-- Prefer a free-tier key with a low quota, and rotate it periodically.
-- For a production deployment, proxy this request through a small backend
-  or serverless function so the real key never reaches the browser.
+Since the application is client-side only, the key is publicly visible. Use your own key for your copy of the project. For production, a backend or serverless proxy should be used to protect the key.
 
 ---
 
 ## 📈 Future Improvements
 
-- Support for multiple cryptocurrencies
-- Further mobile-responsiveness polish (currently covers the main breakpoints)
-- A settings panel (e.g. choosing the weather city, adding more quick links)
-- Backend proxy for the weather API key (see Configuration & Security above)
-- Possible migration to React in future versions
+* Support for multiple cryptocurrencies
+* Further mobile-responsiveness improvements
+* Settings panel for weather city and quick links
+* Backend proxy for the weather API key
+* Possible migration to React
 
 ---
 
@@ -235,12 +222,11 @@ deploying your own copy:
 
 **Koosha Majlessi**
 
-- GitHub: https://github.com/KooshaMajl
-- LinkedIn: https://www.linkedin.com/in/koosha-majlessi-3b609038b
+* GitHub: https://github.com/KooshaMajl
+* LinkedIn: https://www.linkedin.com/in/koosha-majlessi-3b609038b
 
 ---
 
 ## 📚 Note
 
-This project was built as a practical learning experience.
-AI-assisted tools were occasionally used for brainstorming, debugging, and refining specific implementation details, while the overall architecture, structure, and development were completed independently.
+This project was developed as a practical learning experience. AI-assisted tools were occasionally used for brainstorming, debugging, and refining implementation details, while the overall architecture, structure, and development were completed independently.

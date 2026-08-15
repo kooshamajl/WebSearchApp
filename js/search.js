@@ -217,6 +217,7 @@ function isLikelyUrl(str) {
 // sure it doesn't overlap with the history dropdown.
 searchInput.addEventListener("input", () => {
   historyList.classList.remove("show");
+  if (typeof closeEngineMenu === "function") closeEngineMenu(false);
   renderAutocomplete(searchInput.value.trim());
 });
 
@@ -262,8 +263,15 @@ form.addEventListener("submit", (e) => {
       ? input
       : "https://" + input;
   } else {
-    window.location.href =
-      "https://www.google.com/search?q=" + encodeURIComponent(input);
+    // SEARCH_ENGINES / getSelectedEngine() come from js/search-engine.js,
+    // loaded just before this file. Falls back to a plain Google search
+    // if that script didn't load for some reason.
+    const engineKey = typeof getSelectedEngine === "function" ? getSelectedEngine() : "google";
+    const engine = (typeof SEARCH_ENGINES !== "undefined" && SEARCH_ENGINES[engineKey]) || null;
+
+    window.location.href = engine
+      ? engine.searchUrl(input)
+      : "https://www.google.com/search?q=" + encodeURIComponent(input);
   }
 });
 
@@ -338,6 +346,7 @@ function renderHistory() {
 // Toggle the history dropdown via button click or the Ctrl+H shortcut.
 toggleHistoryBtn.addEventListener("click", () => {
   closeAutocomplete();
+  if (typeof closeEngineMenu === "function") closeEngineMenu(false);
   historyList.classList.toggle("show");
 });
 
