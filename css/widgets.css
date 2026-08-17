@@ -18,28 +18,28 @@
 #weather #city {
   font-weight: 400;
   font-size: 14px;
-  margin: 6px 0 1px;
+  margin-bottom: 3px;
+  margin-top: 4px;
 }
 
 #weather #temp {
   font-weight: 600;
-  font-size: 24px;
-  line-height: 1;
-  margin: 0 0 7px;
+  margin: 0 0 1px;
 }
 
-/* Smaller temperature unit */
+/* °C rendered smaller than the number, not as a same-size suffix. */
 .weather-unit {
-  font-size: 0.55em;
+  font-size: 0.7em;
   font-weight: 500;
-  margin-left: 0.5px;
 }
 
-/* Subtle separators */
+/* Thin hairline separators, matching the opacity-based divider style
+   already used elsewhere (e.g. .search-menu a's border-bottom) rather
+   than introducing a new line treatment. */
 .weather-divider {
   height: 1px;
   margin: 6px 4px;
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .weather-details {
@@ -54,56 +54,50 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 2px;
 }
 
 .weather-detail-sep {
   width: 1px;
   align-self: stretch;
-  margin: 0 6px;
-  background: rgba(0, 0, 0, 0.08);
+  margin: 0 8px;
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .weather-detail-label {
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 400;
-  opacity: 0.8;
   color: var(--widget-text-muted);
+  opacity: 0.9;
   white-space: nowrap;
 }
 
 .weather-detail-value {
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 600;
 }
 
-/* Forecast link */
 .weather-forecast-link {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-
   color: var(--color-accent);
-  font-size: 10px;
-  font-weight: 500;
-
+  font-size: 9px;
+  font-weight: 400;
   text-decoration: none;
   cursor: pointer;
-
-  transition:
-    opacity var(--transition-fast),
-    transform var(--transition-fast);
+  transition: opacity var(--transition-fast);
 }
 
 .weather-forecast-link i {
-  font-size: 7px;
-  padding-top: 2.5px;
+  font-size: 6px;
+  padding-top: 1.5px;
   transition: transform var(--transition-fast);
 }
 
 .weather-forecast-link:hover {
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
 .weather-forecast-link:hover i,
@@ -116,7 +110,6 @@
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
-
 
 @keyframes subtle-shake {
   0% {
@@ -156,14 +149,14 @@
 }
 
 .ping-title {
-  font-size: 12px;
-  opacity: .78;
+  font-size: 11px;
+  opacity: .88;
   letter-spacing: 1px;
 }
 
 .ping-divider {
   height: 1px;
-  margin: 5px 0;
+  margin: 4px 0;
   background: linear-gradient(to right,
       transparent,
       rgba(var(--accent-rgb), 0.4),
@@ -185,26 +178,23 @@
 
 .ping-icon {
   color: #234050b7;
-  background: linear-gradient(145deg,
-      rgba(121, 191, 252, 0.75),
-      rgba(176, 218, 255, 0.6));
-
-  border: 1px solid rgba(181, 230, 255, 0.4);
+  background: var(--glass-btn-bg);
+  border: 1px solid var(--glass-btn-border);
   border-radius: var(--radius-sm);
   padding: 2px 2.5px;
-  font-size: 16px;
+  font-size: 15px;
   margin-right: 1.5px;
 }
 
 #pingValue {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: bold;
 }
 
 #pingStatus {
-  font-size: 10px;
+  font-size: 9px;
   margin: 1px 0px;
-  opacity: 0.75;
+  opacity: 0.65;
 }
 
 @keyframes pulse {
@@ -385,22 +375,16 @@
   justify-content: center;
   border-radius: 50%;
   color: var(--widget-text);
-  background: linear-gradient(145deg,
-      rgba(121, 191, 252, 0.75),
-      rgba(176, 218, 255, 0.6));
-
-  border: 1px solid rgba(181, 230, 255, 0.4);
+  background: var(--glass-btn-bg);
+  border: 1px solid var(--glass-btn-border);
   cursor: pointer;
   font-size: 9px;
   transition: background var(--transition-fast), border-color var(--transition-fast), transform 0.15s ease;
 }
 
 .task-add-btn:hover:not(:disabled) {
-  background: linear-gradient(145deg,
-      rgba(117, 188, 250, 0.8),
-      rgba(186, 221, 252, 0.55));
-
-  border: 1px solid rgba(172, 227, 255, 0.7);
+  background: var(--glass-btn-bg-hover);
+  border: 1px solid var(--glass-btn-border-hover);
 }
 
 .task-add-btn:active:not(:disabled) {
@@ -458,10 +442,10 @@
 
 #quickLinks a {
   text-decoration: none;
-  font-size: 12px;
+  font-size: 11px;
   padding: 6px 10px;
   border-radius: var(--radius-sm);
-  background: rgba(var(--accent-rgb), 0.25);
+  background: rgba(var(--accent-rgb), 0.18);
   color: var(--widget-text);
   transition: transform 0.2s ease-in-out, background var(--transition-fast);
 }
@@ -474,22 +458,49 @@
 /* ---------- Crypto (Neon Chart) Widget ---------- */
 #cryptoWidget {
   width: 140px;
-  text-align: center;
   font-size: 12px;
   cursor: pointer;
   transition:
     box-shadow var(--transition-med),
     transform var(--transition-med);
+}
 
+.crypto-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+}
+
+.crypto-icon {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #f7931a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 10px;
+  opacity: 0.65;
+}
+
+.crypto-header-text {
+  flex: 1;
+  min-width: 0;
 }
 
 #cryptoName {
-  font-size: 9.5px;
+  font-size: 7px;
   margin: 0;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--widget-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #cryptoName.demo-label {
@@ -498,17 +509,34 @@
 }
 
 #cryptoPrice {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 400;
   color: var(--widget-text);
-  margin: 2px 0 0 0;
+  margin: 1px 0 0 0;
+}
+
+/* Thin hairline, matching the convention used by the weather widget's
+   dividers (dark line on the light glass bg, overridden for dark mode
+   in css/dark-mode.css) rather than inventing a new line treatment. */
+.crypto-divider {
+  height: 1px;
+  margin: 6px 1px 5px;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 #cryptoChange {
-  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  font-size: 9px;
   font-weight: 600;
-  margin: 1px 0 0 0;
+  margin: 0;
   opacity: 0.95;
+}
+
+#cryptoChange i {
+  font-size: 8px;
 }
 
 #cryptoChange.trend-up {
@@ -519,10 +547,17 @@
   color: var(--neon-danger);
 }
 
+.crypto-change-period {
+  margin-left: auto;
+  font-size: 7px;
+  font-weight: 400;
+  color: var(--widget-text-muted);
+}
+
 .chart-container {
   width: 100%;
   height: 45px;
-  margin: 3px 0 0 0;
+  margin: 5px 0 0 0;
   border-radius: var(--radius-sm);
   border: 1.2px solid rgba(var(--accent-rgb), 0.3);
   background: rgba(14, 28, 40, 0.45);

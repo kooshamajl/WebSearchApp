@@ -35,6 +35,12 @@
   --success: #6FC7A9;
   --warning: #E8B95F;
   --danger: #a13832e3;
+
+
+  --glass-btn-bg-dark: linear-gradient(145deg, rgba(33, 45, 57, 0.66), rgba(48, 64, 76, 0.58));
+  --glass-btn-border-dark: rgba(120, 170, 200, 0.22);
+  --glass-btn-bg-dark-hover: linear-gradient(145deg, rgba(37, 49, 61, 0.68), rgba(50, 66, 78, 0.60));
+  --glass-btn-border-dark-hover: rgba(135, 185, 215, 0.28);
 }
 
 body {
@@ -109,11 +115,8 @@ body {
 
 .ping-icon {
   color: rgb(227, 241, 255);
-  background: linear-gradient(145deg,
-      rgba(33, 45, 57, 0.66),
-      rgba(48, 64, 76, 0.58));
-
-  border: 1px solid rgba(120, 170, 200, 0.22);
+  background: var(--glass-btn-bg-dark);
+  border: 1px solid var(--glass-btn-border-dark);
 }
 
 #taskInput {
@@ -175,7 +178,7 @@ body {
       rgba(49, 66, 84, .78),
       rgba(38, 52, 67, .68));
 
-  border-color: rgba(135, 185, 215, .28);
+  border-color: var(--glass-btn-border-dark-hover);
 
   box-shadow:
     0 6px 14px rgba(0, 0, 0, .36),
@@ -212,6 +215,10 @@ body {
   background: rgba(255, 255, 255, 0.14);
 }
 
+.crypto-divider {
+  background: rgba(255, 255, 255, 0.14);
+}
+
 .glass-widget {
   background: rgba(170, 170, 172, 0.30);
   
@@ -222,18 +229,9 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, .18);
 }
 
-.glass-widget::before {
-  background: linear-gradient(to bottom,
-      rgba(255, 255, 255, .25),
-      transparent 45%);
-}
-
 .widget-dropdown {
-  background: linear-gradient(145deg,
-      rgba(33, 45, 57, 0.66),
-      rgba(48, 64, 76, 0.58));
-
-  border: 1px solid rgba(120, 170, 200, 0.22);
+  background: var(--glass-btn-bg-dark);
+  border: 1px solid var(--glass-btn-border-dark);
 
   box-shadow:
     0 6px 18px rgba(0, 0, 0, .42),
@@ -250,11 +248,8 @@ body {
 
 .widget-dropdown:hover {
 
-  background: linear-gradient(145deg,
-      rgba(37, 49, 61, 0.68),
-      rgba(50, 66, 78, 0.60));
-
-  border-color: rgba(135, 185, 215, .28);
+  background: var(--glass-btn-bg-dark-hover);
+  border-color: var(--glass-btn-border-dark-hover);
 
   box-shadow:
     0 7px 20px rgba(0, 0, 0, .46),
@@ -412,12 +407,8 @@ body {
 }
 
 #theme-toggle {
-
-  background: linear-gradient(145deg,
-      rgba(33, 45, 57, .66),
-      rgba(48, 64, 76, .58));
-
-  border: 1px solid rgba(120, 170, 200, .22);
+  background: var(--glass-btn-bg-dark);
+  border: 1px solid var(--glass-btn-border-dark);
 
   box-shadow:
     0 6px 18px rgba(0, 0, 0, .42),
@@ -426,11 +417,8 @@ body {
 
 #theme-toggle:hover {
 
-  background: linear-gradient(145deg,
-      rgba(37, 49, 61, .68),
-      rgba(50, 66, 78, .60));
-
-  border-color: rgba(135, 185, 215, .28);
+  background: var(--glass-btn-bg-dark-hover);
+  border-color: var(--glass-btn-border-dark-hover);
 
   box-shadow:
     0 7px 20px rgba(0, 0, 0, .46),

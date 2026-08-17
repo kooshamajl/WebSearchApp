@@ -24,7 +24,7 @@
   <main>
     <nav class="search-nav">
       <div class="search-dropdown">
-        <span class="search-label"> Search Options <i class="fa-solid fa-chevron-down search-chevron" aria-hidden="true"></i></span>
+        <span class="search-label">Search Options <i class="fa-solid fa-chevron-down search-chevron" aria-hidden="true"></i></span>
 
         <div class="search-menu">
           <a href="advanced.html">Advanced Search</a>
@@ -50,36 +50,32 @@
 
   <div id="footer-placeholder"></div>
 
-  
-<script>
-  const form = document.querySelector("form");
-  const searchInput = document.querySelector(".search-bar");
+  <script>
+    const form = document.querySelector("form");
+    const searchInput = document.querySelector(".search-bar");
 
-  form.addEventListener("submit", (e) => {
-    if (searchInput.value.trim() === "") {
-      e.preventDefault();
+    form.addEventListener("submit", (e) => {
+      if (searchInput.value.trim() === "") {
+        e.preventDefault();
 
-      searchInput.classList.add("shake");
+        searchInput.classList.add("shake");
 
-      setTimeout(() => {
-        searchInput.classList.remove("shake");
-      }, 300);
-    }
-  });
+        setTimeout(() => {
+          searchInput.classList.remove("shake");
+        }, 300);
+      }
+    });
 
+    searchInput.focus();
+  </script>
 
-  document.querySelector(".search-bar").focus();
-</script>
-
-
-<script src="../js/footer.js"></script>
-<script src="../js/footer-loader.js"></script>
-<script src="../js/widget-loader.js"></script>
-<script src="../js/weather.js"></script>
-<script src="../js/crypto.js"></script>
-<script src="../js/DailyTask.js"></script>
-<script src="../js/ping.js"></script>
-
+  <script src="../js/footer.js"></script>
+  <script src="../js/footer-loader.js"></script>
+  <script src="../js/widget-loader.js"></script>
+  <script src="../js/weather.js"></script>
+  <script src="../js/crypto.js"></script>
+  <script src="../js/DailyTask.js"></script>
+  <script src="../js/ping.js"></script>
 </body>
 
 </html>

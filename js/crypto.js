@@ -119,6 +119,7 @@ function updateText(arr) {
   const last = arr[arr.length - 1];
   const first = arr[0];
   const change = ((last - first) / first) * 100;
+  const isUp = change >= 0;
 
   const nameEl = document.getElementById("cryptoName");
   nameEl.textContent = isDemoData ? "Bitcoin (Demo)" : "Bitcoin (BTC)";
@@ -128,10 +129,18 @@ function updateText(arr) {
     "$" + Math.round(last).toLocaleString();
 
   const changeEl = document.getElementById("cryptoChange");
-  changeEl.textContent =
-    (change > 0 ? "+" : "") + change.toFixed(2) + "%";
-  changeEl.classList.toggle("trend-up", change >= 0);
-  changeEl.classList.toggle("trend-down", change < 0);
+  const changeIconEl = document.getElementById("cryptoChangeIcon");
+  const changeValueEl = document.getElementById("cryptoChangeValue");
+
+  changeValueEl.textContent =
+    (isUp ? "+" : "") + change.toFixed(2) + "%";
+  changeEl.classList.toggle("trend-up", isUp);
+  changeEl.classList.toggle("trend-down", !isUp);
+
+  if (changeIconEl) {
+    changeIconEl.classList.toggle("fa-arrow-up", isUp);
+    changeIconEl.classList.toggle("fa-arrow-down", !isUp);
+  }
 }
 
 /* ---------- Neon Chart ---------- */

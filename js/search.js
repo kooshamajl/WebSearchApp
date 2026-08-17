@@ -350,17 +350,14 @@ toggleHistoryBtn.addEventListener("click", () => {
   historyList.classList.toggle("show");
 });
 
+// Global keyboard shortcuts: Ctrl+H toggles history, "/" focuses the
+// search input (unless it's already focused).
 document.addEventListener("keydown", (e) => {
   if (e.ctrlKey && e.key.toLowerCase() === "h") {
     e.preventDefault();
     closeAutocomplete();
     historyList.classList.toggle("show");
-  }
-});
-
-// Focus the search input via the "/" keyboard shortcut.
-document.addEventListener("keydown", (e) => {
-  if (e.key === "/" && document.activeElement !== searchInput) {
+  } else if (e.key === "/" && document.activeElement !== searchInput) {
     e.preventDefault();
     searchInput.focus();
   }

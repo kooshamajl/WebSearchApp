@@ -45,7 +45,8 @@ function getStatus(ping) {
 
 /**
  * Icon for the current connection state. Font Awesome's free tier only
- * ships one wifi glyph, so "good" and "warn" intentionally share it --
+ * ships one wifi glyph, so every connected state ("Excellent", "Normal",
+ * "Bad") shares it -- only "Offline" gets a distinct icon.
  */
 function getIcon(ping) {
   return typeof ping === "number" ? "fa-solid fa-wifi" : "fa-solid fa-triangle-exclamation";

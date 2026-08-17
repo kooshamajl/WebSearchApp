@@ -7,6 +7,7 @@
   --radius-lg: 20px;
   --radius-xl: 23px;
   --radius-pill: 80px;
+  --radius-control: 12px;
 
   --transition-fast: 0.2s ease;
   --transition-med: 0.3s ease;
@@ -128,7 +129,7 @@ main {
     border-radius: inherit;
     background: linear-gradient(
         to bottom,
-        rgba(255,255,255,.22),
+        rgba(255,255,255,.25),
         transparent 45%
     );
     pointer-events: none;

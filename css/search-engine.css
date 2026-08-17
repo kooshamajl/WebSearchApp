@@ -137,7 +137,7 @@
   gap: 8px;
   padding: 8px 10px;
   font-size: 13.5px;
-  color: #444;
+  color: var(--list-text);
   border-radius: 10px;
   cursor: pointer;
   transition: background var(--transition-fast);

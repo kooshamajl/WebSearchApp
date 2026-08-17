@@ -1,10 +1,21 @@
-    <div class="glass-widget" id="cryptoWidget">
+<div class="glass-widget" id="cryptoWidget">
+  <div class="crypto-header">
+    <span class="crypto-icon" aria-hidden="true"><i class="fa-brands fa-bitcoin"></i></span>
+    <div class="crypto-header-text">
       <p id="cryptoName"></p>
       <p id="cryptoPrice"></p>
-
-      <div class="chart-container">
-        <canvas id="cryptoChart"></canvas>
-      </div>
-
-      <p id="cryptoChange"></p>
     </div>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="cryptoChart"></canvas>
+  </div>
+
+  <div class="crypto-divider"></div>
+
+  <p id="cryptoChange">
+    <i class="fa-solid fa-arrow-down" id="cryptoChangeIcon" aria-hidden="true"></i>
+    <span id="cryptoChangeValue"></span>
+    <span class="crypto-change-period">30d Change</span>
+  </p>
+</div>
