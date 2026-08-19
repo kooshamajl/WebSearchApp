@@ -1,0 +1,112 @@
+/* ============================
+   Image Search - Inline Autocomplete ("Ghost Text")
+   Scoped to html/image.html only (linked there, nowhere else). Shows a
+   low-opacity completion directly inside the search bar as the user
+   types, instead of a separate dropdown list -- that pattern already
+   exists for Web Search (see css/history-search.css's
+   .autocomplete-list) and is intentionally left untouched.
+   ============================ */
+
+/* Positioning context for the ghost overlay below. display: inline-block
+   (not block) so it drops into .container's existing centered, inline
+   layout (see main-style.css) without changing any spacing around it. */
+.image-search-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+/* Sits directly on top of .search-bar, replicating its box model
+   (border/padding/font/line-height) so its text lines up with the
+   real input's text letter-for-letter. Positioned with the same
+   top offset as .search-bar's margin-top, since that margin lives on
+   the input itself rather than on this wrapper. Never touches
+   .search-bar's own rules in main-style.css.
+
+   text-align is set explicitly because .container above has
+   text-align: center for layout purposes -- a real <input> doesn't
+   inherit that (form controls default to their own start-alignment),
+   but this plain <div> would, throwing the overlay's text out of
+   sync with the real input's text unless overridden here. */
+.ghost-suggestion {
+  position: absolute;
+  top: 51px;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  padding: 0 20px;
+  line-height: 46px;
+  font-size: 18px;
+  /* Matches the global `input { font-family: ... }` rule in
+     main-style.css exactly (NOT just `inherit`, which would pull
+     body's plain Inter stack instead) -- any mismatch here throws off
+     character widths enough to visibly misalign the overlay text from
+     the real input text. */
+  font-family:
+    'Vazirmatn',
+    'Inter',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+
+  /* Purely decorative -- clicks and typing must always reach the real
+     input beneath it. */
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Invisible spacer holding the user's own typed text, so the
+   suggestion span below lines up exactly after it instead of
+   overlapping what's already been typed. */
+#ghostTyped {
+  color: transparent;
+}
+
+/* The actual "ghost" completion text. Opacity (not display) is what
+   gets animated, so appearing and changing both stay smooth instead
+   of snapping in/out. Re-triggered from JS on every keystroke by
+   toggling the "visible" class, which is what produces the fade-in.
+
+   Color matches .search-bar's own light-mode color exactly (same
+   --text-dark token). Dark mode overrides both of them the same way,
+   via a rule in css/dark-mode.css -- --text-main (used there) is a
+   dark-mode-only token that doesn't exist in this stylesheet's base
+   :root, so it can't be used directly here without breaking light
+   mode. */
+#ghostRemainder {
+  color: var(--text-dark);
+  opacity: 0;
+  transform: translateX(6px);
+  filter: blur(1px);
+
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast),
+    filter var(--transition-fast);
+}
+
+#ghostRemainder.visible {
+  opacity: 0.3;
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+/* ============================
+   Responsive Adjustments
+   Mirrors .search-bar's own mobile overrides in main-style.css
+   (margin-top: 0, font-size: 16px) so the overlay keeps tracking it.
+   ============================ */
+@media (max-width: 600px) {
+  .ghost-suggestion {
+    top: 0;
+    font-size: 16px;
+  }
+}

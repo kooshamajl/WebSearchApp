@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../css/main-style.css" />
   <link rel="stylesheet" href="../css/footer.css" />
   <link rel="stylesheet" href="../css/widgets.css" />
+  <link rel="stylesheet" href="../css/image-search.css" />
   <link id="dark-mode-css" rel="stylesheet" href="../css/dark-mode.css" disabled>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,8 +38,16 @@
 
     <div class="container">
       <form action="https://www.google.com/search">
-        <input class="search-bar" type="text" name="q" placeholder="Search Google Images..." maxlength="50"
-          autocomplete="off" aria-label="Search Google Images" /><br>
+        <div class="image-search-wrap">
+          <input id="imageSearchInput" class="search-bar" type="text" name="q" placeholder="Search Google Images..."
+            maxlength="50" autocomplete="off" aria-label="Search Google Images" />
+
+          <!-- Decorative ghost-text overlay; see js/image-search-autocomplete.js -->
+          <div class="ghost-suggestion" aria-hidden="true">
+            <span id="ghostTyped"></span><span id="ghostRemainder"></span>
+          </div>
+        </div>
+        <br>
         <input type="hidden" name="tbm" value="isch" />
         <button type="submit" id="search-button" class="search-but">
           <i class="fa-solid fa-image"></i> Image Search
@@ -50,9 +59,10 @@
 
   <div id="footer-placeholder"></div>
 
+  <script src="../js/image-search-autocomplete.js"></script>
   <script>
     const form = document.querySelector("form");
-    const searchInput = document.querySelector(".search-bar");
+    const searchInput = document.getElementById("imageSearchInput");
 
     form.addEventListener("submit", (e) => {
       if (searchInput.value.trim() === "") {
@@ -67,6 +77,14 @@
     });
 
     searchInput.focus();
+
+    // Inline "ghost text" suggestions, scoped to this page only.
+    // See js/image-search-autocomplete.js for the dataset and logic.
+    initImageSearchAutocomplete(
+      searchInput,
+      document.getElementById("ghostTyped"),
+      document.getElementById("ghostRemainder")
+    );
   </script>
 
   <script src="../js/footer.js"></script>
