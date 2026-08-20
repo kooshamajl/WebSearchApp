@@ -25,6 +25,7 @@
 #weather #temp {
   font-weight: 600;
   margin: 0 0 1px;
+  cursor: pointer;
 }
 
 /* °C rendered smaller than the number, not as a same-size suffix. */

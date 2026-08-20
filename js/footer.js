@@ -61,29 +61,48 @@ function formatGregorian(date) {
   return date.toLocaleDateString("en-US", options);
 }
 
-function formatTime(date) {
-  return date.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
+/**
+ * Formats `date` as a time string. 24-hour output is unchanged from
+ * before ("15:57:03"); 12-hour output adds an AM/PM suffix and drops
+ * the leading zero on the hour ("3:57:03 PM"), matching how clocks
+ * conventionally display 12-hour time.
+ */
+function formatTime(date, is24Hour) {
+  return date.toLocaleTimeString("en-US", {
+    hour: is24Hour ? "2-digit" : "numeric",
     minute: "2-digit",
-    second: "2-digit"
+    second: "2-digit",
+    hour12: !is24Hour
   });
 }
 
 /**
- * Wires up all footer behavior (date toggle + theme toggle).
+ * Wires up all footer behavior (date toggle + clock toggle + theme toggle).
  * Called by footer-loader.js once the footer markup has been injected into the page.
  */
 function initFooter() {
   const dateElem = document.getElementById("full-date");
   const dateCard = document.querySelector(".footer-date-card");
   const timeElem = document.getElementById("full-time");
-  let isPersian = true;
+  const timeCard = document.querySelector(".footer-time-card");
+
+  // Restore persisted format preferences; fall back to the existing
+  // defaults (Persian calendar, 24-hour clock) when nothing is saved.
+  let isPersian = localStorage.getItem("dateFormat") !== "gregorian";
+  let is24Hour = localStorage.getItem("clockFormat") !== "12";
+
+  /** Briefly dips then restores `el`'s opacity so a value change registers. */
+  function pulse(el) {
+    el.classList.remove("value-pulse");
+    void el.offsetWidth; // restart the animation if it's already mid-way
+    el.classList.add("value-pulse");
+  }
 
   function updateClock() {
     const now = new Date();
 
     if (timeElem) {
-      timeElem.textContent = formatTime(now);
+      timeElem.textContent = formatTime(now, is24Hour);
     }
 
     if (dateElem) {
@@ -99,8 +118,19 @@ function initFooter() {
 
     dateCard.addEventListener("click", () => {
       isPersian = !isPersian;
+      localStorage.setItem("dateFormat", isPersian ? "persian" : "gregorian");
       updateClock();
+      pulse(dateElem);
     });
+
+    if (timeCard) {
+      timeCard.addEventListener("click", () => {
+        is24Hour = !is24Hour;
+        localStorage.setItem("clockFormat", is24Hour ? "24" : "12");
+        updateClock();
+        pulse(timeElem);
+      });
+    }
   }
 
   const themeToggle = document.getElementById("theme-toggle");

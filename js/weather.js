@@ -17,6 +17,52 @@
 const WEATHER_API_KEY = "530b11acc74c2eabe7b215382a072dee";
 const WEATHER_CITY = "Tehran";
 
+// localStorage key for the user's preferred temperature unit ("C" or "F").
+const WEATHER_UNIT_KEY = "weatherUnit";
+
+// Last Celsius reading from the API (the source of truth), kept around
+// so toggling the unit just re-renders instead of re-fetching.
+let lastTempCelsius = null;
+
+/** Reads the saved unit preference, defaulting to Celsius. */
+function getPreferredTempUnit() {
+  return localStorage.getItem(WEATHER_UNIT_KEY) === "F" ? "F" : "C";
+}
+
+/**
+ * Renders lastTempCelsius in the currently preferred unit.
+ * @param {boolean} animate - plays the shared "value changed" pulse;
+ *   used for user-triggered unit toggles, not the initial fetch.
+ */
+function renderTemp(animate) {
+  const tempValueEl = document.getElementById("tempValue");
+  const tempUnitEl = document.getElementById("tempUnit");
+  if (!tempValueEl || lastTempCelsius === null) return;
+
+  const unit = getPreferredTempUnit();
+  const displayTemp = unit === "F"
+    ? Math.round((lastTempCelsius * 9) / 5 + 32)
+    : lastTempCelsius;
+
+  tempValueEl.textContent = displayTemp;
+  if (tempUnitEl) tempUnitEl.textContent = `°${unit}`;
+
+  if (animate) {
+    tempValueEl.classList.remove("value-pulse");
+    void tempValueEl.offsetWidth; // restart the animation if it's already mid-way
+    tempValueEl.classList.add("value-pulse");
+  }
+}
+
+/** Flips the saved unit preference and re-renders (with the pulse cue). */
+function toggleTempUnit() {
+  if (lastTempCelsius === null) return; // nothing to convert yet
+
+  const nextUnit = getPreferredTempUnit() === "C" ? "F" : "C";
+  localStorage.setItem(WEATHER_UNIT_KEY, nextUnit);
+  renderTemp(true);
+}
+
 /**
  * Fetches current weather for WEATHER_CITY and updates the widget's
  * city/temperature/clouds/humidity text. Fails silently in the UI (the
@@ -40,8 +86,9 @@ function fetchWeather() {
       if (!cityEl || !tempValueEl) return;
 
       cityEl.innerText = cityName;
-      tempValueEl.textContent = temp;
+      lastTempCelsius = temp;
       if (tempUnitEl) tempUnitEl.style.display = "";
+      renderTemp(false);
       if (cloudsEl) cloudsEl.textContent = clouds === null ? "--" : clouds + "%";
       if (humidityEl) humidityEl.textContent = humidity + "%";
     })
@@ -53,6 +100,7 @@ function fetchWeather() {
       const tempUnitEl = document.getElementById("tempUnit");
       if (cityEl && tempValueEl) {
         cityEl.textContent = WEATHER_CITY;
+        lastTempCelsius = null;
         tempValueEl.textContent = "N/A";
         if (tempUnitEl) tempUnitEl.style.display = "none";
       }
@@ -62,10 +110,15 @@ function fetchWeather() {
 /**
  * Entry point called by widget-loader.js once weather.html has been
  * injected into #widget-container. Fetches weather and wires up the
- * "View forecast" link.
+ * "View forecast" link and the click-to-toggle temperature unit.
  */
 function initWeatherWidget() {
   fetchWeather();
+
+  const tempEl = document.getElementById("temp");
+  if (tempEl) {
+    tempEl.addEventListener("click", toggleTempUnit);
+  }
 
   const forecastLink = document.getElementById("weatherForecastLink");
   if (forecastLink) {
