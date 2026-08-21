@@ -65,7 +65,9 @@
     const searchInput = document.getElementById("imageSearchInput");
 
     form.addEventListener("submit", (e) => {
-      if (searchInput.value.trim() === "") {
+      const query = searchInput.value.trim();
+
+      if (query === "") {
         e.preventDefault();
 
         searchInput.classList.add("shake");
@@ -73,7 +75,12 @@
         setTimeout(() => {
           searchInput.classList.remove("shake");
         }, 300);
+        return;
       }
+
+      // Record this query so it's suggested first next time (see
+      // getImageSearchSuggestion() in js/image-search-autocomplete.js).
+      saveImageSearchHistory(query);
     });
 
     searchInput.focus();
@@ -85,6 +92,15 @@
       document.getElementById("ghostTyped"),
       document.getElementById("ghostRemainder")
     );
+
+    // "/" focuses the search input, unless it's already focused --
+    // same shortcut Web Search uses (see js/search.js).
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "/" && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
   </script>
 
   <script src="../js/footer.js"></script>

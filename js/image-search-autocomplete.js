@@ -6,6 +6,10 @@
    exists for Web Search (see js/search.js + css/history-search.css)
    and is intentionally NOT reused here -- this is a distinct,
    Image-Search-only interaction.
+
+   Suggestions come from two sources, in priority order: the user's
+   own recent searches (see IMAGE_SEARCH_HISTORY_KEY), then the
+   curated IMAGE_SEARCH_SUGGESTIONS dataset below.
    =============================== */
 
 /**
@@ -224,14 +228,68 @@ const IMAGE_SUGGESTIONS_FLAT = [
   ...new Set(Object.values(IMAGE_SEARCH_SUGGESTIONS).flat()),
 ];
 
+// localStorage key + cap for the user's own recent Image Search
+// queries. Kept small (10) since these are only ever used as
+// autocomplete suggestions, not shown as a browsable list.
+const IMAGE_SEARCH_HISTORY_KEY = "imageSearchHistory";
+const IMAGE_SEARCH_HISTORY_LIMIT = 10;
+
+/** Reads the saved recent-search list (most recent first). */
+function getImageSearchHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(IMAGE_SEARCH_HISTORY_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
 /**
- * Finds the best inline completion for `query`.
- *
- * "Best" = the shortest suggestion that starts with `query` (case
- * insensitive), so a short, tight completion is preferred over a
- * longer, more specific one -- e.g. typing "ai" should suggest
- * "ai portrait" before "ai futuristic architecture". Ties are broken
- * alphabetically for stable, predictable results.
+ * Prepends `query` to the recent-search list, de-duplicated (case
+ * insensitive) and capped at IMAGE_SEARCH_HISTORY_LIMIT. Called from
+ * html/image.html's submit handler once a search actually goes out.
+ */
+function saveImageSearchHistory(query) {
+  const trimmed = query.trim();
+  if (!trimmed) return;
+
+  let history = getImageSearchHistory();
+  history = [trimmed, ...history.filter((q) => q.toLowerCase() !== trimmed.toLowerCase())];
+  history = history.slice(0, IMAGE_SEARCH_HISTORY_LIMIT);
+  localStorage.setItem(IMAGE_SEARCH_HISTORY_KEY, JSON.stringify(history));
+}
+
+/**
+ * Returns the shortest entry in `list` that starts with
+ * `normalizedQuery` (already lowercased) and is longer than it, or
+ * null if nothing matches. Ties are broken alphabetically for stable,
+ * predictable results. Shared by both the history and dataset lookups
+ * in getImageSearchSuggestion() below.
+ */
+function findShortestPrefixMatch(list, normalizedQuery) {
+  let best = null;
+  for (const entry of list) {
+    const candidate = entry.toLowerCase();
+    if (!candidate.startsWith(normalizedQuery) || candidate.length === normalizedQuery.length) {
+      continue;
+    }
+    if (
+      !best ||
+      candidate.length < best.length ||
+      (candidate.length === best.length && candidate < best)
+    ) {
+      best = entry; // keep the original casing (matters for history entries)
+    }
+  }
+  return best;
+}
+
+/**
+ * Finds the best inline completion for `query`. The user's own recent
+ * searches (see IMAGE_SEARCH_HISTORY_KEY) are checked first and win
+ * over the curated dataset, so a phrase they've actually searched
+ * before is suggested ahead of a generic one -- e.g. after searching
+ * "cyberpunk city lights" once, typing "cyber" suggests that again
+ * before falling back to the shorter "cyberpunk car".
  *
  * Returns the full suggestion string, or null when there's nothing to
  * suggest (empty query, no match, or the query already equals a
@@ -241,20 +299,10 @@ function getImageSearchSuggestion(query) {
   const normalized = query.toLowerCase();
   if (!normalized) return null;
 
-  let best = null;
-  for (const suggestion of IMAGE_SUGGESTIONS_FLAT) {
-    if (!suggestion.startsWith(normalized) || suggestion.length === normalized.length) {
-      continue;
-    }
-    if (
-      !best ||
-      suggestion.length < best.length ||
-      (suggestion.length === best.length && suggestion < best)
-    ) {
-      best = suggestion;
-    }
-  }
-  return best;
+  const historyMatch = findShortestPrefixMatch(getImageSearchHistory(), normalized);
+  if (historyMatch) return historyMatch;
+
+  return findShortestPrefixMatch(IMAGE_SUGGESTIONS_FLAT, normalized);
 }
 
 /**
