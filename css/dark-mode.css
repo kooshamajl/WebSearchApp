@@ -40,6 +40,23 @@
   --glass-btn-border-dark: rgba(120, 170, 200, 0.22);
   --glass-btn-bg-dark-hover: linear-gradient(145deg, rgba(37, 49, 61, 0.68), rgba(50, 66, 78, 0.60));
   --glass-btn-border-dark-hover: rgba(135, 185, 215, 0.28);
+
+  /* History dropdown tokens (dark theme) -- see css/history-search.css
+     for the light-theme defaults these override. */
+  --history-bg: rgba(40, 40, 40, 0.68);
+  --history-border: rgba(255, 255, 255, 0.08);
+  --history-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  --history-inset-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  --history-header-border: rgba(255, 255, 255, 0.08);
+  --history-header-label-color: var(--text-main);
+
+  --history-clear-color: var(--text-soft);
+  --history-clear-hover-bg: rgba(255, 255, 255, 0.08);
+  --history-clear-hover-color: var(--text-main);
+
+  --history-row-text-color: var(--text-main);
+  --history-row-hover-bg: rgba(107, 114, 128, 0.25);
 }
 
 body {
@@ -104,16 +121,12 @@ body {
   background: var(--accent-hover);
 }
 
-#historyList {
-  background: var(--glass-strong);
-}
-
-#historyList li {
+/* #historyList and its children (.history-header, .history-item, etc.)
+   pull their colors from the --history-* tokens above via
+   css/history-search.css, so no per-selector overrides are needed here
+   beyond the token redefinitions. */
+.history-empty {
   color: var(--text-main);
-}
-
-#historyList li:hover {
-  background: rgba(107, 114, 128, 0.2);
 }
 
 .ping-icon {

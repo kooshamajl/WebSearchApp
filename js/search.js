@@ -63,10 +63,11 @@ let acIndex = -1;   // index of the keyboard-highlighted suggestion, -1 = none
 function getSuggestions(query) {
   const q = query.toLowerCase();
 
-  const historyMatches = (JSON.parse(localStorage.getItem("history")) || [])
-    .filter((item) => item.toLowerCase().includes(q))
+  const historyMatches = getHistory()
+    .map((item) => item.value)
+    .filter((value) => value.toLowerCase().includes(q))
     .slice(0, MAX_HISTORY_SUGGESTIONS)
-    .map((item) => ({ type: "history", label: item, value: item }));
+    .map((value) => ({ type: "history", label: value, value: value }));
 
   const remainingSlots = MAX_SUGGESTIONS - historyMatches.length;
 
@@ -275,13 +276,42 @@ form.addEventListener("submit", (e) => {
   }
 });
 
+/**
+ * Reads the history array from localStorage as { value, time } entries.
+ * Older stored history (before timestamps were added) may just be an
+ * array of plain strings -- those are normalized to { value, time: null }
+ * so the rest of the code can rely on a single shape.
+ */
+function getHistory() {
+  const raw = JSON.parse(localStorage.getItem("history")) || [];
+  return raw.map((item) =>
+    typeof item === "string" ? { value: item, time: Date.now() } : item
+  );
+}
+
+/** Formats a saved-search timestamp as a short local time, e.g. "6:37 PM". */
+function formatHistoryTime(time) {
+  if (!time) return "";
+  return new Date(time).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
+
+// Must match --history-remove-duration in css/history-search.css: how
+// long the delete/clear collapse-and-fade transition plays before the
+// history dropdown actually re-renders.
+const REMOVE_ANIMATION_MS = 220;
+
 /** Prepends `value` to the search history, de-duplicated and capped at 5. */
 function saveSearch(value) {
-  let history = JSON.parse(localStorage.getItem("history")) || [];
-  history.unshift(value);
-  history = [...new Set(history)];
+  let history = getHistory();
+  history = history.filter((item) => item.value !== value);
+  history.unshift({ value, time: Date.now() });
   history = history.slice(0, 5);
   localStorage.setItem("history", JSON.stringify(history));
+}
+
+/** Clears the entire search history. */
+function clearHistory() {
+  localStorage.setItem("history", JSON.stringify([]));
 }
 
 /**
@@ -290,28 +320,55 @@ function saveSearch(value) {
  * addition to being clickable, and carries its own delete button.
  */
 function renderHistory() {
-  const history = JSON.parse(localStorage.getItem("history")) || [];
+  const history = getHistory();
   historyList.innerHTML = "";
 
   if (history.length === 0) {
     const li = document.createElement("li");
     li.textContent = "History is empty";
+    li.className = "history-empty";
     li.style.listStyle = "none";
-    li.style.opacity = "0.7";
     li.style.cursor = "default";
     historyList.appendChild(li);
     return;
   }
 
+  const headerLi = document.createElement("li");
+  headerLi.className = "history-header";
+  headerLi.style.listStyle = "none";
+
+  const headerLabel = document.createElement("span");
+  headerLabel.className = "history-header-label";
+  headerLabel.textContent = "Recent searches";
+  headerLi.appendChild(headerLabel);
+
+  const clearBtn = document.createElement("button");
+  clearBtn.type = "button";
+  clearBtn.className = "clear-history-btn";
+  clearBtn.innerHTML = '<i class="fa-solid fa-trash-can" aria-hidden="true"></i> Clear';
+  clearBtn.setAttribute("aria-label", "Clear all search history");
+  clearBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const items = historyList.querySelectorAll(".history-item");
+    items.forEach((rowEl) => rowEl.classList.add("history-item-removing"));
+    setTimeout(() => {
+      clearHistory();
+      renderHistory();
+    }, REMOVE_ANIMATION_MS);
+  });
+  headerLi.appendChild(clearBtn);
+
+  historyList.appendChild(headerLi);
+
   history.forEach((item, index) => {
     const li = document.createElement("li");
-    li.textContent = item;
+    li.className = "history-item";
     li.tabIndex = 0;
     li.setAttribute("role", "button");
-    li.setAttribute("aria-label", `Search again: ${item}`);
+    li.setAttribute("aria-label", `Search again: ${item.value}`);
 
     const selectItem = () => {
-      searchInput.value = item;
+      searchInput.value = item.value;
       form.requestSubmit();
     };
 
@@ -324,18 +381,36 @@ function renderHistory() {
       }
     });
 
+    const icon = document.createElement("i");
+    icon.className = "fa-solid fa-clock-rotate-left history-item-icon";
+    icon.setAttribute("aria-hidden", "true");
+    li.appendChild(icon);
+
+    const textEl = document.createElement("span");
+    textEl.className = "history-item-text";
+    textEl.textContent = item.value;
+    li.appendChild(textEl);
+
+    const timeEl = document.createElement("span");
+    timeEl.className = "history-item-time";
+    timeEl.textContent = formatHistoryTime(item.time);
+    li.appendChild(timeEl);
+
     const deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
     deleteBtn.textContent = "×";
     deleteBtn.className = "delete-btn";
-    deleteBtn.setAttribute("aria-label", `Delete "${item}" from history`);
+    deleteBtn.setAttribute("aria-label", `Delete "${item.value}" from history`);
 
     deleteBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      let current = JSON.parse(localStorage.getItem("history")) || [];
-      current.splice(index, 1);
-      localStorage.setItem("history", JSON.stringify(current));
-      renderHistory();
+      li.classList.add("history-item-removing");
+      setTimeout(() => {
+        let current = getHistory();
+        current.splice(index, 1);
+        localStorage.setItem("history", JSON.stringify(current));
+        renderHistory();
+      }, REMOVE_ANIMATION_MS);
     });
 
     li.appendChild(deleteBtn);
@@ -348,6 +423,32 @@ toggleHistoryBtn.addEventListener("click", () => {
   closeAutocomplete();
   if (typeof closeEngineMenu === "function") closeEngineMenu(false);
   historyList.classList.toggle("show");
+});
+
+// Arrow-key navigation between history rows while the dropdown is open.
+// Works whether focus is still on the toggle button (first ArrowDown
+// jumps into the list) or already on a row/its delete button.
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+  if (!historyList.classList.contains("show")) return;
+
+  const active = document.activeElement;
+  if (active !== toggleHistoryBtn && !historyList.contains(active)) return;
+
+  const items = Array.from(historyList.querySelectorAll(".history-item"));
+  if (items.length === 0) return;
+
+  e.preventDefault();
+
+  const currentIndex = items.indexOf(active);
+  let nextIndex;
+  if (e.key === "ArrowDown") {
+    nextIndex = currentIndex === -1 ? 0 : Math.min(currentIndex + 1, items.length - 1);
+  } else {
+    nextIndex = currentIndex === -1 ? items.length - 1 : Math.max(currentIndex - 1, 0);
+  }
+
+  items[nextIndex].focus();
 });
 
 // Global keyboard shortcuts: Ctrl+H toggles history, "/" focuses the

@@ -2,6 +2,40 @@
    Search History Button + Dropdown
    Rendered/updated by js/search.js (renderHistory / saveSearch).
    ============================ */
+
+/* History dropdown design tokens (light theme defaults).
+   Dark-mode.css redefines these same variables for the dark theme. */
+:root {
+  --history-width: 320px;
+  --history-bg: rgba(255, 255, 255, 0.72);
+  --history-border: rgba(255, 255, 255, 0.5);
+  --history-blur: blur(14px) saturate(160%);
+  --history-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+  --history-inset-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  --history-header-border: rgba(0, 0, 0, 0.07);
+  --history-header-label-color: var(--list-text);
+  --history-header-label-opacity: 0.65;
+
+  --history-clear-color: var(--text-soft, #5E7079);
+  --history-clear-hover-bg: rgba(0, 0, 0, 0.05);
+  --history-clear-hover-color: var(--list-text);
+
+  --history-row-text-color: var(--list-text);
+  --history-row-hover-bg: rgba(138, 204, 251, 0.18);
+  --history-icon-opacity: 0.45;
+  --history-time-opacity: 0.5;
+
+  --history-delete-opacity: 0.55;
+  --history-delete-hover-bg: rgba(255, 75, 75, 0.18);
+  --history-delete-active-bg: rgba(255, 75, 75, 0.3);
+  --history-delete-active-color: #ff2a2a;
+
+  /* Must match REMOVE_ANIMATION_MS in js/search.js, which delays the
+     actual delete/clear until this transition finishes playing. */
+  --history-remove-duration: 220ms;
+}
+
 #toggleHistory {
   background: var(--history-btn-bg);
   border-radius: var(--radius-pill);
@@ -28,15 +62,21 @@
 }
 
 #historyList {
-  list-style: decimal;
-  list-style-position: inside;
-  padding: 4px;
+  list-style: none;
+  padding: 6px;
   margin-top: 10px;
   margin-left: 145px;
-  max-width: 240px;
-  background: rgba(255, 255, 255, 0.95);
+  width: var(--history-width);
+  max-width: var(--history-width);
+
+  background: var(--history-bg);
+  backdrop-filter: var(--history-blur);
+  -webkit-backdrop-filter: var(--history-blur);
+  border: 1px solid var(--history-border);
   border-radius: var(--radius-md);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    var(--history-shadow),
+    var(--history-inset-highlight);
 
   max-height: 0;
   overflow: hidden;
@@ -44,9 +84,9 @@
   transform: translateY(-6px);
 
   transition:
-    max-height 0.4s ease,
-    opacity var(--transition-fast),
-    transform var(--transition-fast);
+    max-height 0.35s ease,
+    opacity 0.18s ease,
+    transform 0.18s ease;
 }
 
 #historyList.show {
@@ -55,63 +95,160 @@
   transform: translateY(0);
 }
 
+/* Header row: "Recent searches" label + Clear-all button */
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px 8px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid var(--history-header-border);
+}
 
-#historyList li {
-  display: block;
-  width: 100%;
-  padding: 9px 9px;
-  text-align: left;
-  font-size: 14px;
-  opacity: 0.8;
-  color: var(--list-text);
+.history-header-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--history-header-label-color);
+  opacity: var(--history-header-label-opacity);
+}
+
+.clear-history-btn {
+  border: none;
+  background: transparent;
+  color: var(--history-clear-color);
+  opacity: 0.65;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  margin-left: -1px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: background 0.18s ease, opacity 0.18s ease, color 0.18s ease;
+}
+
+.clear-history-btn i {
+  font-size: 10.5px;
+}
+
+.clear-history-btn:hover {
+  opacity: 1;
+  color: var(--history-clear-hover-color);
+  background: var(--history-clear-hover-bg);
+}
+
+.history-empty {
+  padding: 10px 8px;
+  font-size: 13px;
+  color: var(--history-row-text-color);
+  opacity: 0.6;
+  text-align: left;
+}
+
+#historyList li.history-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 8px;
+  text-align: left;
+  font-size: 13.5px;
+  color: var(--history-row-text-color);
+  cursor: pointer;
   border-radius: var(--radius-control);
-  transition: background var(--transition-fast), transform var(--transition-fast);
+  overflow: hidden;
+  max-height: 60px;
+  transition:
+    background 0.18s ease,
+    opacity var(--history-remove-duration) ease,
+    max-height var(--history-remove-duration) ease,
+    padding var(--history-remove-duration) ease,
+    margin var(--history-remove-duration) ease,
+    transform var(--history-remove-duration) ease;
 }
 
-#historyList li:last-child {
-  border-bottom: none;
+/* Applied just before an item is spliced out of storage (delete button
+   or Clear all), so js/search.js can let the collapse/fade play out
+   before it actually re-renders the list. Duration must match the
+   REMOVE_ANIMATION_MS constant in js/search.js. */
+#historyList li.history-item.history-item-removing {
+  opacity: 0;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  transform: translateX(6px);
+  pointer-events: none;
 }
 
-#historyList li:hover {
-  background: rgba(138, 204, 251, 0.25);
-  transform: translateX(0.5px);
+.history-item-icon {
+  flex: none;
+  font-size: 11px;
+  opacity: var(--history-icon-opacity);
+  width: 12px;
+  text-align: center;
 }
 
-#historyList li:focus-visible {
+.history-item-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+.history-item-time {
+  flex: none;
+  font-size: 11px;
+  opacity: var(--history-time-opacity);
+  margin-right: 2px;
+}
+
+#historyList li.history-item:hover {
+  background: var(--history-row-hover-bg);
+}
+
+#historyList li.history-item:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: -2px;
-  background: rgba(138, 204, 251, 0.25);
+  background: var(--history-row-hover-bg);
 }
 
 .delete-btn {
-  float: right;
+  flex: none;
   border: none;
   color: var(--delete-color);
-  opacity: 0.8;
+  opacity: var(--history-delete-opacity);
   background: transparent;
   border-radius: 50%;
   font-weight: bold;
   cursor: pointer;
-  font-size: 15px;
-  width: 22px;
-  height: 22px;
+  font-size: 14px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: opacity 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.history-item:hover .delete-btn {
+  opacity: 0.85;
 }
 
 .delete-btn:hover {
+  opacity: 1;
   color: var(--delete-hover);
-  background: rgba(255, 75, 75, 0.2);
+  background: var(--history-delete-hover-bg);
 }
 
 .delete-btn:active {
-  background: rgba(255, 75, 75, 0.35);
-  color: #ff2a2a;
+  background: var(--history-delete-active-bg);
+  color: var(--history-delete-active-color);
 }
 
 /* ============================
@@ -208,7 +345,8 @@
      so we drop it and just center the dropdown instead. */
   #historyList {
     margin-left: 0;
-    max-width: calc(100vw - 32px);
+    width: auto;
+    max-width: min(var(--history-width), calc(100vw - 32px));
   }
 
   /* This file loads after main-style.css, so its unconditional
