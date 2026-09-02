@@ -116,19 +116,35 @@ function initFooter() {
     updateClock();
     setInterval(updateClock, 1000);
 
-    dateCard.addEventListener("click", () => {
+    const toggleDateFormat = () => {
       isPersian = !isPersian;
       localStorage.setItem("dateFormat", isPersian ? "persian" : "gregorian");
       updateClock();
       pulse(dateElem);
+    };
+
+    dateCard.addEventListener("click", toggleDateFormat);
+    dateCard.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleDateFormat();
+      }
     });
 
     if (timeCard) {
-      timeCard.addEventListener("click", () => {
+      const toggleClockFormat = () => {
         is24Hour = !is24Hour;
         localStorage.setItem("clockFormat", is24Hour ? "24" : "12");
         updateClock();
         pulse(timeElem);
+      };
+
+      timeCard.addEventListener("click", toggleClockFormat);
+      timeCard.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleClockFormat();
+        }
       });
     }
   }

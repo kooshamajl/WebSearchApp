@@ -118,6 +118,12 @@ function initWeatherWidget() {
   const tempEl = document.getElementById("temp");
   if (tempEl) {
     tempEl.addEventListener("click", toggleTempUnit);
+    tempEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleTempUnit();
+      }
+    });
   }
 
   const forecastLink = document.getElementById("weatherForecastLink");
