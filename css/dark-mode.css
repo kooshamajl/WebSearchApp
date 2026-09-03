@@ -354,6 +354,52 @@ body {
 }
 
 /* ============================
+   Quick Links (dark mode)
+   ============================ */
+.quick-link-add-btn {
+  background: var(--glass-btn-bg-dark);
+  border: 1px solid var(--glass-btn-border-dark);
+  color: rgba(235, 243, 248, .92);
+}
+
+.quick-link-add-btn:hover:not(:disabled) {
+  background: var(--glass-btn-bg-dark-hover);
+  border-color: var(--glass-btn-border-dark-hover);
+}
+
+.quick-link-popover {
+  background: var(--glass-strong);
+  border-color: var(--border-soft);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.quick-link-popover-row label {
+  color: var(--text-soft);
+}
+
+.quick-link-input {
+  background: rgba(50, 50, 50, 0.6);
+  border: 1px solid var(--border-soft);
+  color: var(--text-main);
+}
+
+.quick-link-input::placeholder {
+  color: var(--text-soft);
+}
+
+.quick-link-cancel-btn {
+  color: var(--text-soft);
+}
+
+.quick-link-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.quick-link-divider {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ============================
    Search Engine Selector (dark mode)
    ============================ */
 .engine-select-btn {

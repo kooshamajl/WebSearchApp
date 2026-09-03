@@ -1,26 +1,39 @@
-<!-- Quick Links widget: a row of shortcut icons to frequently used sites. -->
+<!--
+  Quick Links widget: a row of shortcut icons to frequently used sites,
+  plus a small "Add" control. The link row itself is rendered by
+  js/quick-links.js from localStorage (seeded with the same 6 sites
+  this partial used to hard-code) so links can be added/removed and
+  survive a reload; see that file for the render/add/remove logic.
+-->
 <div class="glass-widget" id="quickLinks">
-  <a href="https://youtube.com" target="_blank" rel="noopener" title="YouTube" aria-label="Open YouTube">
-    <i class="fab fa-youtube" aria-hidden="true"></i>
-  </a>
+  <div class="quick-links-row" id="quickLinksRow"></div>
 
-  <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram" aria-label="Open Instagram">
-    <i class="fab fa-instagram" aria-hidden="true"></i>
-  </a>
+  <span class="quick-link-divider" aria-hidden="true"></span>
 
-  <a href="https://chat.openai.com" target="_blank" rel="noopener" title="ChatGPT" aria-label="Open ChatGPT">
-    <i class="fas fa-robot" aria-hidden="true"></i>
-  </a>
+  <button type="button" class="quick-link-add-btn" id="quickLinkAddBtn" aria-haspopup="dialog"
+    aria-expanded="false" aria-label="Add quick link">
+    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+  </button>
 
-  <a href="https://github.com" target="_blank" rel="noopener" title="GitHub" aria-label="Open GitHub">
-    <i class="fab fa-github" aria-hidden="true"></i>
-  </a>
+  <div class="quick-link-popover" id="quickLinkPopover" role="dialog" aria-modal="true"
+    aria-label="Add quick link">
+    <div class="quick-link-popover-row">
+      <label for="quickLinkName">Name</label>
+      <input type="text" id="quickLinkName" class="quick-link-input" maxlength="24" autocomplete="off"
+        placeholder="e.g. Amazon" />
+    </div>
 
-  <a href="https://mail.google.com" target="_blank" rel="noopener" title="Gmail" aria-label="Open Gmail">
-    <i class="fas fa-envelope" aria-hidden="true"></i>
-  </a>
+    <div class="quick-link-popover-row">
+      <label for="quickLinkUrl">URL or site name</label>
+      <input type="text" id="quickLinkUrl" class="quick-link-input" maxlength="60" autocomplete="off"
+        placeholder="e.g. amazon.com" />
+    </div>
 
-  <a href="https://drive.google.com" target="_blank" rel="noopener" title="Drive" aria-label="Open Google Drive">
-    <i class="fab fa-google-drive" aria-hidden="true"></i>
-  </a>
+    <p class="quick-link-error" id="quickLinkError" aria-live="polite"></p>
+
+    <div class="quick-link-popover-actions">
+      <button type="button" class="quick-link-cancel-btn" id="quickLinkCancelBtn">Cancel</button>
+      <button type="button" class="quick-link-save-btn" id="quickLinkSaveBtn">Add</button>
+    </div>
+  </div>
 </div>
