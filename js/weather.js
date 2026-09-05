@@ -64,12 +64,20 @@ function toggleTempUnit() {
 }
 
 /**
- * Fetches current weather for WEATHER_CITY and updates the widget's
- * city/temperature/clouds/humidity text. Fails silently in the UI (the
- * widget just keeps its last known values) but logs the error.
+ * Fetches current weather and updates the widget's city/temperature/
+ * clouds/humidity text. Pass lat/lon to look up the user's actual
+ * location; omit them to use the WEATHER_CITY (Tehran) fallback.
+ * Fails silently in the UI (the widget just keeps its last known
+ * values, or falls back to Tehran if a coordinate lookup failed) but
+ * logs the error.
  */
-function fetchWeather() {
-  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${WEATHER_CITY}&appid=${WEATHER_API_KEY}&units=metric`)
+function fetchWeather(lat, lon) {
+  const usingCoords = typeof lat === "number" && typeof lon === "number";
+  const url = usingCoords
+    ? `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`
+    : `https://api.openweathermap.org/data/2.5/weather?q=${WEATHER_CITY}&appid=${WEATHER_API_KEY}&units=metric`;
+
+  fetch(url)
     .then(res => res.json())
     .then(data => {
       const temp = Math.round(data.main.temp);
@@ -95,6 +103,13 @@ function fetchWeather() {
     .catch(err => {
       console.error("Weather fetch failed:", err);
 
+      if (usingCoords) {
+        // The coordinate-based lookup failed -- silently retry with
+        // the default city instead of showing a broken state.
+        fetchWeather();
+        return;
+      }
+
       const cityEl = document.getElementById("city");
       const tempValueEl = document.getElementById("tempValue");
       const tempUnitEl = document.getElementById("tempUnit");
@@ -108,12 +123,36 @@ function fetchWeather() {
 }
 
 /**
+ * Tries to get the user's local position via the browser Geolocation
+ * API and fetch weather for it; falls back to WEATHER_CITY (Tehran)
+ * -- silently, no permission/error UI -- when geolocation isn't
+ * supported, is denied, times out, or the coordinate lookup fails
+ * (that last case is handled inside fetchWeather's catch).
+ */
+function requestLocalWeather() {
+  if (!navigator.geolocation) {
+    fetchWeather();
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      fetchWeather(position.coords.latitude, position.coords.longitude);
+    },
+    () => {
+      fetchWeather();
+    },
+    { timeout: 5000 }
+  );
+}
+
+/**
  * Entry point called by widget-loader.js once weather.html has been
  * injected into #widget-container. Fetches weather and wires up the
  * "View forecast" link and the click-to-toggle temperature unit.
  */
 function initWeatherWidget() {
-  fetchWeather();
+  requestLocalWeather();
 
   const tempEl = document.getElementById("temp");
   if (tempEl) {
