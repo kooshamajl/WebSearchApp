@@ -130,13 +130,27 @@ function initQuickLinksWidget() {
       // Empty state, same idea as .tasks-empty's "No tasks yet" / the
       // history dropdown's "History is empty" -- so removing every
       // link leaves a small placeholder instead of a blank gap.
-      // Styled inline (not a new CSS class) since it's just a couple
-      // of properties reusing the existing --widget-text-muted token.
+      // `white-space: nowrap` matters here: during the width-lock step
+      // below, the widget briefly sits at its old (narrower) width --
+      // without nowrap the text would wrap to 2 lines for that one
+      // frame, bumping the widget's height up and back down.
       const empty = document.createElement("span");
-      empty.textContent = "No quick links yet";
+      empty.style.display = "inline-flex";
+      empty.style.alignItems = "center";
+      empty.style.gap = "6px";
       empty.style.fontSize = "11px";
       empty.style.color = "var(--widget-text-muted)";
       empty.style.opacity = "0.75";
+      empty.style.whiteSpace = "nowrap";
+
+      const icon = document.createElement("i");
+      icon.className = "fa-solid fa-link-slash";
+      icon.setAttribute("aria-hidden", "true");
+
+      const label = document.createElement("span");
+      label.textContent = "No quick links yet";
+
+      empty.append(icon, label);
       row.appendChild(empty);
     }
 
