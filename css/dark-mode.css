@@ -231,6 +231,10 @@ body {
   background: rgba(255, 255, 255, 0.14);
 }
 
+.weather-detail:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .crypto-divider {
   background: rgba(255, 255, 255, 0.14);
 }
