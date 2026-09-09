@@ -1,18 +1,47 @@
 /* ===============================
    Crypto Price Widget (Neon Chart)
    Renders a small glowing sparkline of Bitcoin's price using the
-   CoinGecko public API, with a live price refreshed periodically.
+   CoinGecko public API, with a 24H/7D toggle for the chart and the
+   percentage-change figure.
+
+   Data model: ONE 7-day historical request (~hourly points) is kept
+   as `priceHistory`, an array of { t: timestampMs, p: price } points.
+   Both the 24H and 7D views (and the "current" price) are derived
+   from that single coherent, evenly-spaced dataset -- there's no
+   separate live-price poll appending differently-spaced points onto
+   it, which used to make the array's time spacing inconsistent.
+
    If the API is unreachable, the widget falls back to synthetic demo
    data and clearly labels it as such (see isDemoData) instead of
    silently pretending it's real.
    =============================== */
 
-const prices = [];
-const MAX_POINTS = 45;
+const MAX_POINTS = 45; // chart points to actually render, after downsampling
+const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
+const DAY_MS = 24 * 60 * 60 * 1000;
+const TIMEFRAME_KEY = "cryptoTimeframe"; // localStorage key for the 24H/7D choice
+
+let priceHistory = []; // [{ t, p }, ...], oldest first, ~7 days of hourly points
+let currentTimeframe = loadTimeframePref(); // "24h" | "7d" -- restored from localStorage, defaults to "24h"
 let intervalId;
 let isDemoData = false;
 
 /* ---------- Helpers ---------- */
+
+/** Reads the saved 24H/7D choice, defaulting to "24h" if missing/invalid. */
+function loadTimeframePref() {
+  const saved = localStorage.getItem(TIMEFRAME_KEY);
+  return saved === "24h" || saved === "7d" ? saved : "24h";
+}
+
+/** Reflects `currentTimeframe` onto the toggle buttons' active/aria-pressed state. */
+function syncTimeframeButtons() {
+  document.querySelectorAll(".tf-btn").forEach(btn => {
+    const active = btn.dataset.tf === currentTimeframe;
+    btn.classList.toggle("active", active);
+    btn.setAttribute("aria-pressed", String(active));
+  });
+}
 
 /** Reads a CSS custom property from :root, e.g. cssVar('--neon-success'). */
 function cssVar(name, fallback) {
@@ -26,107 +55,161 @@ function hexToRgb(hex) {
   return m.map(x => parseInt(x, 16)).join(",");
 }
 
+/**
+ * Reduces `points` to at most `maxPoints` for cheap Canvas rendering
+ * (the widget is a small sparkline, not a data-dense chart). Always
+ * keeps the true last point so the chart's end matches the actual
+ * latest price.
+ */
+function downsample(points, maxPoints) {
+  if (points.length <= maxPoints) return points;
+  const step = points.length / maxPoints;
+  const out = [];
+  for (let i = 0; i < maxPoints; i++) {
+    out.push(points[Math.floor(i * step)]);
+  }
+  out[out.length - 1] = points[points.length - 1];
+  return out;
+}
+
+/** The slice of priceHistory belonging to the currently selected timeframe. */
+function getSliceForTimeframe(tf) {
+  if (tf === "24h") {
+    const cutoff = priceHistory[priceHistory.length - 1].t - DAY_MS;
+    const slice = priceHistory.filter(pt => pt.t >= cutoff);
+    // Hourly data should easily cover the last 24h; fall back to the
+    // full history only if something left an unexpectedly sparse set.
+    return slice.length >= 2 ? slice : priceHistory;
+  }
+  return priceHistory; // "7d" -- the whole (~7-day) history
+}
+
 /* ---------- Init ---------- */
 
 /**
  * Entry point called by widget-loader.js once crypto.html has been
- * injected into #widget-container. Loads `days` worth of daily price
- * history to seed the sparkline, then starts polling for the live price.
+ * injected into #widget-container. Fetches ~7 days of price history
+ * (used to derive both 24H and 7D), then starts polling for updates.
  */
-async function initCryptoWidget(days = 30) {
-  try {
-    const res = await fetch(
-      `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${days}&interval=daily`
-    );
-    const data = await res.json();
+async function initCryptoWidget() {
+  // HTML always ships with "24H" marked active -- if a "7d" preference
+  // was restored from localStorage, reflect that before the first render.
+  syncTimeframeButtons();
 
-    if (!data.prices || !data.prices.length)
-      throw new Error("No data returned");
-
-    prices.length = 0;
-    data.prices.slice(-MAX_POINTS).forEach(p => prices.push(p[1]));
-
-    isDemoData = false;
-    drawSparkline(prices);
-    updateText(prices);
-
-  } catch (err) {
-    console.error("Init error:", err);
-
-    // API unreachable/rate-limited: fall back to a synthetic wave so the
-    // widget still has *something* to draw, but flag it via isDemoData
-    // so updateText() can make that visible to the user instead of
-    // showing fake numbers as if they were real.
-    prices.length = 0;
-    for (let i = 0; i < MAX_POINTS; i++) {
-      prices.push(45000 + Math.sin(i / 3) * 800);
-    }
-
-    isDemoData = true;
-    drawSparkline(prices);
-    updateText(prices);
-  }
+  await fetchHistory();
 
   // Re-create the interval on every init so switching widgets away and
   // back doesn't stack up multiple concurrent pollers.
   if (intervalId) clearInterval(intervalId);
-  intervalId = setInterval(fetchLivePrice, 100000);
+  intervalId = setInterval(fetchHistory, REFRESH_MS);
 
   // The widget is styled with cursor: pointer (see css/widgets.css) to invite
   // a click-through to the full chart, same as the weather widget does.
-  const widget = document.getElementById("cryptoWidget");
-  if (widget) {
-    widget.addEventListener("click", () => {
+  const chart = document.getElementById("cryptoChart");
+  if (chart) {
+    chart.addEventListener("click", () => {
       window.open("https://www.coingecko.com/en/coins/bitcoin", "_blank");
     });
   }
+
+  // 24H/7D toggle. stopPropagation keeps a toggle click from also
+  // triggering the widget-wide "open CoinGecko" click handler above.
+  document.querySelectorAll(".tf-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setTimeframe(btn.dataset.tf);
+    });
+  });
 }
 
-/* ---------- Live Price ---------- */
+/** Switches the active timeframe, persists the choice, updates the toggle's visual state, and re-renders. */
+function setTimeframe(tf) {
+  if (tf === currentTimeframe) return;
+  currentTimeframe = tf;
+  localStorage.setItem(TIMEFRAME_KEY, tf);
+
+  syncTimeframeButtons();
+  render();
+}
+
+/* ---------- Data Fetch ---------- */
 
 /**
- * Polls CoinGecko's simple price endpoint and appends the latest price
- * to the rolling `prices` window, then redraws the chart. On failure,
- * the widget simply keeps showing its last known state.
+ * Fetches ~7 days of Bitcoin price history in ONE request and derives
+ * everything the widget needs (current price, 24H, 7D, chart) from
+ * it -- no separate "current price" or per-timeframe requests.
  */
-async function fetchLivePrice() {
+async function fetchHistory() {
   try {
     const res = await fetch(
-      "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+      "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7"
     );
     const data = await res.json();
 
-    const lastPrice = data.bitcoin.usd;
-    prices.push(lastPrice);
-    if (prices.length > MAX_POINTS) prices.shift();
+    if (!data.prices || data.prices.length < 2)
+      throw new Error("No data returned");
 
+    priceHistory = data.prices.map(([t, p]) => ({ t, p }));
     isDemoData = false;
-    drawSparkline(prices);
-    updateText(prices);
+    render();
 
   } catch (err) {
-    console.error("Live fetch error:", err);
+    console.error("History fetch error:", err);
+
+    // API unreachable/rate-limited: fall back to a synthetic wave so the
+    // widget still has *something* to draw, but flag it via isDemoData
+    // so updateText() can make that visible to the user instead of
+    // showing fake numbers as if they were real. Built as real hourly
+    // points over 7 days so getSliceForTimeframe() works identically.
+    const now = Date.now();
+    priceHistory = [];
+    const hours = 7 * 24;
+    for (let i = hours; i >= 0; i--) {
+      priceHistory.push({
+        t: now - i * 60 * 60 * 1000,
+        p: 45000 + Math.sin((hours - i) / 8) * 800,
+      });
+    }
+
+    isDemoData = true;
+    render();
   }
+}
+
+/** Re-derives the current timeframe's slice and redraws the chart + text. Also used by resize/theme redraw triggers. */
+function render() {
+  if (priceHistory.length < 2) return;
+
+  const slice = getSliceForTimeframe(currentTimeframe);
+  const chartPoints = downsample(slice, MAX_POINTS).map(pt => pt.p);
+
+  drawSparkline(chartPoints);
+  updateText(slice);
 }
 
 /* ---------- Text Update ---------- */
 
 /**
- * Updates the widget's name/price/percent-change text based on the
- * first and last points currently in `arr`.
+ * Updates the widget's name/price/percent-change text. `slice` is the
+ * currently selected timeframe's points; the change % is derived from
+ * its first/last price, while the displayed price always uses the
+ * single most recent point in the full history (independent of which
+ * timeframe is selected, per spec).
  */
-function updateText(arr) {
-  const last = arr[arr.length - 1];
-  const first = arr[0];
+function updateText(slice) {
+  const last = slice[slice.length - 1].p;
+  const first = slice[0].p;
   const change = ((last - first) / first) * 100;
   const isUp = change >= 0;
+
+  const currentPrice = priceHistory[priceHistory.length - 1].p;
 
   const nameEl = document.getElementById("cryptoName");
   nameEl.textContent = isDemoData ? "Bitcoin (Demo)" : "Bitcoin (BTC)";
   nameEl.classList.toggle("demo-label", isDemoData);
 
   document.getElementById("cryptoPrice").textContent =
-    "$" + Math.round(last).toLocaleString();
+    "$" + Math.round(currentPrice).toLocaleString();
 
   const changeEl = document.getElementById("cryptoChange");
   const changeIconEl = document.getElementById("cryptoChangeIcon");
@@ -205,19 +288,23 @@ function drawSparkline(data) {
     ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
   }
 
-  /* glow: a wider, blurred, translucent stroke behind the crisp line */
+  /* glow: a wider, blurred, translucent stroke behind the crisp line.
+     Slightly reduced from the original (16 -> 10 blur) so the crisper
+     main line below reads more clearly against it. */
   ctx.save();
   ctx.strokeStyle = mainColor;
   ctx.lineWidth = 4;
-  ctx.shadowBlur = 14;
+  ctx.shadowBlur = 10;
   ctx.shadowColor = mainColor;
-  ctx.globalAlpha = 0.35;
+  ctx.globalAlpha = 0.32;
   ctx.stroke();
   ctx.restore();
 
-  /* main line: the crisp, fully opaque stroke on top of the glow */
+  /* main line: the crisp, fully opaque stroke on top of the glow.
+     Slightly thicker than before (1.2 -> 1.6) for a touch more
+     sharpness/visibility, same shape and color otherwise. */
   ctx.strokeStyle = mainColor;
-  ctx.lineWidth = 1.2;
+  ctx.lineWidth = 1.6;
   ctx.globalAlpha = 1;
   ctx.stroke();
 
@@ -248,12 +335,12 @@ function drawSparkline(data) {
 // Canvas pixel buffers don't reflow on their own -- redraw on resize
 // so the sparkline stays crisp and correctly scaled.
 window.addEventListener("resize", () => {
-  if (prices.length) drawSparkline(prices);
+  if (priceHistory.length) render();
 });
 
 // Redraw immediately when the user toggles light/dark mode (see
-// js/footer.js) instead of waiting up to 100s for the next scheduled
-// fetchLivePrice() tick to happen to redraw with the new colors.
+// js/footer.js) instead of waiting for the next scheduled
+// fetchHistory() tick to happen to redraw with the new colors.
 document.addEventListener("themechange", () => {
-  if (prices.length) drawSparkline(prices);
+  if (priceHistory.length) render();
 });
