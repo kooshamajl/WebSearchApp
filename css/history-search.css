@@ -1,6 +1,6 @@
 /* ============================
    Search History Button + Dropdown
-   Rendered/updated by js/search.js (renderHistory / saveSearch).
+   Shared by the React and legacy search pages.
    ============================ */
 
 /* History dropdown design tokens (light theme defaults).
@@ -31,12 +31,11 @@
   --history-delete-active-bg: rgba(255, 75, 75, 0.3);
   --history-delete-active-color: #ff2a2a;
 
-  /* Must match REMOVE_ANIMATION_MS in js/search.js, which delays the
-     actual delete/clear until this transition finishes playing. */
+  /* Must match REMOVE_ANIMATION_MS in SearchHistory.tsx and js/search.js. */
   --history-remove-duration: 220ms;
 }
 
-#toggleHistory {
+:is(#toggleHistory, .history-toggle) {
   background: var(--history-btn-bg);
   border-radius: var(--radius-pill);
   border: 1px solid rgba(255, 255, 255, 0.01);
@@ -50,18 +49,18 @@
   transition: box-shadow var(--transition-med), transform var(--transition-med), background var(--transition-med);
 }
 
-#toggleHistory:hover {
+:is(#toggleHistory, .history-toggle):hover {
   background: var(--history-btn-hover);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   transform: translateY(-1.5px) scale(1.02);
 }
 
-#toggleHistory:active {
+:is(#toggleHistory, .history-toggle):active {
   transform: translateY(0) scale(0.98);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-#historyList {
+:is(#historyList, .history-list) {
   list-style: none;
   padding: 6px;
   margin-top: 10px;
@@ -89,7 +88,7 @@
     transform 0.18s ease;
 }
 
-#historyList.show {
+:is(#historyList, .history-list).show {
   max-height: 320px;
   opacity: 1;
   transform: translateY(0);
@@ -147,7 +146,7 @@
   text-align: left;
 }
 
-#historyList li.history-item {
+:is(#historyList, .history-list) li.history-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -169,11 +168,8 @@
     transform var(--history-remove-duration) ease;
 }
 
-/* Applied just before an item is spliced out of storage (delete button
-   or Clear all), so js/search.js can let the collapse/fade play out
-   before it actually re-renders the list. Duration must match the
-   REMOVE_ANIMATION_MS constant in js/search.js. */
-#historyList li.history-item.history-item-removing {
+/* Keep the row visible while the removal transition plays. */
+:is(#historyList, .history-list) li.history-item.history-item-removing {
   opacity: 0;
   max-height: 0;
   padding-top: 0;
@@ -208,7 +204,7 @@
   margin-right: 2px;
 }
 
-#historyList li.history-item:hover {
+:is(#historyList, .history-list) li.history-item:hover {
   background: var(--history-row-hover-bg);
 }
 
@@ -353,7 +349,56 @@
      margin-top: 50px on #toggleHistory (same ID-selector specificity)
      would otherwise win the cascade and override main-style.css's mobile
      reset there, leaving History out of line with the Search button. */
-  #toggleHistory {
+  :is(#toggleHistory, .history-toggle) {
     margin-top: 0;
+  }
+}
+
+.web-search-form .search-wrapper {
+  position: relative;
+}
+
+.search-history :is(#historyList, .history-list) {
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  left: 50%;
+  width: min(var(--history-width), 100%);
+  margin: 10px 0 0;
+  translate: -50% 0;
+}
+
+.history-search-btn {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  border: 0;
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.search-history button:focus-visible {
+  outline: 2px solid var(--color-accent-hover);
+  outline-offset: 1px;
+}
+
+.search-history .history-toggle:focus-visible {
+  outline-color: #fff;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-history *,
+  .search-history :is(#toggleHistory, .history-toggle),
+  .search-history :is(#historyList, .history-list),
+  .search-history :is(#historyList, .history-list) li.history-item {
+    transition: none;
   }
 }
