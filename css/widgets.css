@@ -1050,6 +1050,109 @@
   margin: 0;
 }
 
+.app-widget-container .glass-widget[data-widget="quick-links"] {
+  width: min(304px, calc(100% - 32px));
+}
+
+#quickLinks.app-quick-links {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  font-size: .875rem;
+}
+
+.app-quick-links .quick-links-row {
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+#quickLinks.app-quick-links a,
+.app-quick-links .quick-link-add-btn {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 1.25rem;
+}
+
+.app-quick-links svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.app-quick-links .quick-link-remove {
+  top: -3px;
+  right: -3px;
+  width: 24px;
+  height: 24px;
+  background: var(--glass-strong, #385161);
+  font-size: 1rem;
+}
+
+.app-quick-links .quick-link-item:is(:hover, :focus-within) .quick-link-remove {
+  opacity: 1;
+  transform: none;
+}
+
+.app-quick-links .quick-link-remove:hover { background: #9f3834; }
+
+.app-quick-links .quick-link-popover {
+  width: min(100%, 288px);
+}
+
+.app-quick-links .quick-link-popover-row label,
+.app-quick-links .quick-link-error,
+.app-quick-links .quick-link-popover-actions button {
+  font-size: .875rem;
+}
+
+.app-quick-links .quick-link-error {
+  color: var(--text-main, #7b2f2a);
+}
+
+.app-quick-links .quick-link-input {
+  min-height: 44px;
+  font-size: 1rem;
+}
+
+.app-quick-links .quick-link-popover-actions button { min-height: 44px; }
+
+.app-quick-links :is(a, button, input):focus-visible {
+  outline: 2px solid var(--focus-blue);
+  outline-offset: 2px;
+}
+
+.app-quick-links .quick-links-empty { margin: 0; }
+
+@media (hover: none) {
+  .app-quick-links .quick-link-remove {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 1400px) {
+  .app-widget-container .glass-widget[data-widget="quick-links"] {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    margin: 0 16px 16px auto;
+  }
+
+  .app-quick-links .quick-link-popover {
+    position: static;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-quick-links .quick-link-popover { transition: none; }
+}
+
 @media (max-width: 1280px) {
   .app-widget-container .glass-widget[data-widget="DailyTask"] {
     position: relative;
