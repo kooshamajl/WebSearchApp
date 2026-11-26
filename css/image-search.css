@@ -1,10 +1,6 @@
 /* ============================
    Image Search - Inline Autocomplete ("Ghost Text")
-   Scoped to html/image.html only (linked there, nowhere else). Shows a
-   low-opacity completion directly inside the search bar as the user
-   types, instead of a separate dropdown list -- that pattern already
-   exists for Web Search (see css/history-search.css's
-   .autocomplete-list) and is intentionally left untouched.
+   Shared by the React and legacy Image Search forms.
    ============================ */
 
 /* Positioning context for the ghost overlay below. display: inline-block
@@ -108,5 +104,45 @@
   .ghost-suggestion {
     top: 0;
     font-size: 16px;
+  }
+}
+
+.image-search-form .search-bar {
+  display: block;
+}
+
+.image-search-form .search-bar:focus {
+  transform: none;
+}
+
+.image-search-form .ghost-suggestion {
+  top: auto;
+  bottom: 0;
+}
+
+.image-search-form .ghost-text {
+  overflow: hidden;
+  white-space: pre;
+}
+
+.image-search-suggestion-announcement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .image-search-form #search-button {
+    margin-top: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-search-form #ghostRemainder {
+    transition: none;
   }
 }

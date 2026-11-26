@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { FormEvent } from "react";
 
 import SearchAutocomplete from "../components/search/SearchAutocomplete";
@@ -14,6 +14,7 @@ import {
 
 import { buildSearchUrl } from "../utils/search";
 import { useSearchHistory } from "../hooks/useSearchHistory";
+import { useSearchInputFocus } from "../hooks/useSearchInputFocus";
 
 import "../../css/search-engine.css";
 import "../styles/web-search.css";
@@ -28,35 +29,7 @@ export default function WebSearch() {
     );
 
     const inputRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        inputRef.current?.focus();
-
-        function handleKeyDown(event: KeyboardEvent) {
-            const target = event.target;
-
-            if (
-                event.key === "/" &&
-                !event.ctrlKey &&
-                !event.altKey &&
-                !event.metaKey &&
-                !(target instanceof HTMLInputElement) &&
-                !(target instanceof HTMLTextAreaElement) &&
-                !(target instanceof HTMLSelectElement) &&
-                !(target instanceof HTMLElement &&
-                    target.isContentEditable)
-            ) {
-                event.preventDefault();
-                inputRef.current?.focus();
-            }
-        }
-
-        document.addEventListener("keydown", handleKeyDown);
-
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, []);
+    useSearchInputFocus(inputRef);
 
     function handleEngineChange(selectedEngine: SearchEngine) {
         setEngine(selectedEngine);
