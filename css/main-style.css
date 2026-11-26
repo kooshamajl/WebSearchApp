@@ -167,6 +167,12 @@ main {
   left: 10px;
 }
 
+.app-theme-control {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
 .search-dropdown {
   position: relative;
   background: rgba(255, 255, 255, 0.6);

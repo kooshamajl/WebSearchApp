@@ -1,11 +1,11 @@
 /* ============================
    Dark Mode Overrides
-   This stylesheet is loaded as a disabled <link> in every page's <head>
-   and toggled on/off by js/footer.js (see initFooter -> applyTheme).
-   It only needs to redefine the tokens/rules that actually differ from
-   the light theme in main-style.css.
+   React loads this stylesheet in both themes and sets data-theme on <html>.
+   Legacy pages leave the attribute unset and still enable this sheet only
+   when dark mode is selected.
    ============================ */
-:root {
+:root:not([data-theme="light"]) {
+  color-scheme: dark;
   --bg-main: #1e1f23;
   --text-main: #e0e0e0;
   --text-soft: #A9B7BD;
@@ -59,65 +59,64 @@
   --history-row-hover-bg: rgba(107, 114, 128, 0.25);
 }
 
-body {
-  background-image: url("../pictures/dark.jpg");
-  background-color: var(--bg-main);
+:root:not([data-theme="light"]) body {
+  background: var(--bg-main) url("../pictures/dark.jpg") center / cover no-repeat fixed;
   color: var(--text-main);
 }
 
-.search-dropdown {
+:root:not([data-theme="light"]) .search-dropdown {
   background: var(--glass-light);
   border-color: var(--border-soft);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
 }
 
-.search-dropdown:hover {
+:root:not([data-theme="light"]) .search-dropdown:is(:hover, :focus-within) {
   background: var(--glass-strong);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
-.search-label {
+:root:not([data-theme="light"]) .search-label {
   color: var(--text-main);
   opacity: 0.9;
 }
 
-.search-menu a {
+:root:not([data-theme="light"]) .search-menu a {
   color: var(--text-main);
 }
 
-.search-menu a:hover {
+:root:not([data-theme="light"]) .search-menu a:is(:hover, :focus-visible) {
   background: var(--accent-hover);
   color: #fff;
 }
 
 
-.search-bar {
+:root:not([data-theme="light"]) .search-bar {
   background-color: var(--glass-light);
   color: var(--text-main);
   border: 1px solid var(--border-soft);
 }
 
-#ghostRemainder {
+:root:not([data-theme="light"]) #ghostRemainder {
   color: var(--text-main);
 }
 
-.search-bar::placeholder {
+:root:not([data-theme="light"]) .search-bar::placeholder {
   color: var(--text-soft);
 }
 
-.search-bar:hover {
+:root:not([data-theme="light"]) .search-bar:hover {
   box-shadow: 0 0 6px rgba(107, 114, 128, 0.25);
 }
 
-#search-button,
-#toggleHistory {
+:root:not([data-theme="light"]) #search-button,
+:root:not([data-theme="light"]) :is(#toggleHistory, .history-toggle) {
   background: var(--accent);
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-#search-button:hover,
-#toggleHistory:hover {
+:root:not([data-theme="light"]) #search-button:hover,
+:root:not([data-theme="light"]) :is(#toggleHistory, .history-toggle):hover {
   background: var(--accent-hover);
 }
 
@@ -125,17 +124,17 @@ body {
    pull their colors from the --history-* tokens above via
    css/history-search.css, so no per-selector overrides are needed here
    beyond the token redefinitions. */
-.history-empty {
+:root:not([data-theme="light"]) .history-empty {
   color: var(--text-main);
 }
 
-.ping-icon {
+:root:not([data-theme="light"]) .ping-icon {
   color: rgb(227, 241, 255);
   background: var(--glass-btn-bg-dark);
   border: 1px solid var(--glass-btn-border-dark);
 }
 
-#taskInput {
+:root:not([data-theme="light"]) #taskInput {
 
   background: rgba(45, 47, 52, 0.42);
 
@@ -153,11 +152,11 @@ body {
     box-shadow .25s ease;
 }
 
-#taskInput::placeholder {
+:root:not([data-theme="light"]) #taskInput::placeholder {
   color: rgba(220, 228, 235, .48);
 }
 
-#taskInput:focus {
+:root:not([data-theme="light"]) #taskInput:focus {
 
   outline: none;
 
@@ -172,7 +171,7 @@ body {
 
 }
 
-.task-add-btn {
+:root:not([data-theme="light"]) .task-add-btn {
 
   background: linear-gradient(145deg,
       rgba(43, 58, 74, .72),
@@ -188,7 +187,7 @@ body {
 
 }
 
-.task-add-btn:hover:not(:disabled) {
+:root:not([data-theme="light"]) .task-add-btn:hover:not(:disabled) {
 
   background: linear-gradient(145deg,
       rgba(49, 66, 84, .78),
@@ -202,44 +201,44 @@ body {
 
 }
 
-.task-add-btn:active:not(:disabled) {
+:root:not([data-theme="light"]) .task-add-btn:active:not(:disabled) {
   box-shadow:
     0 2px 6px rgba(0, 0, 0, .28);
 
 }
 
-.site-footer {
+:root:not([data-theme="light"]) .site-footer {
   background: var(--footer-bg);
   color: var(--footer-text);
   border-top: 1px solid rgba(255, 255, 255, .08);
 }
 
-.site-footer:hover {
+:root:not([data-theme="light"]) .site-footer:hover {
     background: rgba(30, 30, 30, .35);
 }
 
-.social-icons a {
+:root:not([data-theme="light"]) .social-icons a {
   color: var(--footer-text);
 }
 
-#cryptoName {
+:root:not([data-theme="light"]) #cryptoName {
   color: var(--widget-text);
 }
 
-.weather-divider,
-.weather-detail-sep {
+:root:not([data-theme="light"]) .weather-divider,
+:root:not([data-theme="light"]) .weather-detail-sep {
   background: rgba(255, 255, 255, 0.14);
 }
 
-.weather-detail:hover {
+:root:not([data-theme="light"]) .weather-detail:hover {
   background: rgba(255, 255, 255, 0.08);
 }
 
-.crypto-divider {
+:root:not([data-theme="light"]) .crypto-divider {
   background: rgba(255, 255, 255, 0.14);
 }
 
-.glass-widget {
+:root:not([data-theme="light"]) .glass-widget {
   background: rgba(170, 170, 172, 0.30);
   
   border: 1px solid rgba(255, 255, 255, .28);
@@ -249,13 +248,13 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, .18);
 }
 
-.glass-widget::before {
+:root:not([data-theme="light"]) .glass-widget::before {
   background: linear-gradient(to bottom,
       rgba(255, 255, 255, .25),
       transparent 45%);
 }
 
-.widget-dropdown {
+:root:not([data-theme="light"]) .widget-dropdown {
   background: var(--glass-btn-bg-dark);
   border: 1px solid var(--glass-btn-border-dark);
 
@@ -272,7 +271,7 @@ body {
 }
 
 
-.widget-dropdown:hover {
+:root:not([data-theme="light"]) .widget-dropdown:hover {
 
   background: var(--glass-btn-bg-dark-hover);
   border-color: var(--glass-btn-border-dark-hover);
@@ -284,161 +283,175 @@ body {
   transform: translateY(-0.5px);
 }
 
-.widget-label {
+:root:not([data-theme="light"]) .widget-label {
   color: rgba(230, 245, 255, 0.9);
 }
 
 
-.widget-options span {
+:root:not([data-theme="light"]) .widget-options span {
   color: rgba(230, 245, 255, 0.85);
 }
 
-.widget-options span:hover {
+:root:not([data-theme="light"]) .widget-options span:hover {
   background: rgba(120, 200, 230, 0.25);
   color: #ffffff;
 }
 
 
-.advanced-container {
+:root:not([data-theme="light"]) .advanced-container {
   background: var(--advanced-bg-dark);
   border: 1px solid rgba(255, 255, 255, 0.05);
   color: var(--advanced-text);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
-.advanced-container h3 {
+:root:not([data-theme="light"]) .advanced-container :is(h1, h3) {
   color: var(--advanced-text);
 }
 
-.advanced-container label {
+:root:not([data-theme="light"]) .advanced-container label {
   color: var(--advanced-text);
 }
 
-.advanced-container .search-bar {
+:root:not([data-theme="light"]) .advanced-container .search-bar {
   background-color: rgba(50, 50, 50, 0.75);
   color: var(--advanced-text);
   border: 1px solid var(--advanced-input-border);
 }
 
-.advanced-container .search-bar::placeholder {
+:root:not([data-theme="light"]) .advanced-container .search-bar::placeholder {
   color: var(--advanced-placeholder);
   opacity: 0.8;
 }
 
-.advanced-container .search-bar:hover {
+:root:not([data-theme="light"]) .advanced-container .search-bar:hover {
   box-shadow: 0 0 6px rgba(107, 114, 128, 0.25);
 }
 
-.advanced-container .search-bar:focus {
+:root:not([data-theme="light"]) .advanced-container .search-bar:focus {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   transform: scale(1.01);
   outline: none;
 }
 
-.task-delete {
+:root:not([data-theme="light"]) .advanced-container .search-bar:focus-visible {
+  outline: 2px solid var(--focus-blue);
+  outline-offset: 2px;
+}
+
+:root:not([data-theme="light"]) #advanced-search-error {
+  background: #402728;
+  color: #ffd7d2;
+}
+
+:root:not([data-theme="light"]) .search-history button:focus-visible {
+  outline-color: var(--focus-blue);
+}
+
+:root:not([data-theme="light"]) .task-delete {
   color: var(--danger);
 }
 
-.autocomplete-list {
+:root:not([data-theme="light"]) .autocomplete-list {
   background: var(--glass-strong);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-.autocomplete-list li {
+:root:not([data-theme="light"]) .autocomplete-list li {
   color: var(--text-main);
 }
 
-.autocomplete-list li mark {
+:root:not([data-theme="light"]) .autocomplete-list li mark {
   color: #8ecbe8;
 }
 
-.autocomplete-list li:hover,
-.autocomplete-list li.active {
+:root:not([data-theme="light"]) .autocomplete-list li:hover,
+:root:not([data-theme="light"]) .autocomplete-list li.active {
   background: rgba(107, 114, 128, 0.25);
 }
 
 /* ============================
    Quick Links (dark mode)
    ============================ */
-.quick-link-add-btn {
+:root:not([data-theme="light"]) .quick-link-add-btn {
   background: var(--glass-btn-bg-dark);
   border: 1px solid var(--glass-btn-border-dark);
   color: rgba(235, 243, 248, .92);
 }
 
-.quick-link-add-btn:hover:not(:disabled) {
+:root:not([data-theme="light"]) .quick-link-add-btn:hover:not(:disabled) {
   background: var(--glass-btn-bg-dark-hover);
   border-color: var(--glass-btn-border-dark-hover);
 }
 
-.quick-link-popover {
+:root:not([data-theme="light"]) .quick-link-popover {
   background: var(--glass-strong);
   border-color: var(--border-soft);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-.quick-link-popover-row label {
+:root:not([data-theme="light"]) .quick-link-popover-row label {
   color: var(--text-soft);
 }
 
-.quick-link-input {
+:root:not([data-theme="light"]) .quick-link-input {
   background: rgba(50, 50, 50, 0.6);
   border: 1px solid var(--border-soft);
   color: var(--text-main);
 }
 
-.quick-link-input::placeholder {
+:root:not([data-theme="light"]) .quick-link-input::placeholder {
   color: var(--text-soft);
 }
 
-.quick-link-cancel-btn {
+:root:not([data-theme="light"]) .quick-link-cancel-btn {
   color: var(--text-soft);
 }
 
-.quick-link-cancel-btn:hover {
+:root:not([data-theme="light"]) .quick-link-cancel-btn:hover {
   background: rgba(255, 255, 255, 0.08);
 }
 
-.quick-link-divider {
+:root:not([data-theme="light"]) .quick-link-divider {
   background: rgba(255, 255, 255, 0.14);
 }
 
 /* ============================
    Search Engine Selector (dark mode)
    ============================ */
-.engine-select-btn {
+:root:not([data-theme="light"]) .engine-select-btn {
   background: var(--glass-light);
   border-color: var(--border-soft);
   color: var(--text-main);
 }
 
-.engine-select-btn:hover,
-.engine-select.open .engine-select-btn {
+:root:not([data-theme="light"]) .engine-select-btn:hover,
+:root:not([data-theme="light"]) .engine-select.open .engine-select-btn {
   background: var(--glass-strong);
 }
 
-.engine-menu {
+:root:not([data-theme="light"]) .engine-menu {
   background: var(--glass-strong);
   border-color: var(--border-soft);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-.engine-menu li {
+:root:not([data-theme="light"]) .engine-menu li {
   color: var(--text-main);
 }
 
-.engine-menu li:hover,
-.engine-menu li:focus-visible {
+:root:not([data-theme="light"]) .engine-menu li:hover,
+:root:not([data-theme="light"]) .engine-menu li:focus-visible {
   background: rgba(107, 114, 128, 0.25);
 }
 
-.engine-check {
+:root:not([data-theme="light"]) .engine-check {
   color: #8ecbe8;
 }
 
 
-.footer-date-card,
-.footer-time-card {
+:root:not([data-theme="light"]) .footer-date-card,
+:root:not([data-theme="light"]) .footer-time-card {
 
   background: rgba(255, 255, 255, .05);
 
@@ -448,22 +461,22 @@ body {
 
 }
 
-.footer-date-card span,
-.footer-time-card span {
+:root:not([data-theme="light"]) .footer-date-card span,
+:root:not([data-theme="light"]) .footer-time-card span {
 
   color: #eee;
 
 }
 
-.footer-date-card i,
-.footer-time-card i {
+:root:not([data-theme="light"]) .footer-date-card i,
+:root:not([data-theme="light"]) .footer-time-card i {
 
   color: #5c82b4;
 
 }
 
-.footer-date-card:hover,
-.footer-time-card:hover {
+:root:not([data-theme="light"]) .footer-date-card:hover,
+:root:not([data-theme="light"]) .footer-time-card:hover {
 
   background: rgba(255, 255, 255, 0.08);
 
@@ -478,16 +491,17 @@ body {
 
 }
 
-#theme-toggle {
+:root:not([data-theme="light"]) :is(#theme-toggle, .theme-toggle) {
   background: var(--glass-btn-bg-dark);
   border: 1px solid var(--glass-btn-border-dark);
+  color: var(--text-main);
 
   box-shadow:
     0 6px 18px rgba(0, 0, 0, .42),
     inset 0 0 0 1px rgba(255, 255, 255, .04);
 }
 
-#theme-toggle:hover {
+:root:not([data-theme="light"]) :is(#theme-toggle, .theme-toggle):hover {
 
   background: var(--glass-btn-bg-dark-hover);
   border-color: var(--glass-btn-border-dark-hover);
