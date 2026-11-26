@@ -272,11 +272,16 @@ main {
   overflow: hidden;
 }
 
-.advanced-container h3 {
+.advanced-container :is(h1, h3) {
   margin-top: -4px;
   margin-bottom: 20px;
   margin-left: 30px;
   color: #1f3d3d;
+}
+
+.advanced-container h1 {
+  padding: 6px;
+  font-size: 1.25rem;
 }
 
 .advanced-container .search-bar {
@@ -292,6 +297,20 @@ main {
 
 .advanced-container #search-button {
   margin-left: 35px;
+}
+
+.advanced-search-form .search-but {
+  margin-top: 0;
+}
+
+#advanced-search-error {
+  width: fit-content;
+  max-width: 80%;
+  margin: 0 0 16px 35px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: #fff4f1;
+  color: #8a302b;
 }
 
 .row {
@@ -455,7 +474,8 @@ h3 {
   .advanced-container .search-bar,
   .advanced-container label,
   .advanced-container #search-button,
-  .advanced-container h3 {
+  .advanced-container :is(h1, h3),
+  #advanced-search-error {
     margin-left: 12px;
   }
 }
