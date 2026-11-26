@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { useActiveWidget } from "../../hooks/useActiveWidget";
+import ConnectionWidget from "../widgets/ConnectionWidget";
 import CryptoWidget from "../widgets/CryptoWidget";
 import DailyTasksWidget from "../widgets/DailyTasksWidget";
 import QuickLinksWidget from "../widgets/QuickLinksWidget";
@@ -25,6 +26,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                     {activeWidget === "crypto" ? <CryptoWidget /> : null}
                     {activeWidget === "DailyTask" ? <DailyTasksWidget /> : null}
                     {activeWidget === "quick-links" ? <QuickLinksWidget /> : null}
+                    {activeWidget === "ping" ? <ConnectionWidget /> : null}
                 </WidgetContainer>
             </main>
             <Footer activeWidget={activeWidget} onWidgetChange={selectWidget} />

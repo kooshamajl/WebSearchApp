@@ -1128,6 +1128,55 @@
 
 .app-quick-links .quick-links-empty { margin: 0; }
 
+.app-widget-container .glass-widget[data-widget="ping"] {
+  width: min(212px, calc(100% - 32px));
+}
+
+.app-widget-container #pingWidget {
+  width: 100%;
+  text-align: left;
+  cursor: auto;
+}
+
+.connection-widget .ping-title {
+  margin: 4px 0;
+  font-size: .875rem;
+  letter-spacing: normal;
+  opacity: 1;
+}
+
+.connection-widget .ping-row {
+  justify-content: flex-start;
+}
+
+.connection-widget #pingStatus {
+  font-size: .875rem;
+  opacity: 1;
+}
+
+.connection-refresh {
+  min-height: 44px;
+  margin-top: 6px;
+  padding: 0 8px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.connection-refresh[aria-disabled="true"] {
+  cursor: default;
+  opacity: .75;
+}
+
+.connection-refresh:focus-visible {
+  outline: 2px solid var(--focus-blue);
+  outline-offset: 2px;
+}
+
 @media (hover: none) {
   .app-quick-links .quick-link-remove {
     opacity: 1;
@@ -1163,7 +1212,7 @@
 }
 
 @media (max-width: 1200px) {
-  .app-widget-container .glass-widget:is([data-widget="weather"], [data-widget="crypto"]) {
+  .app-widget-container .glass-widget:is([data-widget="weather"], [data-widget="crypto"], [data-widget="ping"]) {
     position: relative;
     inset: auto;
     z-index: auto;
