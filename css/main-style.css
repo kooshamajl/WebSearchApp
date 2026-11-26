@@ -171,6 +171,22 @@ main {
   transform: translateY(-1px) scale(1.02);
 }
 
+.app-widget-container .glass-widget {
+  max-width: calc(100% - 32px);
+  padding: 10px 14px;
+}
+
+.app-widget-container .glass-widget > h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.app-widget-container .glass-widget > p {
+  margin: 4px 0 0;
+  color: var(--widget-text-muted);
+  font-size: .875rem;
+}
+
 /* ============================
    Search Options Dropdown
    ============================ */
@@ -463,6 +479,14 @@ h3 {
   .glass-widget {
     top: 8px;
     right: 8px;
+  }
+
+  .app-widget-container .glass-widget {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    width: fit-content;
+    margin: 0 16px 16px auto;
   }
 
   .search-wrapper {

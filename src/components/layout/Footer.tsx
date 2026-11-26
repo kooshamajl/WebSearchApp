@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import ThemeToggle from "../common/ThemeToggle";
+import { isWidgetId, WIDGETS, type WidgetId } from "../../data/widgets";
 import { formatFooterDate, formatFooterTime, type ClockFormat, type DateFormat } from "../../utils/footerDateTime";
 
 import "../../../css/footer.css";
 
 const DATE_FORMAT_KEY = "dateFormat";
 const CLOCK_FORMAT_KEY = "clockFormat";
+
+type FooterProps = {
+    activeWidget: WidgetId | null;
+    onWidgetChange: (widget: WidgetId) => void;
+};
 
 function readPreference(key: string): string | null {
     try {
@@ -23,7 +29,7 @@ function savePreference(key: string, value: string) {
     }
 }
 
-export default function Footer() {
+export default function Footer({ activeWidget, onWidgetChange }: FooterProps) {
     const [now, setNow] = useState(() => new Date());
     const [dateFormat, setDateFormat] = useState<DateFormat>(() =>
         readPreference(DATE_FORMAT_KEY) === "gregorian" ? "gregorian" : "persian"
@@ -66,13 +72,20 @@ export default function Footer() {
             </div>
 
             <div className="footer-right">
-                <select className="footer-widget-select" aria-label="Widgets" defaultValue="" disabled>
-                    <option value="">Widgets</option>
-                    <option value="weather">Weather</option>
-                    <option value="crypto">Crypto</option>
-                    <option value="DailyTask">Task</option>
-                    <option value="quick-links">Quick links</option>
-                    <option value="ping">Ping</option>
+                <select
+                    className="footer-widget-select"
+                    aria-label="Widgets"
+                    aria-controls="widget-container"
+                    value={activeWidget ?? ""}
+                    onChange={(event) => {
+                        const widget = event.target.value;
+                        if (isWidgetId(widget)) onWidgetChange(widget);
+                    }}
+                >
+                    <option value="" disabled>Widgets</option>
+                    {Object.entries(WIDGETS).map(([id, label]) => (
+                        <option key={id} value={id}>{label}</option>
+                    ))}
                 </select>
 
                 <ThemeToggle />

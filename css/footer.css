@@ -346,8 +346,8 @@
   color: var(--text-main, var(--color-text-muted));
 }
 
-.app-footer .footer-widget-select:disabled {
-  opacity: .75;
+.app-footer .footer-widget-select {
+  cursor: pointer;
 }
 
 .app-footer .social-icons a {
