@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 
+import SearchAutocomplete from "../components/search/SearchAutocomplete";
 import SearchEngineSelector from
     "../components/search/SearchEngineSelector";
 import SearchHistory from "../components/search/SearchHistory";
@@ -19,7 +20,7 @@ import "../styles/web-search.css";
 
 export default function WebSearch() {
     const [query, setQuery] = useState("");
-    const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+    const [openPanel, setOpenPanel] = useState<"history" | "autocomplete" | null>(null);
     const { items, saveSearch, deleteSearch, clearHistory } = useSearchHistory();
 
     const [engine, setEngine] = useState<SearchEngine>(
@@ -81,9 +82,18 @@ export default function WebSearch() {
 
     function submitSearch(value: string) {
         setQuery(value);
-        setIsHistoryOpen(false);
+        setOpenPanel(null);
         saveSearch(value);
         window.location.assign(buildSearchUrl(value, engine));
+    }
+
+    function handleQueryChange(value: string) {
+        setQuery(value);
+        setOpenPanel("autocomplete");
+    }
+
+    function dismissAutocomplete() {
+        setOpenPanel((panel) => panel === "autocomplete" ? null : panel);
     }
 
     return (
@@ -91,19 +101,15 @@ export default function WebSearch() {
             <form className="web-search-form" onSubmit={handleSubmit}>
                 <div className="search-wrapper">
                     <div className="search-input-wrap">
-                        <input
-                            ref={inputRef}
-                            id="searchInput"
-                            className="search-bar"
-                            type="text"
-                            placeholder="Search or enter a URL"
-                            aria-label="Search or enter a URL"
-                            autoComplete="off"
-                            value={query}
-                            onChange={(event) => {
-                                setQuery(event.target.value);
-                                setIsHistoryOpen(false);
-                            }}
+                        <SearchAutocomplete
+                            inputId="searchInput"
+                            query={query}
+                            history={items}
+                            inputRef={inputRef}
+                            isOpen={openPanel === "autocomplete"}
+                            onQueryChange={handleQueryChange}
+                            onDismiss={dismissAutocomplete}
+                            onSelect={submitSearch}
                         />
 
                         <SearchEngineSelector
@@ -122,9 +128,9 @@ export default function WebSearch() {
 
                     <SearchHistory
                         items={items}
-                        isOpen={isHistoryOpen}
+                        isOpen={openPanel === "history"}
                         inputRef={inputRef}
-                        onOpenChange={setIsHistoryOpen}
+                        onOpenChange={(open) => setOpenPanel(open ? "history" : null)}
                         onSearch={submitSearch}
                         onDelete={deleteSearch}
                         onClear={clearHistory}

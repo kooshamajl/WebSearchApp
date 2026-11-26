@@ -368,6 +368,21 @@
   translate: -50% 0;
 }
 
+.web-search-form:has(.autocomplete-list.show) .history-list,
+.web-search-form:has(.history-list.show) .autocomplete-list {
+  visibility: hidden;
+}
+
+.search-autocomplete .autocomplete-list.show {
+  overflow-y: auto;
+}
+
+.search-autocomplete .ac-url {
+  max-width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .history-search-btn {
   display: flex;
   flex: 1;
@@ -398,7 +413,9 @@
   .search-history *,
   .search-history :is(#toggleHistory, .history-toggle),
   .search-history :is(#historyList, .history-list),
-  .search-history :is(#historyList, .history-list) li.history-item {
+  .search-history :is(#historyList, .history-list) li.history-item,
+  .search-autocomplete .autocomplete-list,
+  .search-autocomplete .autocomplete-list li {
     transition: none;
   }
 }
