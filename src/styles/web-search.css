@@ -1,0 +1,9 @@
+.engine-select select {
+    max-width: 125px;
+}
+
+@media (max-width: 600px) {
+    .search-input-wrap .search-bar {
+        padding-right: 132px;
+    }
+}
