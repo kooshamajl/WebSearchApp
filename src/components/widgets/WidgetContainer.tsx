@@ -13,7 +13,7 @@ export default function WidgetContainer({ activeWidget, children }: WidgetContai
     return (
         <div id="widget-container" className="app-widget-container">
             {activeWidget && (
-                <section className="glass-widget" aria-labelledby={titleId}>
+                <section className="glass-widget" data-widget={activeWidget} aria-labelledby={titleId}>
                     <h2 id={titleId}>{WIDGETS[activeWidget]}</h2>
                     {children ?? <p>Coming soon</p>}
                 </section>

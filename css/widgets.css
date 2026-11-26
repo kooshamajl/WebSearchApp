@@ -846,3 +846,69 @@
     filter: blur(0);
   }
 }
+
+.app-widget-container .glass-widget[data-widget="weather"] {
+  width: min(220px, calc(100% - 32px));
+}
+
+.app-widget-container #weather {
+  width: 100%;
+}
+
+.weather-widget :is(button, .weather-forecast-link) {
+  min-height: 44px;
+  color: inherit;
+}
+
+.weather-widget button {
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.weather-widget button:hover {
+  background: var(--history-row-hover-bg);
+}
+
+.weather-widget .weather-detail-label,
+.weather-widget .weather-detail-value,
+.weather-widget .weather-forecast-link {
+  font-size: .875rem;
+}
+
+.weather-widget .weather-detail-label {
+  white-space: normal;
+}
+
+.weather-widget :is(.weather-forecast-link, .weather-retry, .weather-attribution a) {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.weather-widget .weather-attribution {
+  display: block;
+  text-align: center;
+  font-size: .75rem;
+}
+
+.weather-widget :is(button, a):focus-visible {
+  outline: 2px solid var(--focus-blue);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1200px) {
+  .app-widget-container .glass-widget[data-widget="weather"] {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    margin: 0 16px 16px auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-widget-container#widget-container .glass-widget {
+    animation: none;
+  }
+}

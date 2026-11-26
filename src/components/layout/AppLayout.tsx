@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { useActiveWidget } from "../../hooks/useActiveWidget";
+import WeatherWidget from "../widgets/WeatherWidget";
 import WidgetContainer from "../widgets/WidgetContainer";
 import Footer from "./Footer";
 import Navigation from "./Navigation";
@@ -16,7 +17,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <main>
                 <Navigation />
                 {children}
-                <WidgetContainer activeWidget={activeWidget} />
+                <WidgetContainer activeWidget={activeWidget}>
+                    {activeWidget === "weather" ? <WeatherWidget /> : undefined}
+                </WidgetContainer>
             </main>
             <Footer activeWidget={activeWidget} onWidgetChange={selectWidget} />
         </div>
