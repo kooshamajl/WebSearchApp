@@ -1,0 +1,35 @@
+{
+  "name": "websearchapp",
+  "version": "1.0.0",
+  "description": "A modern and minimal front-end search application built with **HTML, CSS, and JavaScript**.\r The project includes multiple search modes, dynamic widgets, theme support, search history, autocomplete, and a modular structure.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kooshamajl/WebSearchApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kooshamajl/WebSearchApp/issues"
+  },
+  "homepage": "https://github.com/kooshamajl/WebSearchApp#readme",
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.3",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8"
+  }
+}
