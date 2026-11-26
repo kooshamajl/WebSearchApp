@@ -462,7 +462,8 @@
 }
 
 :root:not([data-theme="light"]) .footer-date-card span,
-:root:not([data-theme="light"]) .footer-time-card span {
+:root:not([data-theme="light"]) .footer-time-card span,
+:root:not([data-theme="light"]) :is(.footer-date-card, .footer-time-card) time {
 
   color: #eee;
 

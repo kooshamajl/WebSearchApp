@@ -111,6 +111,19 @@ main {
   min-height: calc(100vh - 178px);
 }
 
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.app-layout > main {
+  display: flow-root;
+  flex: 1;
+  min-height: 0;
+}
+
 /* ============================
    Glass Widget Base
    ============================ */
@@ -165,12 +178,6 @@ main {
   position: absolute;
   top: 10px;
   left: 10px;
-}
-
-.app-theme-control {
-  position: absolute;
-  top: 10px;
-  right: 10px;
 }
 
 .search-dropdown {

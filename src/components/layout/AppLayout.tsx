@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import ThemeToggle from "../common/ThemeToggle";
+import Footer from "./Footer";
 import Navigation from "./Navigation";
 
 interface AppLayoutProps {
@@ -8,12 +8,12 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
     return (
-        <main>
-            <Navigation />
-            <div className="app-theme-control">
-                <ThemeToggle />
-            </div>
-            {children}
-        </main>
+        <div className="app-layout">
+            <main>
+                <Navigation />
+                {children}
+            </main>
+            <Footer />
+        </div>
     );
 }
