@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { useActiveWidget } from "../../hooks/useActiveWidget";
 import CryptoWidget from "../widgets/CryptoWidget";
+import DailyTasksWidget from "../widgets/DailyTasksWidget";
 import WeatherWidget from "../widgets/WeatherWidget";
 import WidgetContainer from "../widgets/WidgetContainer";
 import Footer from "./Footer";
@@ -21,6 +22,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 <WidgetContainer activeWidget={activeWidget}>
                     {activeWidget === "weather" ? <WeatherWidget /> : null}
                     {activeWidget === "crypto" ? <CryptoWidget /> : null}
+                    {activeWidget === "DailyTask" ? <DailyTasksWidget /> : null}
                 </WidgetContainer>
             </main>
             <Footer activeWidget={activeWidget} onWidgetChange={selectWidget} />
