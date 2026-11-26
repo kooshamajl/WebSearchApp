@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { useActiveWidget } from "../../hooks/useActiveWidget";
+import CryptoWidget from "../widgets/CryptoWidget";
 import WeatherWidget from "../widgets/WeatherWidget";
 import WidgetContainer from "../widgets/WidgetContainer";
 import Footer from "./Footer";
@@ -18,7 +19,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 <Navigation />
                 {children}
                 <WidgetContainer activeWidget={activeWidget}>
-                    {activeWidget === "weather" ? <WeatherWidget /> : undefined}
+                    {activeWidget === "weather" ? <WeatherWidget /> : null}
+                    {activeWidget === "crypto" ? <CryptoWidget /> : null}
                 </WidgetContainer>
             </main>
             <Footer activeWidget={activeWidget} onWidgetChange={selectWidget} />

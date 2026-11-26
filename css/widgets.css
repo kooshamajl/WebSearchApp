@@ -847,7 +847,7 @@
   }
 }
 
-.app-widget-container .glass-widget[data-widget="weather"] {
+.app-widget-container .glass-widget:is([data-widget="weather"], [data-widget="crypto"]) {
   width: min(220px, calc(100% - 32px));
 }
 
@@ -898,8 +898,72 @@
   outline-offset: 2px;
 }
 
+.app-widget-container #cryptoWidget {
+  width: 100%;
+  margin-top: 8px;
+  font-size: .875rem;
+}
+
+.crypto-widget #cryptoName {
+  font-size: .75rem;
+}
+
+.crypto-widget #cryptoPrice {
+  font-size: 1.125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.crypto-widget .chart-container {
+  display: block;
+  height: 60px;
+  background: #0e1c28;
+}
+
+.crypto-widget #cryptoChange {
+  font-size: .875rem;
+}
+
+.crypto-widget .tf-btn,
+.crypto-status button {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: .875rem;
+  color: inherit;
+}
+
+.crypto-widget .tf-btn.active {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.crypto-widget :is(.trend-up, .trend-down) {
+  padding: 3px 5px;
+  border-radius: var(--radius-sm);
+  background: #0e1c28;
+}
+
+.crypto-widget .trend-up { color: var(--neon-success); }
+.crypto-widget .trend-down { color: var(--neon-danger); }
+
+.crypto-status p { margin: 4px 0 0; }
+
+.crypto-status button {
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.crypto-widget :is(button, a):focus-visible {
+  outline: 2px solid var(--focus-blue);
+  outline-offset: 2px;
+}
+
 @media (max-width: 1200px) {
-  .app-widget-container .glass-widget[data-widget="weather"] {
+  .app-widget-container .glass-widget:is([data-widget="weather"], [data-widget="crypto"]) {
     position: relative;
     inset: auto;
     z-index: auto;
