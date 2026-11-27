@@ -2,8 +2,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { DAILY_TASK_LIMIT, TASK_TEXT_LIMIT, getTaskDateKey, readDailyTasks, saveDailyTasks, type DailyTask } from "../../utils/dailyTasks";
 
-import "../../../css/widgets.css";
-
 type TaskRow = DailyTask & { id: number };
 type TaskList = { date: string; tasks: TaskRow[] };
 

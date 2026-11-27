@@ -113,6 +113,7 @@ WebSearchApp/
 │
 ├── css/
 │   ├── main-style.css
+│   ├── tokens.css
 │   ├── dark-mode.css
 │   ├── widgets.css
 │   ├── history-search.css
@@ -130,10 +131,14 @@ WebSearchApp/
 │   ├── footer-loader.js
 │   └── widget-loader.js
 │
-├── pictures/
-│   ├── icon.png
-│   ├── light.jpg
-│   └── dark.jpg
+├── src/
+│   └── assets/
+│       ├── backgrounds/
+│       │   ├── light.jpg
+│       │   └── dark.jpg
+│       └── icons/
+│           ├── icon.png
+│           └── quick-link-icons.svg
 │
 └── README.md
 ```

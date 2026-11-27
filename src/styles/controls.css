@@ -1,0 +1,24 @@
+.theme-toggle:focus-visible,
+.app-footer :is(button, a, select):focus-visible,
+.weather-widget :is(button, a):focus-visible,
+.crypto-widget :is(button, a):focus-visible,
+#tasksWidget #taskInput:focus-visible,
+.daily-tasks :is(input, button):focus-visible,
+.app-quick-links :is(a, button, input):focus-visible,
+.connection-refresh:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.crypto-status button,
+.connection-refresh {
+  min-height: var(--control-target);
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}

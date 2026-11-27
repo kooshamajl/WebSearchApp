@@ -1,9 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
-import iconSprite from "../../assets/quick-link-icons.svg?url";
+import iconSprite from "../../assets/icons/quick-link-icons.svg?url";
 import { QUICK_LINK_LIMIT, quickLinkHost, quickLinkIcon, readQuickLinks, resolveQuickLink, saveQuickLinks, seedQuickLinks } from "../../utils/quickLinks";
-
-import "../../../css/widgets.css";
 
 type LinkError = { field: "name" | "url"; message: string };
 

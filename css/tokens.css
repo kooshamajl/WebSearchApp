@@ -1,0 +1,115 @@
+/* ============================
+   Design Tokens
+   ============================ */
+:root {
+  --space-2: 8px;
+  --space-4: 16px;
+  --control-target: 44px;
+  --search-control-size: 48px;
+  --search-control-offset: 50px;
+  --search-control-line-height: 46px;
+  --search-field-background: rgba(255, 255, 255, .42);
+  --search-field-border: rgba(255, 255, 255, .35);
+  --search-field-text: var(--text-dark);
+  --search-field-placeholder: #6e8092;
+
+  --font-ui: 'Inter', sans-serif;
+  --font-input: 'Vazirmatn', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-control: .875rem;
+  --font-size-caption: .75rem;
+
+  --shadow-compact: 0 3px 8px rgba(0, 0, 0, 0.15);
+  --shadow-control: 0 4px 10px rgba(0, 0, 0, 0.18);
+  --shadow-control-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+  --shadow-control-active: 0 2px 4px rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 23px;
+  --radius-pill: 80px;
+  --radius-control: 12px;
+
+  --transition-fast: 0.2s ease;
+  --transition-med: 0.3s ease;
+  --transition-slow: 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  --color-accent: #5b7d92;
+  --color-accent-hover: #4e6d81;
+  --color-text-muted: #2f4a5c;
+
+  --widget-text: #22384ac5;
+  --widget-text-muted: #4d6572;
+  --warning: #B8862E;
+  --danger: #B54B45;
+  --text-soft: #5E7079;
+  --accent-rgb: 78, 143, 166;
+
+  /* Crypto chart sits on a fixed dark navy background in both themes,
+     so its neon line/text should not depend on light/dark mode. */
+  --neon-success: #39ff8c;
+  --neon-danger: #ff5c5c;
+  --chart-surface: #0e1c28;
+
+  /* Values below were previously repeated as raw hex/rgb literals in
+     two or more places across the CSS files; each now has one
+     definition here instead of several independent copies to keep in
+     sync. */
+  --text-dark: #333;
+  --focus-blue: #7caaf4;
+  --focus-ring: 2px solid var(--focus-blue);
+  --focus-ring-offset: 2px;
+  --list-text: #444;
+
+  --icon-accent: #567a9a;
+  --icon-accent-hover: #46769c;
+  --label-text: #50697f;
+  --link-hover-dark: #326060;
+
+  --delete-color: rgb(240, 111, 111);
+  --delete-hover: #ff4b4b;
+
+  --history-btn-bg: #6e8fa3;
+  --history-btn-hover: #648699ef;
+
+  /* This exact gradient/border pair was copy-pasted identically across
+     .ping-icon, .task-add-btn and #theme-toggle (and their hover
+     states) in widgets.css and footer.css. Tokenized here so all three
+     stay in sync. */
+  --glass-btn-bg: linear-gradient(145deg, rgba(121, 191, 252, 0.75), rgba(176, 218, 255, 0.6));
+  --glass-btn-border: rgba(181, 230, 255, 0.4);
+  --glass-btn-bg-hover: linear-gradient(145deg, rgba(117, 188, 250, 0.8), rgba(186, 221, 252, 0.55));
+  --glass-btn-border-hover: rgba(172, 227, 255, 0.7);
+}
+
+/* History dropdown design tokens (light theme defaults).
+   Dark-mode.css redefines these same variables for the dark theme. */
+:root {
+  --history-width: 320px;
+  --history-bg: rgba(255, 255, 255, 0.72);
+  --history-border: rgba(255, 255, 255, 0.5);
+  --history-blur: blur(14px) saturate(160%);
+  --history-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
+  --history-inset-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  --history-header-border: rgba(0, 0, 0, 0.07);
+  --history-header-label-color: var(--list-text);
+  --history-header-label-opacity: 0.65;
+
+  --history-clear-color: var(--text-soft);
+  --history-clear-hover-bg: rgba(0, 0, 0, 0.05);
+  --history-clear-hover-color: var(--list-text);
+
+  --history-row-text-color: var(--list-text);
+  --history-row-hover-bg: rgba(138, 204, 251, 0.18);
+  --history-icon-opacity: 0.45;
+  --history-time-opacity: 0.5;
+
+  --history-delete-opacity: 0.55;
+  --history-delete-hover-bg: rgba(255, 75, 75, 0.18);
+  --history-delete-active-bg: rgba(255, 75, 75, 0.3);
+  --history-delete-active-color: #ff2a2a;
+
+  /* Must match REMOVE_ANIMATION_MS in SearchHistory.tsx and js/search.js. */
+  --history-remove-duration: 220ms;
+}

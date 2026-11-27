@@ -8,8 +8,6 @@ import {
     saveImageSearchHistory,
 } from "../utils/imageSearch";
 
-import "../../css/image-search.css";
-
 export default function ImageSearch() {
     const [query, setQuery] = useState("");
     const [history, setHistory] = useState(readImageSearchHistory);

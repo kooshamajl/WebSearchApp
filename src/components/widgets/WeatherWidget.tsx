@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { getAirQuality, getCurrentWeather, getForecastUrl, type AirQuality, type WeatherConditions } from "../../services/weather";
-import "../../../css/widgets.css";
-
 const LEFT_METRICS = ["clouds", "feelsLike", "wind", "visibility"] as const;
 const RIGHT_METRICS = ["humidity", "uv", "aqi", "precip"] as const;
 const UNIT_KEY = "weatherUnit";

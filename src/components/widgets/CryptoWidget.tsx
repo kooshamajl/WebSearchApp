@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { fetchCryptoHistory, getCryptoRange, makeDemoHistory, sampleCryptoChart, type CryptoTimeframe, type PricePoint } from "../../services/crypto";
 import CryptoChart from "./CryptoChart";
 
-import "../../../css/widgets.css";
-
 const TIMEFRAME_KEY = "cryptoTimeframe";
 const REFRESH_MS = 5 * 60 * 1000;
 const REQUEST_TIMEOUT_MS = 10000;

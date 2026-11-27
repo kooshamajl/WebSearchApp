@@ -3,61 +3,29 @@
    Shared by the React and legacy search pages.
    ============================ */
 
-/* History dropdown design tokens (light theme defaults).
-   Dark-mode.css redefines these same variables for the dark theme. */
-:root {
-  --history-width: 320px;
-  --history-bg: rgba(255, 255, 255, 0.72);
-  --history-border: rgba(255, 255, 255, 0.5);
-  --history-blur: blur(14px) saturate(160%);
-  --history-shadow: 0 10px 24px rgba(0, 0, 0, 0.10);
-  --history-inset-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.4);
-
-  --history-header-border: rgba(0, 0, 0, 0.07);
-  --history-header-label-color: var(--list-text);
-  --history-header-label-opacity: 0.65;
-
-  --history-clear-color: var(--text-soft, #5E7079);
-  --history-clear-hover-bg: rgba(0, 0, 0, 0.05);
-  --history-clear-hover-color: var(--list-text);
-
-  --history-row-text-color: var(--list-text);
-  --history-row-hover-bg: rgba(138, 204, 251, 0.18);
-  --history-icon-opacity: 0.45;
-  --history-time-opacity: 0.5;
-
-  --history-delete-opacity: 0.55;
-  --history-delete-hover-bg: rgba(255, 75, 75, 0.18);
-  --history-delete-active-bg: rgba(255, 75, 75, 0.3);
-  --history-delete-active-color: #ff2a2a;
-
-  /* Must match REMOVE_ANIMATION_MS in SearchHistory.tsx and js/search.js. */
-  --history-remove-duration: 220ms;
-}
-
 :is(#toggleHistory, .history-toggle) {
   background: var(--history-btn-bg);
   border-radius: var(--radius-pill);
   border: 1px solid rgba(255, 255, 255, 0.01);
   color: #fff;
   width: 92px;
-  height: 48px;
-  margin-top: 50px;
+  height: var(--search-control-size);
+  margin-top: var(--search-control-offset);
   cursor: pointer;
   font-weight: 400;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow-control);
   transition: box-shadow var(--transition-med), transform var(--transition-med), background var(--transition-med);
 }
 
 :is(#toggleHistory, .history-toggle):hover {
   background: var(--history-btn-hover);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-control-hover);
   transform: translateY(-1.5px) scale(1.02);
 }
 
 :is(#toggleHistory, .history-toggle):active {
   transform: translateY(0) scale(0.98);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-control-active);
 }
 
 :is(#historyList, .history-list) {
@@ -346,7 +314,7 @@
   }
 
   /* This file loads after main-style.css, so its unconditional
-     margin-top: 50px on #toggleHistory (same ID-selector specificity)
+     margin-top: var(--search-control-offset) on #toggleHistory (same ID-selector specificity)
      would otherwise win the cascade and override main-style.css's mobile
      reset there, leaving History out of line with the Search button. */
   :is(#toggleHistory, .history-toggle) {

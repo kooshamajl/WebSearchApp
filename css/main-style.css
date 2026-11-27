@@ -1,62 +1,4 @@
-/* ============================
-   Design Tokens
-   ============================ */
-:root {
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 23px;
-  --radius-pill: 80px;
-  --radius-control: 12px;
-
-  --transition-fast: 0.2s ease;
-  --transition-med: 0.3s ease;
-  --transition-slow: 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-  --color-accent: #5b7d92;
-  --color-accent-hover: #4e6d81;
-  --color-text-muted: #2f4a5c;
-
-  --widget-text: #22384ac5;
-  --widget-text-muted: #4d6572;
-  --warning: #B8862E;
-  --danger: #B54B45;
-  --text-soft: #5E7079;
-  --accent-rgb: 78, 143, 166;
-
-  /* Crypto chart sits on a fixed dark navy background in both themes,
-     so its neon line/text should not depend on light/dark mode. */
-  --neon-success: #39ff8c;
-  --neon-danger: #ff5c5c;
-
-  /* Values below were previously repeated as raw hex/rgb literals in
-     two or more places across the CSS files; each now has one
-     definition here instead of several independent copies to keep in
-     sync. */
-  --text-dark: #333;
-  --focus-blue: #7caaf4;
-  --list-text: #444;
-
-  --icon-accent: #567a9a;
-  --icon-accent-hover: #46769c;
-  --label-text: #50697f;
-  --link-hover-dark: #326060;
-
-  --delete-color: rgb(240, 111, 111);
-  --delete-hover: #ff4b4b;
-
-  --history-btn-bg: #6e8fa3;
-  --history-btn-hover: #648699ef;
-
-  /* This exact gradient/border pair was copy-pasted identically across
-     .ping-icon, .task-add-btn and #theme-toggle (and their hover
-     states) in widgets.css and footer.css. Tokenized here so all three
-     stay in sync. */
-  --glass-btn-bg: linear-gradient(145deg, rgba(121, 191, 252, 0.75), rgba(176, 218, 255, 0.6));
-  --glass-btn-border: rgba(181, 230, 255, 0.4);
-  --glass-btn-bg-hover: linear-gradient(145deg, rgba(117, 188, 250, 0.8), rgba(186, 221, 252, 0.55));
-  --glass-btn-border-hover: rgba(172, 227, 255, 0.7);
-}
+@import "./tokens.css";
 
 /* ============================
    Shared Utilities
@@ -85,26 +27,20 @@ html {
 }
 
 body {
-  background-image: url("../pictures/light.jpg");
+  background-image: url("../src/assets/backgrounds/light.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   min-height: 100%;
   background-attachment: fixed;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-ui);
   background-color: #f9f9f9;
   margin: 0;
   padding: 0;
 }
 
 input {
-  font-family:
-    'Vazirmatn',
-    'Inter',
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
+  font-family: var(--font-input);
 }
 
 main {
@@ -184,7 +120,7 @@ main {
 .app-widget-container .glass-widget > p {
   margin: 4px 0 0;
   color: var(--widget-text-muted);
-  font-size: .875rem;
+  font-size: var(--font-size-control);
 }
 
 /* ============================
@@ -201,7 +137,7 @@ main {
   background: rgba(255, 255, 255, 0.6);
   border-radius: var(--radius-md);
   cursor: default;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-compact);
   display: inline-block;
   overflow: hidden;
   max-height: 40px;
@@ -377,19 +313,19 @@ h3 {
 
 .search-bar {
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, .42);
-  border: 1px solid rgba(255, 255, 255, .35);
+  background: var(--search-field-background);
+  border: 1px solid var(--search-field-border);
   box-shadow:
     inset 0 1px 1px rgba(255, 255, 255, .22),
     0 8px 20px rgba(0, 0, 0, .08);
-  color: var(--text-dark);
+  color: var(--search-field-text);
   backdrop-filter: blur(10px) saturate(140%);
   -webkit-backdrop-filter: blur(10px) saturate(140%);
-  margin-top: 50px;
+  margin-top: var(--search-control-offset);
   width: 500px;
   max-width: 90vw;
-  height: 48px;
-  line-height: 46px;
+  height: var(--search-control-size);
+  line-height: var(--search-control-line-height);
   padding: 0 20px;
   font-size: 18px;
   transition: transform var(--transition-fast), border-color var(--transition-med), box-shadow var(--transition-med);
@@ -407,13 +343,13 @@ h3 {
 }
 
 .search-bar:focus-visible {
-  outline: 2px solid var(--focus-blue);
+  outline: var(--focus-ring);
   outline-offset: 2px;
 }
 
 .search-bar::placeholder {
   padding-top: 1px;
-  color: #6e8092;
+  color: var(--search-field-placeholder);
   font-weight: 400;
   letter-spacing: .2px;
   opacity: .9;
@@ -429,18 +365,18 @@ h3 {
   border: 1px solid rgba(255, 255, 255, 0.01);
   color: #fff;
   width: 140px;
-  height: 48px;
+  height: var(--search-control-size);
   cursor: pointer;
   font-weight: 400;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow-control);
   transition: box-shadow var(--transition-med), transform var(--transition-med), background var(--transition-med);
 }
 
 /* Aligns the button's vertical center with .search-bar (which also has
-   margin-top: 50px). Kept as the single source of truth for this value
+   margin-top: var(--search-control-offset)). Kept as the single source of truth for this value
    instead of duplicating/overriding it on #search-button. */
 .search-but {
-  margin-top: 50px;
+  margin-top: var(--search-control-offset);
 }
 
 .search-but i {
@@ -450,7 +386,7 @@ h3 {
 
 #search-button:hover {
   background: var(--color-accent-hover);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-control-hover);
   transform: translateY(-1.5px) scale(1.02);
 }
 
@@ -461,7 +397,7 @@ h3 {
 
 #search-button:active {
   transform: translateY(0) scale(0.98);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-control-active);
 }
 
 /* ============================

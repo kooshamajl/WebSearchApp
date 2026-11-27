@@ -16,9 +16,6 @@ import { buildSearchUrl } from "../utils/search";
 import { useSearchHistory } from "../hooks/useSearchHistory";
 import { useSearchInputFocus } from "../hooks/useSearchInputFocus";
 
-import "../../css/search-engine.css";
-import "../styles/web-search.css";
-
 export default function WebSearch() {
     const [query, setQuery] = useState("");
     const [openPanel, setOpenPanel] = useState<"history" | "autocomplete" | null>(null);

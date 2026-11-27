@@ -1,8 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent, RefObject } from "react";
 import type { SearchHistoryItem } from "../../hooks/useSearchHistory";
-import "../../../css/history-search.css";
-
 type SearchHistoryProps = {
     items: SearchHistoryItem[];
     isOpen: boolean;

@@ -21,9 +21,9 @@
   position: absolute;
   /* Matches .search-bar's margin-top so the control sits flush with
      the input instead of floating at the top of the wrap. */
-  top: 50px;
+  top: var(--search-control-offset);
   right: 6px;
-  height: 48px;
+  height: var(--search-control-size);
   display: flex;
   align-items: center;
   z-index: 5;
@@ -54,7 +54,7 @@
 }
 
 .engine-select-btn:focus-visible {
-  outline: 2px solid var(--focus-blue);
+  outline: var(--focus-ring);
   outline-offset: 2px;
 }
 

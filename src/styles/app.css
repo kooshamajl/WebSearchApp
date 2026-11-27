@@ -1,0 +1,12 @@
+/* Load shared styles, their React overrides, and the common control rules. */
+@import "../../css/widgets.css";
+@import "./widgets.css";
+@import "./theme-toggle.css";
+@import "../../css/footer.css";
+@import "./footer.css";
+@import "../../css/history-search.css";
+@import "../../css/search-engine.css";
+@import "./web-search.css";
+@import "../../css/image-search.css";
+@import "../../css/main-style.css";
+@import "./controls.css";

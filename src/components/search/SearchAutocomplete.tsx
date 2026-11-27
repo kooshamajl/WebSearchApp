@@ -2,8 +2,6 @@ import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent, RefObject } from "react";
 import type { SearchHistoryItem } from "../../hooks/useSearchHistory";
 import { getSearchSuggestions } from "../../utils/searchSuggestions";
-import "../../../css/history-search.css";
-
 type SearchAutocompleteProps = {
     inputId?: string;
     query: string;

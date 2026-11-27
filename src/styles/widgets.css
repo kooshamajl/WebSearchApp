@@ -1,0 +1,332 @@
+/* React widget layout and controls. */
+.app-widget-container .glass-widget:is([data-widget="weather"], [data-widget="crypto"]) {
+  width: min(220px, calc(100% - 32px));
+}
+
+.app-widget-container #weather {
+  width: 100%;
+}
+
+.weather-widget :is(button, .weather-forecast-link) {
+  min-height: var(--control-target);
+  color: inherit;
+}
+
+.weather-widget button {
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.weather-widget button:hover {
+  background: var(--history-row-hover-bg);
+}
+
+.weather-widget .weather-detail-label,
+.weather-widget .weather-detail-value,
+.weather-widget .weather-forecast-link {
+  font-size: var(--font-size-control);
+}
+
+.weather-widget .weather-detail-label {
+  white-space: normal;
+}
+
+.weather-widget :is(.weather-forecast-link, .weather-retry, .weather-attribution a) {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.weather-widget .weather-attribution {
+  display: block;
+  text-align: center;
+  font-size: var(--font-size-caption);
+}
+
+.app-widget-container #cryptoWidget {
+  width: 100%;
+  margin-top: 8px;
+  font-size: var(--font-size-control);
+}
+
+.crypto-widget #cryptoName {
+  font-size: var(--font-size-caption);
+}
+
+.crypto-widget #cryptoPrice {
+  font-size: 1.125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.crypto-widget .chart-container {
+  display: block;
+  height: 60px;
+  background: var(--chart-surface);
+}
+
+.crypto-widget #cryptoChange {
+  font-size: var(--font-size-control);
+}
+
+.crypto-widget .tf-btn,
+.crypto-status button {
+  min-width: var(--control-target);
+  min-height: var(--control-target);
+  font-size: var(--font-size-control);
+  color: inherit;
+}
+
+.crypto-widget .tf-btn.active {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.crypto-widget :is(.trend-up, .trend-down) {
+  padding: 3px 5px;
+  border-radius: var(--radius-sm);
+  background: var(--chart-surface);
+}
+
+.crypto-widget .trend-up { color: var(--neon-success); }
+.crypto-widget .trend-down { color: var(--neon-danger); }
+
+.crypto-status p { margin: 4px 0 0; }
+
+.app-widget-container .glass-widget[data-widget="DailyTask"] {
+  width: min(242px, calc(100% - 32px));
+}
+
+.app-widget-container #tasksWidget {
+  width: 100%;
+  overflow: visible;
+  font-size: var(--font-size-control);
+}
+
+.daily-tasks .tasks-count {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  margin: 0;
+  font-size: var(--font-size-control);
+  opacity: 1;
+}
+
+.daily-tasks .tasks-list li {
+  overflow: visible;
+  opacity: 1;
+}
+
+.daily-tasks .task-toggle {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--control-target);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.daily-tasks .task-text {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: inherit;
+}
+
+.daily-tasks .task-item.done .task-text {
+  opacity: 1;
+}
+
+.daily-tasks .tasks-empty {
+  font-size: inherit;
+  opacity: 1;
+}
+
+.daily-tasks .task-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+}
+
+.daily-tasks #taskInput {
+  min-height: var(--control-target);
+  padding: 6px 10px;
+  font-size: 1rem;
+}
+
+.daily-tasks #taskInput::placeholder {
+  font-size: var(--font-size-control);
+}
+
+.daily-tasks :is(.task-add-btn, .task-delete) {
+  position: static;
+  width: var(--control-target);
+  height: var(--control-target);
+  font-size: 1.125rem;
+}
+
+#tasksWidget .task-delete {
+  color: var(--widget-text);
+  opacity: 1;
+}
+
+#task-input-error {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.app-widget-container .glass-widget[data-widget="quick-links"] {
+  width: min(304px, calc(100% - 32px));
+}
+
+#quickLinks.app-quick-links {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  font-size: var(--font-size-control);
+}
+
+.app-quick-links .quick-links-row {
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+}
+
+#quickLinks.app-quick-links a,
+.app-quick-links .quick-link-add-btn {
+  display: grid;
+  place-items: center;
+  width: var(--control-target);
+  height: var(--control-target);
+  padding: 0;
+  font-size: 1.25rem;
+}
+
+.app-quick-links svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.app-quick-links .quick-link-remove {
+  top: -3px;
+  right: -3px;
+  width: 24px;
+  height: 24px;
+  background: var(--glass-strong, #385161);
+  font-size: 1rem;
+}
+
+.app-quick-links .quick-link-item:is(:hover, :focus-within) .quick-link-remove {
+  opacity: 1;
+  transform: none;
+}
+
+.app-quick-links .quick-link-remove:hover { background: #9f3834; }
+
+.app-quick-links .quick-link-popover {
+  width: min(100%, 288px);
+}
+
+.app-quick-links .quick-link-popover-row label,
+.app-quick-links .quick-link-error,
+.app-quick-links .quick-link-popover-actions button {
+  font-size: var(--font-size-control);
+}
+
+.app-quick-links .quick-link-error {
+  color: var(--text-main, #7b2f2a);
+}
+
+.app-quick-links .quick-link-input {
+  min-height: var(--control-target);
+  font-size: 1rem;
+}
+
+.app-quick-links .quick-link-popover-actions button { min-height: var(--control-target); }
+
+.app-quick-links .quick-links-empty { margin: 0; }
+
+.app-widget-container .glass-widget[data-widget="ping"] {
+  width: min(212px, calc(100% - 32px));
+}
+
+.app-widget-container #pingWidget {
+  width: 100%;
+  text-align: left;
+  cursor: auto;
+}
+
+.connection-widget .ping-title {
+  margin: 4px 0;
+  font-size: var(--font-size-control);
+  letter-spacing: normal;
+  opacity: 1;
+}
+
+.connection-widget .ping-row {
+  justify-content: flex-start;
+}
+
+.connection-widget #pingStatus {
+  font-size: var(--font-size-control);
+  opacity: 1;
+}
+
+.connection-refresh { margin-top: 6px; }
+
+.connection-refresh[aria-disabled="true"] {
+  cursor: default;
+  opacity: .75;
+}
+
+@media (hover: none) {
+  .app-quick-links .quick-link-remove {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 1400px) {
+  .app-widget-container .glass-widget[data-widget="quick-links"] {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    margin: 0 var(--space-4) var(--space-4) auto;
+  }
+
+  .app-quick-links .quick-link-popover {
+    position: static;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-quick-links .quick-link-popover { transition: none; }
+}
+
+@media (max-width: 1280px) {
+  .app-widget-container .glass-widget[data-widget="DailyTask"] {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    margin: 0 var(--space-4) var(--space-4) auto;
+  }
+}
+
+@media (max-width: 1200px) {
+  .app-widget-container .glass-widget:is([data-widget="weather"], [data-widget="crypto"], [data-widget="ping"]) {
+    position: relative;
+    inset: auto;
+    z-index: auto;
+    margin: 0 var(--space-4) var(--space-4) auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-widget-container#widget-container .glass-widget {
+    animation: none;
+  }
+}

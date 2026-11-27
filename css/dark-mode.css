@@ -14,6 +14,10 @@
   --glass-strong: rgba(40, 40, 40, 0.9);
 
   --border-soft: rgba(255, 255, 255, 0.08);
+  --search-field-background: var(--glass-light);
+  --search-field-border: var(--border-soft);
+  --search-field-text: var(--text-main);
+  --search-field-placeholder: var(--text-soft);
 
   --accent: #434f63b6;
   --accent-hover: #555e70;
@@ -60,7 +64,7 @@
 }
 
 :root:not([data-theme="light"]) body {
-  background: var(--bg-main) url("../pictures/dark.jpg") center / cover no-repeat fixed;
+  background: var(--bg-main) url("../src/assets/backgrounds/dark.jpg") center / cover no-repeat fixed;
   color: var(--text-main);
 }
 
@@ -90,18 +94,8 @@
 }
 
 
-:root:not([data-theme="light"]) .search-bar {
-  background-color: var(--glass-light);
-  color: var(--text-main);
-  border: 1px solid var(--border-soft);
-}
-
 :root:not([data-theme="light"]) #ghostRemainder {
   color: var(--text-main);
-}
-
-:root:not([data-theme="light"]) .search-bar::placeholder {
-  color: var(--text-soft);
 }
 
 :root:not([data-theme="light"]) .search-bar:hover {
@@ -335,7 +329,7 @@
 }
 
 :root:not([data-theme="light"]) .advanced-container .search-bar:focus-visible {
-  outline: 2px solid var(--focus-blue);
+  outline: var(--focus-ring);
   outline-offset: 2px;
 }
 

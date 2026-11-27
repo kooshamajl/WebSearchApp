@@ -3,8 +3,6 @@ import ThemeToggle from "../common/ThemeToggle";
 import { isWidgetId, WIDGETS, type WidgetId } from "../../data/widgets";
 import { formatFooterDate, formatFooterTime, type ClockFormat, type DateFormat } from "../../utils/footerDateTime";
 
-import "../../../css/footer.css";
-
 const DATE_FORMAT_KEY = "dateFormat";
 const CLOCK_FORMAT_KEY = "clockFormat";
 

@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { describeLatency, measureHttpLatency } from "../../services/connection";
 
-import "../../../css/widgets.css";
-
 const REFRESH_MS = 4000;
 const TIMEOUT_MS = 4000;
 
