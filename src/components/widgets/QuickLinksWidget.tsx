@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Icon from "../common/Icon";
 import type { FormEvent } from "react";
 import iconSprite from "../../assets/icons/quick-link-icons.svg?url";
+import { useWidgetResize } from "../../hooks/useWidgetResize";
 import { QUICK_LINK_LIMIT, quickLinkHost, quickLinkIcon, readQuickLinks, resolveQuickLink, saveQuickLinks, seedQuickLinks } from "../../utils/quickLinks";
 
 type LinkError = { field: "name" | "url"; message: string };
@@ -16,12 +17,15 @@ export default function QuickLinksWidget() {
     const dialog = useRef<HTMLFormElement>(null);
     const lastLink = useRef<HTMLAnchorElement>(null);
     const restoreFocus = useRef(false);
+    const { content, captureSize } = useWidgetResize("width");
     const limitReached = links.length >= QUICK_LINK_LIMIT;
 
     useEffect(seedQuickLinks, []);
 
     useEffect(() => {
         if (!isOpen) return;
+        if (nameInput.current) nameInput.current.value = "";
+        if (urlInput.current) urlInput.current.value = "";
         nameInput.current?.focus();
 
         function handleOutsidePointer(event: PointerEvent) {
@@ -49,6 +53,15 @@ export default function QuickLinksWidget() {
         restoreFocus.current = false;
         (limitReached ? lastLink : addButton).current?.focus();
     }, [links, limitReached]);
+
+    useLayoutEffect(() => {
+        if (!error) return;
+        const field = (error.field === "name" ? nameInput : urlInput).current;
+        if (!field) return;
+        field.classList.remove("shake");
+        void field.offsetWidth;
+        field.classList.add("shake");
+    }, [error]);
 
     function reportError(field: LinkError["field"], message: string) {
         setError({ field, message });
@@ -79,6 +92,7 @@ export default function QuickLinksWidget() {
 
         const next = [...links, { name, ...resolved }];
         restoreFocus.current = true;
+        captureSize();
         setLinks(next);
         saveQuickLinks(next);
         setIsOpen(false);
@@ -87,12 +101,13 @@ export default function QuickLinksWidget() {
     function removeLink(index: number) {
         const next = links.filter((_, position) => position !== index);
         restoreFocus.current = true;
+        captureSize();
         setLinks(next);
         saveQuickLinks(next);
     }
 
     return (
-        <div id="quickLinks" className="app-quick-links">
+        <div id="quickLinks" className="app-quick-links" ref={content}>
             {links.length === 0 ? <p className="quick-links-empty">No quick links yet</p> : (
                 <ul className="quick-links-row" role="list" aria-label="Saved links">
                     {links.map(({ name, url, icon }, index) => (
@@ -110,37 +125,35 @@ export default function QuickLinksWidget() {
 
             <span className="quick-link-divider" aria-hidden="true" />
             <button type="button" className="quick-link-add-btn" ref={addButton} aria-label="Add quick link"
-                aria-haspopup="dialog" aria-expanded={isOpen} aria-controls={isOpen ? "quickLinkPopover" : undefined}
+                aria-haspopup="dialog" aria-expanded={isOpen} aria-controls="quickLinkPopover"
                 disabled={limitReached} title={limitReached ? `Limit reached (${QUICK_LINK_LIMIT})` : "Add quick link"}
-                onClick={() => { setError(null); setIsOpen(!isOpen); }}><Icon name="plus" /></button>
+                onClick={() => { if (!isOpen) { setError(null); setIsOpen(true); } }}><Icon name="plus" /></button>
 
-            {isOpen && (
-                <form className="quick-link-popover open" id="quickLinkPopover" ref={dialog}
-                    role="dialog" aria-label="Add quick link" onSubmit={handleSave}>
-                    <div className="quick-link-popover-row">
-                        <label htmlFor="quickLinkName">Name</label>
-                        <input type="text" id="quickLinkName" ref={nameInput} maxLength={24} autoComplete="off"
-                            className={`quick-link-input${error?.field === "name" ? " invalid" : ""}`}
-                            aria-invalid={error?.field === "name"} aria-describedby={error?.field === "name" ? "quickLinkError" : undefined}
-                            onChange={() => { if (error?.field === "name") setError(null); }} />
-                    </div>
-                    <div className="quick-link-popover-row">
-                        <label htmlFor="quickLinkUrl">URL or site name</label>
-                        <input type="text" id="quickLinkUrl" ref={urlInput} maxLength={60} autoComplete="off"
-                            className={`quick-link-input${error?.field === "url" ? " invalid" : ""}`}
-                            aria-invalid={error?.field === "url"} aria-describedby={error?.field === "url" ? "quickLinkError" : undefined}
-                            onChange={() => { if (error?.field === "url") setError(null); }} />
-                    </div>
-                    {error && <p className="quick-link-error" id="quickLinkError" role="alert">{error.message}</p>}
-                    <div className="quick-link-popover-actions">
-                        <button type="button" className="quick-link-cancel-btn" onClick={() => {
-                            setIsOpen(false);
-                            addButton.current?.focus();
-                        }}>Cancel</button>
-                        <button type="submit" className="quick-link-save-btn">Add</button>
-                    </div>
-                </form>
-            )}
+            <form className={`quick-link-popover${isOpen ? " open" : ""}`} id="quickLinkPopover" ref={dialog}
+                role="dialog" aria-label="Add quick link" inert={!isOpen} onSubmit={handleSave}>
+                <div className="quick-link-popover-row">
+                    <label htmlFor="quickLinkName">Name</label>
+                    <input type="text" id="quickLinkName" ref={nameInput} maxLength={24} autoComplete="off" placeholder="e.g. Amazon"
+                        className={`quick-link-input${error?.field === "name" ? " invalid" : ""}`}
+                        aria-invalid={error?.field === "name"} aria-describedby={error?.field === "name" ? "quickLinkError" : undefined}
+                        onChange={() => { if (error?.field === "name") setError(null); }} />
+                </div>
+                <div className="quick-link-popover-row">
+                    <label htmlFor="quickLinkUrl">URL or site name</label>
+                    <input type="text" id="quickLinkUrl" ref={urlInput} maxLength={60} autoComplete="off" placeholder="e.g. amazon.com"
+                        className={`quick-link-input${error?.field === "url" ? " invalid" : ""}`}
+                        aria-invalid={error?.field === "url"} aria-describedby={error?.field === "url" ? "quickLinkError" : undefined}
+                        onChange={() => { if (error?.field === "url") setError(null); }} />
+                </div>
+                <p className="quick-link-error" id="quickLinkError" role={error ? "alert" : undefined}>{error?.message}</p>
+                <div className="quick-link-popover-actions">
+                    <button type="button" className="quick-link-cancel-btn" onClick={() => {
+                        setIsOpen(false);
+                        addButton.current?.focus();
+                    }}>Cancel</button>
+                    <button type="submit" className="quick-link-save-btn">Add</button>
+                </div>
+            </form>
         </div>
     );
 }

@@ -237,7 +237,7 @@
   
   border: 1px solid rgba(255, 255, 255, .28);
 
-  box-shadow:
+  --widget-shadow:
     0 8px 24px rgba(0, 0, 0, .30),
     inset 0 1px 0 rgba(255, 255, 255, .18);
 }
@@ -282,7 +282,7 @@
 }
 
 
-:root:not([data-theme="light"]) .widget-options :is(span, button):not(.active-widget) {
+:root:not([data-theme="light"]) .widget-options :is(span, button) {
   color: rgba(230, 245, 255, 0.85);
 }
 
@@ -389,8 +389,8 @@
 }
 
 :root:not([data-theme="light"]) .quick-link-input {
+  --quick-link-input-border: var(--border-soft);
   background: rgba(50, 50, 50, 0.6);
-  border: 1px solid var(--border-soft);
   color: var(--text-main);
 }
 

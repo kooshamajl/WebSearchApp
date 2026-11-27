@@ -4,7 +4,7 @@
 .crypto-widget :is(button, a):focus-visible,
 #tasksWidget #taskInput:focus-visible,
 .daily-tasks :is(input, button):focus-visible,
-.app-quick-links :is(a, button, input):focus-visible,
+.app-quick-links :is(a, button):focus-visible,
 .connection-refresh:focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-ring-offset);

@@ -18,6 +18,7 @@ const statusLabels = {
 export default function ConnectionWidget() {
     const [result, setResult] = useState<ConnectionResult>({ status: "checking" });
     const [isChecking, setIsChecking] = useState(false);
+    const [measurement, setMeasurement] = useState(0);
     const refresh = useRef<(() => void) | null>(null);
 
     useEffect(() => {
@@ -37,6 +38,7 @@ export default function ConnectionWidget() {
         function goOffline() {
             cancelCheck();
             setResult({ status: "offline" });
+            setMeasurement((count) => count + 1);
             setIsChecking(false);
         }
 
@@ -64,6 +66,7 @@ export default function ConnectionWidget() {
                 if (pending === current) {
                     pending = undefined;
                     setIsChecking(false);
+                    setMeasurement((count) => count + 1);
                     if (navigator.onLine) refreshTimer = window.setTimeout(checkConnection, REFRESH_MS);
                 }
             }
@@ -93,9 +96,13 @@ export default function ConnectionWidget() {
             <button type="button" className="ping-row connection-refresh" aria-label="Check connection"
                 title="Check HTTP latency to jsDelivr" aria-disabled={isChecking || result.status === "offline"}
                 onClick={() => refresh.current?.()}>
-                <span className="ping-icon"><Icon name="wifi" /></span>
+                <span className="ping-icon">
+                    <Icon name={result.status === "offline" || result.status === "unavailable" ? "triangle-exclamation" : "wifi"} />
+                </span>
                 <span className="ping-info">
-                    <span id="pingValue">{result.status === "connected" ? `${result.latency} ms` : "— ms"}</span>
+                    <span key={measurement} id="pingValue" className={measurement ? "ping-animate" : undefined}>
+                        {result.status === "connected" ? `${result.latency} ms` : "— ms"}
+                    </span>
                     <span id="pingStatus" aria-hidden="true">{status}</span>
                 </span>
             </button>

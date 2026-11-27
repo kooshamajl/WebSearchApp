@@ -607,7 +607,7 @@
   color: var(--text-dark);
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, .55);
-  border: 1px solid rgba(0, 0, 0, .1);
+  border: 1px solid var(--quick-link-input-border, rgba(0, 0, 0, .1));
   transition: border-color .2s ease, box-shadow .2s ease;
 }
 

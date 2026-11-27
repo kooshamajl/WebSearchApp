@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Icon from "../common/Icon";
 import type { FormEvent } from "react";
+import { useWidgetResize } from "../../hooks/useWidgetResize";
 import { DAILY_TASK_LIMIT, TASK_TEXT_LIMIT, getTaskDateKey, readDailyTasks, saveDailyTasks, type DailyTask } from "../../utils/dailyTasks";
 
 type TaskRow = DailyTask & { id: number };
@@ -18,6 +19,7 @@ export default function DailyTasksWidget() {
     const input = useRef<HTMLInputElement>(null);
     const lastCheckbox = useRef<HTMLInputElement>(null);
     const focusAfterUpdate = useRef<"input" | "last-task" | null>(null);
+    const { content, captureSize } = useWidgetResize("height");
 
     const { tasks } = taskList;
     const limitReached = tasks.length >= DAILY_TASK_LIMIT;
@@ -54,6 +56,7 @@ export default function DailyTasksWidget() {
     }, [taskList]);
 
     function commitTasks(date: string, tasks: TaskRow[]) {
+        captureSize();
         saveDailyTasks(date, tasks);
         setTaskList({ date, tasks });
     }
@@ -63,7 +66,13 @@ export default function DailyTasksWidget() {
         const text = draft.trim();
         if (!text || text.length > TASK_TEXT_LIMIT) {
             setShowError(true);
-            input.current?.focus();
+            const field = input.current;
+            if (field) {
+                field.focus();
+                field.classList.remove("limit");
+                void field.offsetWidth;
+                field.classList.add("limit");
+            }
             return;
         }
 
@@ -90,7 +99,7 @@ export default function DailyTasksWidget() {
     }
 
     return (
-        <div id="tasksWidget" className="daily-tasks">
+        <div id="tasksWidget" className="daily-tasks" ref={content}>
             <div className="tasks-header">
                 <Icon name="list-check" />
                 <span aria-hidden="true">Daily Tasks</span>

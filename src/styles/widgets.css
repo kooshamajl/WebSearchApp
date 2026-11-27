@@ -2,6 +2,7 @@
 .app-widget-container .glass-widget {
   max-width: calc(100% - 32px);
   font-size: 14px;
+  transition: box-shadow var(--transition-med), transform var(--transition-med);
 }
 
 .app-widget-container .glass-widget:is([data-widget="weather"], [data-widget="crypto"], [data-widget="ping"]) {
@@ -14,11 +15,12 @@
 .weather-widget button {
   border: 0;
   padding: 0;
-  background: transparent;
   color: inherit;
   font: inherit;
   cursor: pointer;
 }
+
+.weather-widget :is(#temp, .weather-retry) { background: transparent; }
 
 .weather-widget .weather-detail-label { white-space: normal; }
 .weather-widget .weather-attribution {
@@ -37,7 +39,7 @@
 .crypto-widget .trend-down { color: var(--neon-danger); }
 .crypto-status p { margin: 4px 0 0; }
 
-.app-widget-container .glass-widget[data-widget="DailyTask"] { width: 155px; }
+.app-widget-container .glass-widget[data-widget="DailyTask"] { width: 155px; overflow: hidden; }
 .app-widget-container #tasksWidget { overflow: visible; }
 .daily-tasks .tasks-count { flex: none; }
 .daily-tasks .tasks-empty { margin: 8px 0; }
@@ -56,8 +58,6 @@
   overflow-wrap: anywhere;
   cursor: inherit;
 }
-
-[data-theme="dark"] .daily-tasks .task-delete { color: var(--widget-text); }
 
 #task-input-error { margin: 4px 0 0; }
 
@@ -81,7 +81,7 @@
 
 .app-quick-links .quick-link-add-btn { flex: none; }
 .app-quick-links .quick-links-empty { margin: 0; }
-.app-quick-links .quick-link-popover { width: min(220px, 100%); }
+.app-quick-links .quick-link-popover { width: min(190px, calc(100vw - 32px)); }
 
 .connection-widget .ping-title { margin: 0; }
 .connection-widget .connection-refresh {
@@ -112,11 +112,12 @@
 }
 
 @media (max-width: 600px) {
-  .app-quick-links:has(.quick-link-popover) { flex-wrap: wrap; }
-  .app-quick-links .quick-link-popover { position: static; flex-basis: 100%; }
+  .app-quick-links:has(.quick-link-popover.open) { flex-wrap: wrap; }
+  .app-quick-links .quick-link-popover.open { position: static; flex-basis: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .app-widget-container#widget-container .glass-widget { animation: none; }
+  .app-widget-container#widget-container .glass-widget { animation: none; transition: none; }
+  .app-widget-container :is(.value-pulse, .ping-animate, .shake, #taskInput.limit) { animation: none; }
   .app-quick-links .quick-link-popover { transition: none; }
 }

@@ -64,6 +64,7 @@ export default function WeatherWidget() {
     const [unit, setUnit] = useState<Unit>(() => readPreference(UNIT_KEY, ["C", "F"]));
     const [left, setLeft] = useState(() => readPreference(LEFT_METRIC_KEY, LEFT_METRICS));
     const [right, setRight] = useState(() => readPreference(RIGHT_METRIC_KEY, RIGHT_METRICS));
+    const [changed, setChanged] = useState({ temperature: false, left: false, right: false });
 
     useEffect(() => {
         const controller = new AbortController();
@@ -117,9 +118,11 @@ export default function WeatherWidget() {
             <button id="temp" type="button" aria-label={`Toggle temperature unit. ${temperature}°${unit}`} onClick={() => {
                 const next = unit === "C" ? "F" : "C";
                 setUnit(next);
+                setChanged((previous) => ({ ...previous, temperature: true }));
                 savePreference(UNIT_KEY, next);
             }}>
-                <span>{temperature}</span><span className="weather-unit">°{unit}</span>
+                <span key={unit} className={changed.temperature ? "value-pulse" : undefined}>{temperature}</span>{" "}
+                <span className="weather-unit">°{unit}</span>
             </button>
 
             <div className="weather-divider" aria-hidden="true" />
@@ -127,19 +130,21 @@ export default function WeatherWidget() {
                 <button type="button" className="weather-detail" aria-label={`Cycle left weather metric. ${labels[left]}, ${leftValue}`} onClick={() => {
                     const next = nextMetric(LEFT_METRICS, left);
                     setLeft(next);
+                    setChanged((previous) => ({ ...previous, left: true }));
                     savePreference(LEFT_METRIC_KEY, next);
                 }}>
                     <span className="weather-detail-label">{labels[left]}</span>
-                    <span className="weather-detail-value">{leftValue}</span>
+                    <span key={left} className={`weather-detail-value${changed.left ? " value-pulse" : ""}`}>{leftValue}</span>
                 </button>
                 <div className="weather-detail-sep" aria-hidden="true" />
                 <button type="button" className="weather-detail" aria-label={`Cycle right weather metric. ${labels[right]}, ${rightValue}`} onClick={() => {
                     const next = nextMetric(RIGHT_METRICS, right);
                     setRight(next);
+                    setChanged((previous) => ({ ...previous, right: true }));
                     savePreference(RIGHT_METRIC_KEY, next);
                 }}>
                     <span className="weather-detail-label">{labels[right]}</span>
-                    <span className="weather-detail-value">{rightValue}</span>
+                    <span key={right} className={`weather-detail-value${changed.right ? " value-pulse" : ""}`}>{rightValue}</span>
                 </button>
             </div>
 

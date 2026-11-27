@@ -18,8 +18,15 @@
 }
 
 .app-widget-dropdown .widget-label { padding: 0; }
-.app-widget-dropdown .widget-options { visibility: hidden; }
-.app-widget-dropdown.open .widget-options { visibility: visible; }
+.app-widget-dropdown .widget-options {
+  visibility: hidden;
+  transition: opacity .25s ease .15s, transform .25s ease .15s, visibility 0s linear .4s;
+}
+
+.app-widget-dropdown.open .widget-options {
+  visibility: visible;
+  transition-delay: .15s, .15s, 0s;
+}
 
 /* Use an upward menu when the expanded strip could push the footer onto a new row. */
 @media (max-width: 1140px) {

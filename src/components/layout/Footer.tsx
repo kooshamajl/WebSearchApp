@@ -76,7 +76,16 @@ export default function Footer({ activeWidget, onWidgetChange }: FooterProps) {
             </div>
 
             <div className="footer-right">
-                <div className={`widget-dropdown app-widget-dropdown${isOpen ? " open" : ""}`} {...disclosureProps}>
+                <div className={`widget-dropdown app-widget-dropdown${isOpen ? " open" : ""}`} {...disclosureProps}
+                    onPointerLeave={(event) => {
+                        if (event.pointerType !== "mouse") return;
+                        const focused = document.activeElement;
+                        if (event.currentTarget.contains(focused)) {
+                            if (focused?.matches(":focus-visible")) return;
+                            trigger.current?.focus();
+                        }
+                        close();
+                    }}>
                     <button ref={trigger} type="button" className="widget-label" aria-expanded={isOpen}
                         aria-controls={widgetMenuId} onClick={toggle} onPointerEnter={openOnHover}>
                         <Icon name="layer-group" /> Widgets
@@ -85,10 +94,13 @@ export default function Footer({ activeWidget, onWidgetChange }: FooterProps) {
                     <div className="widget-options" id={widgetMenuId} inert={!isOpen}>
                         {(Object.keys(WIDGETS) as WidgetId[]).map((id) => (
                             <button key={id} type="button" className={id === activeWidget ? "active-widget" : undefined}
-                                aria-pressed={id === activeWidget} aria-controls="widget-container" onClick={() => {
+                                aria-pressed={id === activeWidget} aria-controls="widget-container" onClick={(event) => {
                                     onWidgetChange(id);
-                                    close();
-                                    trigger.current?.focus();
+                                    const pointer = event.nativeEvent;
+                                    if (!(pointer instanceof window.PointerEvent && pointer.pointerType === "mouse")) {
+                                        close();
+                                        trigger.current?.focus();
+                                    }
                                 }}>
                                 {WIDGETS[id]}
                             </button>
