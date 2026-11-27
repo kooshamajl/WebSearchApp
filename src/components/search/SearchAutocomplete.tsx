@@ -4,6 +4,7 @@ import type { SearchHistoryItem } from "../../hooks/useSearchHistory";
 import { getSearchSuggestions } from "../../utils/searchSuggestions";
 type SearchAutocompleteProps = {
     inputId?: string;
+    errorId?: string;
     query: string;
     history: readonly SearchHistoryItem[];
     inputRef: RefObject<HTMLInputElement | null>;
@@ -22,7 +23,7 @@ function highlightMatch(text: string, query: string) {
 }
 
 export default function SearchAutocomplete({
-    inputId, query, history, inputRef, isOpen, onQueryChange, onDismiss, onSelect,
+    inputId, errorId, query, history, inputRef, isOpen, onQueryChange, onDismiss, onSelect,
 }: SearchAutocompleteProps) {
     const listId = useId();
     const rootRef = useRef<HTMLDivElement>(null);
@@ -83,6 +84,8 @@ export default function SearchAutocomplete({
                 type="text"
                 placeholder="Search or enter a URL"
                 aria-label="Search or enter a URL"
+                aria-invalid={!!errorId}
+                aria-describedby={errorId}
                 role="combobox"
                 aria-autocomplete="list"
                 aria-controls={listId}

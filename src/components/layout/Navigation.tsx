@@ -1,34 +1,17 @@
-import { Link, useLocation } from "react-router";
+import { NavLink } from "react-router";
 
 const searchPages = [
-    { path: "/", label: "Web Search" },
-    { path: "/image", label: "Image Search" },
-    { path: "/advanced", label: "Advanced Search" },
+    { path: "/", label: "Web Search", text: "Web" },
+    { path: "/image", label: "Image Search", text: "Image" },
+    { path: "/advanced", label: "Advanced Search", text: "Advanced" },
 ];
 
 export default function Navigation() {
-    const { pathname } = useLocation();
-
     return (
-        <nav className="search-nav" aria-label="Search options">
-            <div className="search-dropdown">
-                <span className="search-label" tabIndex={0}>
-                    Search Options
-                    <span className="search-chevron" aria-hidden="true">
-                        ▼
-                    </span>
-                </span>
-
-                <div className="search-menu">
-                    {searchPages
-                        .filter((page) => page.path !== pathname)
-                        .map((page) => (
-                            <Link key={page.path} to={page.path}>
-                                {page.label}
-                            </Link>
-                        ))}
-                </div>
-            </div>
+        <nav className="search-mode-nav" aria-label="Search options">
+            {searchPages.map(({ path, label, text }) => (
+                <NavLink key={path} to={path} end aria-label={label}>{text}</NavLink>
+            ))}
         </nav>
     );
 }

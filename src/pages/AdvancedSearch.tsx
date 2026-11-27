@@ -31,7 +31,7 @@ export default function AdvancedSearch() {
     }
 
     return (
-        <div className="advanced-container">
+        <div className="advanced-container search-page">
             <h1 id="advanced-search-title">Advanced Search</h1>
 
             <form
@@ -41,7 +41,7 @@ export default function AdvancedSearch() {
                 onSubmit={handleSubmit}
             >
                 {showError && (
-                    <p id="advanced-search-error" role="alert">Enter at least one search term.</p>
+                    <p className="search-feedback" id="advanced-search-error" role="alert">Enter at least one search term.</p>
                 )}
 
                 {ADVANCED_SEARCH_FIELDS.map(({ id, name, label }, index) => (

@@ -19,13 +19,12 @@ export const DEFAULT_ENGINE: SearchEngine = "google";
 export const ENGINE_STORAGE_KEY = "selectedSearchEngine";
 
 export function getSelectedEngine(): SearchEngine {
-    const stored = localStorage.getItem(ENGINE_STORAGE_KEY);
+    try {
+        const stored = localStorage.getItem(ENGINE_STORAGE_KEY);
 
-    if (
-        stored &&
-        Object.hasOwn(SEARCH_ENGINES, stored)
-    ) {
-        return stored as SearchEngine;
+        if (stored && Object.hasOwn(SEARCH_ENGINES, stored)) return stored as SearchEngine;
+    } catch {
+        // Use the default engine when storage is unavailable.
     }
 
     return DEFAULT_ENGINE;

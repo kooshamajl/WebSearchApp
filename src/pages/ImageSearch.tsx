@@ -50,8 +50,9 @@ export default function ImageSearch() {
     }
 
     return (
-        <div className="container">
-            <form className="image-search-form" role="search" aria-label="Image search" onSubmit={handleSubmit}>
+        <div className="container search-page">
+            <h1 id="image-search-title">Image Search</h1>
+            <form className="image-search-form" role="search" aria-labelledby="image-search-title" onSubmit={handleSubmit}>
                 <div className="image-search-wrap">
                     <input
                         ref={inputRef}
@@ -90,7 +91,7 @@ export default function ImageSearch() {
                 <div className="image-search-suggestion-announcement" role="status">
                     {suggestion && `Suggestion: ${suggestion}. Press Tab to accept.`}
                 </div>
-                {isInvalid && <p id="image-search-error" role="alert">Enter a search term.</p>}
+                {isInvalid && <p className="search-feedback" id="image-search-error" role="alert">Enter a search term.</p>}
 
                 <div>
                     <button type="submit" id="search-button" className="search-but">
