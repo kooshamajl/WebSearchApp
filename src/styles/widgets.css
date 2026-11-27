@@ -102,16 +102,13 @@
   .app-quick-links .quick-link-remove { opacity: 1; transform: none; }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1140px) {
   .app-widget-container .glass-widget {
     position: relative;
     inset: auto;
     z-index: auto;
     margin: 0 16px 16px auto;
   }
-}
-
-@media (max-width: 600px) {
   .app-quick-links:has(.quick-link-popover.open) { flex-wrap: wrap; }
   .app-quick-links .quick-link-popover.open { position: static; flex-basis: 100%; }
 }

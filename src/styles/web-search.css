@@ -45,24 +45,63 @@
   .web-search-form .search-history :is(#historyList, .history-list) { left: 145px; translate: none; }
 }
 
-/* Keep suggestions below the entire row wherever Search and History can wrap. */
+@media (max-width: 1140px) {
+  .app-layout .advanced-container { margin-bottom: 40px; }
+}
+
 @media (max-width: 985px) {
-  .web-search-form .search-input-wrap { flex-basis: 100%; min-width: 0; position: static; }
-  .web-search-form .search-bar { max-width: min(100%, 90vw); }
-  .web-search-form .engine-select {
-    top: var(--search-control-offset);
-    right: max(6px, calc((100% - min(500px, 90vw)) / 2 + 6px));
+  .app-layout .container {
+    margin-inline: clamp(var(--space-4), 4vw, 32px);
+    margin-bottom: 40px;
   }
-  .web-search-form .autocomplete-list {
-    width: min(500px, 90vw, 100%);
-    left: 50%;
-    right: auto;
-    translate: -50% 0;
+
+  .image-search-form .image-search-wrap { width: min(500px, 100%); }
+  .image-search-form .search-bar { max-width: 100%; }
+
+  /* Give the field, actions, and results separate rows on narrow screens. */
+  .web-search-form .search-wrapper {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 140px) minmax(0, 92px) minmax(0, 1fr);
+    width: min(500px, 100%);
+    margin-inline: auto;
   }
+
+  .web-search-form :is(.search-input-wrap, .search-autocomplete, .search-history) { display: contents; }
+
+  .web-search-form .search-bar {
+    grid-area: 1 / 1 / 2 / -1;
+    width: 100%;
+    max-width: none;
+  }
+
+  .web-search-form #search-button { grid-area: 2 / 2; }
+  .web-search-form .history-toggle { grid-area: 2 / 3; }
+
+  .web-search-form :is(#search-button, #toggleHistory, .history-toggle) {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .web-search-form :is(.autocomplete-list, #historyList, .history-list) {
+    grid-area: 3 / 1 / 4 / -1;
+    position: static;
+    justify-self: center;
+    width: 100%;
+    margin: 0;
+    translate: none;
+  }
+
+  .web-search-form :is(.autocomplete-list, #historyList, .history-list):not(.show) { display: none; }
+}
+
+@media (600px < width <= 985px) {
+  .app-layout .advanced-container { max-width: min(650px, calc(100% - 2 * var(--space-4))); }
 }
 
 @media (max-width: 600px) {
-  .web-search-form .engine-select { top: 0; }
+  .web-search-form .engine-select-btn { min-width: var(--control-target); height: var(--control-target); }
+  .web-search-form .search-bar { padding-right: calc(var(--control-target) + 12px); }
+  .app-layout .advanced-container .search-bar { width: calc(100% - 24px); max-width: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
