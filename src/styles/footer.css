@@ -6,8 +6,35 @@
 .app-footer :is(.footer-left, .footer-right) { flex-wrap: wrap; }
 .app-footer :is(.footer-date-card, .footer-time-card) { font: inherit; }
 .app-footer #theme-toggle { padding: 0; }
-.app-footer #theme-icon { color: #fff; transition: color 0.5s ease; }
+.app-footer #theme-icon {
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  width: 1em;
+  height: 1em;
+  color: #fff;
+  transition: color 0.5s ease;
+}
 [data-theme="dark"] .app-footer #theme-icon { color: #bdb6b6; }
+
+.theme-glyph {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: rotate(-18deg) scale(.86);
+  transition: transform var(--transition-med), opacity var(--transition-fast);
+}
+
+.theme-glyph--moon {
+  /* The moon path occupies 448 of the symbol's 512 vertical units. */
+  font-size: calc(1em * 512 / 448);
+  transform: rotate(18deg) scale(.86);
+}
+
+.theme-toggle[aria-pressed="false"] .theme-glyph--sun,
+.theme-toggle[aria-pressed="true"] .theme-glyph--moon {
+  opacity: 1;
+  transform: none;
+}
 
 .app-widget-dropdown :where(.widget-label, .widget-options button) {
   border: 0;
@@ -71,4 +98,5 @@
     transition: none;
   }
   .app-footer .value-pulse { animation: none; }
+  .theme-glyph { transition: none; }
 }

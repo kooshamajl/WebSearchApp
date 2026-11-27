@@ -111,19 +111,24 @@ export default function WeatherWidget() {
     const temperature = roundedTemperature(reading.temperature, unit);
     const leftValue = formatMetric(left, reading, unit);
     const rightValue = formatMetric(right, reading, unit);
+    const showsAirQuality = (right === "uv" || right === "aqi") && reading[right] !== null;
 
     return (
         <div className="weather-widget" id="weather">
             <p id="city">{reading.location.label}</p>
-            <button id="temp" type="button" aria-label={`Toggle temperature unit. ${temperature}°${unit}`} onClick={() => {
-                const next = unit === "C" ? "F" : "C";
-                setUnit(next);
-                setChanged((previous) => ({ ...previous, temperature: true }));
-                savePreference(UNIT_KEY, next);
-            }}>
-                <span key={unit} className={changed.temperature ? "value-pulse" : undefined}>{temperature}</span>{" "}
-                <span className="weather-unit">°{unit}</span>
-            </button>
+            <div className="weather-temperature">
+                <button id="temp" type="button" aria-label={`Toggle temperature unit. ${temperature}°${unit}`} onClick={() => {
+                    const next = unit === "C" ? "F" : "C";
+                    setUnit(next);
+                    setChanged((previous) => ({ ...previous, temperature: true }));
+                    savePreference(UNIT_KEY, next);
+                }}>
+                    <span key={unit} className={changed.temperature ? "value-pulse" : undefined}>{temperature}</span>{" "}
+                    <span className="weather-unit">°{unit}</span>
+                </button>
+                <a className="weather-source" href="https://open-meteo.com/en/licence" target="_blank" rel="noopener"
+                    title="Open-Meteo data licence (CC BY 4.0). Values rounded and units converted for display.">Open-Meteo</a>
+            </div>
 
             <div className="weather-divider" aria-hidden="true" />
             <div className="weather-details">
@@ -147,16 +152,16 @@ export default function WeatherWidget() {
                     <span key={right} className={`weather-detail-value${changed.right ? " value-pulse" : ""}`}>{rightValue}</span>
                 </button>
             </div>
+            {showsAirQuality && (
+                <a className="weather-source" href="https://atmosphere.copernicus.eu/" target="_blank" rel="noopener">
+                    CAMS ENSEMBLE
+                </a>
+            )}
 
             <div className="weather-divider" aria-hidden="true" />
             <a className="weather-forecast-link" href={getForecastUrl(reading.location)} target="_blank" rel="noopener">
                 View forecast <Icon name="arrow-right" />
             </a>
-            <small className="weather-attribution">
-                <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
-                {" · "}
-                <a href="https://atmosphere.copernicus.eu/" target="_blank" rel="noopener">CAMS ENSEMBLE</a>
-            </small>
         </div>
     );
 }
