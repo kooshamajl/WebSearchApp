@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
+import Icon from "../common/Icon";
 import type { KeyboardEvent, RefObject } from "react";
 import type { SearchHistoryItem } from "../../hooks/useSearchHistory";
 type SearchHistoryProps = {
@@ -115,7 +116,7 @@ export default function SearchHistory({
                 aria-controls={listId}
                 onClick={() => onOpenChange(!isOpen)}
             >
-                History
+                <Icon name="clock-rotate-left" /> History
             </button>
 
             <ul id={listId} className={`history-list${isOpen ? " show" : ""}`}
@@ -125,7 +126,7 @@ export default function SearchHistory({
                         <span className="history-header-label">Recent searches</span>
                         <button type="button" className="clear-history-btn"
                             aria-label="Clear all search history" onClick={handleClear}>
-                            Clear
+                            <Icon name="trash-can" /> Clear
                         </button>
                     </li>
                 )}
@@ -139,7 +140,7 @@ export default function SearchHistory({
                             aria-hidden={isRemoving} inert={isRemoving}>
                             <button type="button" className="history-search-btn"
                                 aria-label={`Search again: ${value}`} onClick={() => onSearch(value)}>
-                                <span className="history-item-icon" aria-hidden="true">◷</span>
+                                <Icon name="clock-rotate-left" className="history-item-icon" />
                                 <span className="history-item-text">{value}</span>
                                 {time !== null && (
                                     <time className="history-item-time" dateTime={new Date(time).toISOString()}>

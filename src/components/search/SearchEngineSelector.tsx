@@ -1,16 +1,19 @@
 import { useEffect, useId, useRef } from "react";
 import type { KeyboardEvent } from "react";
-import icons from "../../assets/icons/quick-link-icons.svg?url";
 import { SEARCH_ENGINES, type SearchEngine } from "../../data/searchEngines";
+import Icon from "../common/Icon";
 
 const engines = Object.keys(SEARCH_ENGINES) as SearchEngine[];
 
 function EngineIcon({ engine }: { engine: SearchEngine }) {
+    if (engine === "google") return <Icon name="google" />;
+
     return (
-        <span className={`engine-symbol engine-symbol--${engine}`} aria-hidden="true">
-            {engine === "google" ? <svg focusable="false"><use href={`${icons}#fa-google`} /></svg>
-                : engine === "bing" ? "B" : "D"}
-        </span>
+        <svg className={`engine-badge ${engine === "bing" ? "engine-badge-bing" : "engine-badge-ddg"}`}
+            viewBox="0 0 16 16" aria-hidden="true">
+            <circle className="engine-badge-circle" cx="8" cy="8" r="8" />
+            <text className="engine-badge-text" x="8" y="11.5">{engine === "bing" ? "b" : "D"}</text>
+        </svg>
     );
 }
 
@@ -64,11 +67,11 @@ export default function SearchEngineSelector({ value, isOpen, onOpenChange, onCh
     }, [isOpen, onOpenChange]);
 
     return (
-        <div className="search-engine" ref={root}
+        <div className={`engine-select${isOpen ? " open" : ""}`} ref={root}
             onBlur={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget)) onOpenChange(false);
             }}>
-            <button ref={trigger} type="button" className="search-engine-trigger"
+            <button ref={trigger} type="button" className="engine-select-btn"
                 aria-label="Choose search engine" aria-describedby={`${id}-value`}
                 aria-haspopup="listbox" aria-expanded={isOpen} aria-controls={id}
                 onClick={() => onOpenChange(!isOpen)}
@@ -81,17 +84,18 @@ export default function SearchEngineSelector({ value, isOpen, onOpenChange, onCh
                         onOpenChange(false);
                     }
                 }}>
-                <EngineIcon engine={value} />
-                <span id={`${id}-value`} className="search-engine-name">{SEARCH_ENGINES[value].name}</span>
-                <span className="search-engine-chevron" aria-hidden="true" />
+                <span className="engine-icon-slot"><EngineIcon engine={value} /></span>
+                <span id={`${id}-value`} className="engine-name">{SEARCH_ENGINES[value].name}</span>
+                <Icon name="chevron-down" className="engine-chevron" />
             </button>
-            <ul id={id} className="search-engine-options" aria-label="Search engines" role="listbox"
-                ref={options} hidden={!isOpen} onKeyDown={handleKeys}>
+            <ul id={id} className="engine-menu" aria-label="Search engines" role="listbox"
+                ref={options} inert={!isOpen} onKeyDown={handleKeys}>
                 {engines.map((engine) => (
                     <li key={engine} role="option" tabIndex={-1} aria-selected={engine === value}
                         onClick={() => choose(engine)}>
-                        <EngineIcon engine={engine} />
-                        {SEARCH_ENGINES[engine].name}
+                        <span className="engine-menu-icon"><EngineIcon engine={engine} /></span>
+                        <span className="engine-menu-name">{SEARCH_ENGINES[engine].name}</span>
+                        <Icon name="check" className="engine-check" />
                     </li>
                 ))}
             </ul>

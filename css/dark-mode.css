@@ -74,7 +74,7 @@
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
 }
 
-:root:not([data-theme="light"]) .search-dropdown:is(:hover, :focus-within) {
+:root:not([data-theme="light"]) :is(.search-dropdown:not(.app-search-dropdown):is(:hover, :focus-within), .search-dropdown.open) {
   background: var(--glass-strong);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
@@ -265,7 +265,7 @@
 }
 
 
-:root:not([data-theme="light"]) .widget-dropdown:hover {
+:root:not([data-theme="light"]) :is(.widget-dropdown:not(.app-widget-dropdown):hover, .widget-dropdown.open) {
 
   background: var(--glass-btn-bg-dark-hover);
   border-color: var(--glass-btn-border-dark-hover);
@@ -282,11 +282,11 @@
 }
 
 
-:root:not([data-theme="light"]) .widget-options span {
+:root:not([data-theme="light"]) .widget-options :is(span, button):not(.active-widget) {
   color: rgba(230, 245, 255, 0.85);
 }
 
-:root:not([data-theme="light"]) .widget-options span:hover {
+:root:not([data-theme="light"]) .widget-options :is(span, button):is(:hover, :focus-visible) {
   background: rgba(120, 200, 230, 0.25);
   color: #ffffff;
 }

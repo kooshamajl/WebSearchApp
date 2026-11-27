@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
+import Icon from "../common/Icon";
 import type { KeyboardEvent, RefObject } from "react";
 import type { SearchHistoryItem } from "../../hooks/useSearchHistory";
 import { getSearchSuggestions } from "../../utils/searchSuggestions";
@@ -111,7 +112,7 @@ export default function SearchAutocomplete({
                 aria-label="Search suggestions"
                 aria-hidden={!expanded}
             >
-                {suggestions.map(({ type, label, value }, index) => (
+                {suggestions.map(({ type, label, value, icon }, index) => (
                     <li
                         key={`${type}:${value}`}
                         id={`${listId}-${index}`}
@@ -121,7 +122,7 @@ export default function SearchAutocomplete({
                         onMouseDown={(event) => event.preventDefault()}
                         onClick={() => onSelect(value)}
                     >
-                        <span className="ac-icon" aria-hidden="true">{type === "history" ? "◷" : "🌐︎"}</span>
+                        <Icon name={icon} className="ac-icon" />
                         <span className="ac-label">{highlightMatch(label, trimmedQuery)}</span>
                         {type === "site" && (
                             <span className="ac-url">{highlightMatch(value, trimmedQuery)}</span>

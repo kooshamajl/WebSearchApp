@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import Icon from "../components/common/Icon";
 import type { FormEvent, KeyboardEvent } from "react";
 import { useSearchInputFocus } from "../hooks/useSearchInputFocus";
 import {
@@ -50,8 +51,8 @@ export default function ImageSearch() {
     }
 
     return (
-        <div className="container search-page">
-            <h1 id="image-search-title">Image Search</h1>
+        <div className="container">
+            <h1 className="visually-hidden" id="image-search-title">Image Search</h1>
             <form className="image-search-form" role="search" aria-labelledby="image-search-title" onSubmit={handleSubmit}>
                 <div className="image-search-wrap">
                     <input
@@ -95,7 +96,7 @@ export default function ImageSearch() {
 
                 <div>
                     <button type="submit" id="search-button" className="search-but">
-                        Image Search
+                        <Icon name="image" /> Image Search
                     </button>
                 </div>
             </form>

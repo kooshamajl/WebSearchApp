@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import Icon from "../common/Icon";
 import type { FormEvent } from "react";
 import { DAILY_TASK_LIMIT, TASK_TEXT_LIMIT, getTaskDateKey, readDailyTasks, saveDailyTasks, type DailyTask } from "../../utils/dailyTasks";
 
@@ -90,10 +91,14 @@ export default function DailyTasksWidget() {
 
     return (
         <div id="tasksWidget" className="daily-tasks">
-            <p id="tasksCount" className="tasks-count" role="status" aria-label="Task count">{tasks.length}/{DAILY_TASK_LIMIT}</p>
+            <div className="tasks-header">
+                <Icon name="list-check" />
+                <span aria-hidden="true">Daily Tasks</span>
+                <span id="tasksCount" className="tasks-count" role="status" aria-label="Task count">{tasks.length}/{DAILY_TASK_LIMIT}</span>
+            </div>
             <div className="tasks-divider" aria-hidden="true" />
 
-            {tasks.length === 0 ? <p className="tasks-empty">No tasks yet</p> : (
+            {tasks.length === 0 ? <p className="tasks-empty"><Icon name="clipboard-check" />No tasks yet</p> : (
                 <ul id="tasksList" className="tasks-list" role="list" aria-label="Today's tasks">
                     {tasks.map(({ id, text, done }, index) => (
                         <li className={`task-item${done ? " done" : ""}`} key={id}>
@@ -111,14 +116,18 @@ export default function DailyTasksWidget() {
             {tasks.length > 0 && tasks.every(({ done }) => done) && <p role="status">All tasks complete.</p>}
 
             <form className="task-input-row" onSubmit={handleAdd}>
-                <input ref={input} type="text" id="taskInput" aria-label="New task" maxLength={TASK_TEXT_LIMIT}
-                    placeholder={limitReached ? "Task limit reached" : "Add new task..."} disabled={limitReached}
-                    aria-invalid={showError} aria-describedby={showError ? "task-input-error" : undefined}
-                    value={draft} onChange={(event) => {
-                        setDraft(event.target.value);
-                        if (event.target.value.trim()) setShowError(false);
-                    }} />
-                <button id="taskAddBtn" type="submit" className="task-add-btn" aria-label="Add task" disabled={limitReached}>+</button>
+                <div className="task-controls">
+                    <input ref={input} type="text" id="taskInput" aria-label="New task" maxLength={TASK_TEXT_LIMIT}
+                        placeholder={limitReached ? "Task limit reached" : "Add new task..."} disabled={limitReached}
+                        aria-invalid={showError} aria-describedby={showError ? "task-input-error" : undefined}
+                        value={draft} onChange={(event) => {
+                            setDraft(event.target.value);
+                            if (event.target.value.trim()) setShowError(false);
+                        }} />
+                    <button id="taskAddBtn" type="submit" className="task-add-btn" aria-label="Add task" disabled={limitReached}>
+                        <Icon name="plus" />
+                    </button>
+                </div>
                 {showError && <p id="task-input-error" role="alert">Enter a task of up to {TASK_TEXT_LIMIT} characters.</p>}
             </form>
         </div>

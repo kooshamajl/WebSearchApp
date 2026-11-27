@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Icon from "../common/Icon";
 import { describeLatency, measureHttpLatency } from "../../services/connection";
 
 const REFRESH_MS = 4000;
@@ -86,18 +87,20 @@ export default function ConnectionWidget() {
     return (
         <div id="pingWidget" className="connection-widget">
             <p className="ping-title" title="Browser HTTP request timing. ICMP ping uses network-layer echo requests.">
-                HTTP latency to jsDelivr
+                Connection
             </p>
             <div className="ping-divider" aria-hidden="true" />
-            <div className="ping-row">
-                <span className="ping-icon" aria-hidden="true">{result.status === "connected" ? "✓" : "–"}</span>
-                <div className="ping-info">
-                    <div id="pingValue">{result.status === "connected" ? `${result.latency} ms` : "— ms"}</div>
-                    <div id="pingStatus" role="status">{status}</div>
-                </div>
-            </div>
-            <button type="button" className="connection-refresh" aria-disabled={isChecking || result.status === "offline"}
-                onClick={() => refresh.current?.()}>Check connection</button>
+            <button type="button" className="ping-row connection-refresh" aria-label="Check connection"
+                title="Check HTTP latency to jsDelivr" aria-disabled={isChecking || result.status === "offline"}
+                onClick={() => refresh.current?.()}>
+                <span className="ping-icon"><Icon name="wifi" /></span>
+                <span className="ping-info">
+                    <span id="pingValue">{result.status === "connected" ? `${result.latency} ms` : "— ms"}</span>
+                    <span id="pingStatus" aria-hidden="true">{status}</span>
+                </span>
+            </button>
+            <span className="visually-hidden">HTTP latency to jsDelivr</span>
+            <span className="visually-hidden" role="status">{status}</span>
         </div>
     );
 }

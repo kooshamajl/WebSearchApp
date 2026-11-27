@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import type { FormEvent } from "react";
+import Icon from "../components/common/Icon";
 
 import SearchAutocomplete from "../components/search/SearchAutocomplete";
 import SearchEngineSelector from "../components/search/SearchEngineSelector";
@@ -79,43 +80,41 @@ export default function WebSearch() {
     }
 
     return (
-        <div className="container search-page">
-            <h1 id="web-search-title">Web Search</h1>
+        <div className="container">
+            <h1 className="visually-hidden" id="web-search-title">Web Search</h1>
             <form className="web-search-form" role="search" aria-labelledby="web-search-title" onSubmit={handleSubmit}>
                 <div className="search-wrapper">
-                    <SearchAutocomplete
-                        inputId="searchInput"
-                        errorId={error ? "web-search-error" : undefined}
-                        query={query}
-                        history={items}
-                        inputRef={inputRef}
-                        isOpen={openPanel === "autocomplete"}
-                        onQueryChange={handleQueryChange}
-                        onDismiss={() => changePanel("autocomplete", false)}
-                        onSelect={submitSearch}
-                    />
-
-                    <div className="web-search-actions">
+                    <div className="search-input-wrap">
+                        <SearchAutocomplete
+                            inputId="searchInput"
+                            errorId={error ? "web-search-error" : undefined}
+                            query={query}
+                            history={items}
+                            inputRef={inputRef}
+                            isOpen={openPanel === "autocomplete"}
+                            onQueryChange={handleQueryChange}
+                            onDismiss={() => changePanel("autocomplete", false)}
+                            onSelect={submitSearch}
+                        />
                         <SearchEngineSelector
                             value={engine}
                             isOpen={openPanel === "engine"}
                             onOpenChange={(open) => changePanel("engine", open)}
                             onChange={handleEngineChange}
                         />
-                        <button type="submit" className="search-but" id="search-button">
-                            Search
-                        </button>
-
-                        <SearchHistory
-                            items={items}
-                            isOpen={openPanel === "history"}
-                            inputRef={inputRef}
-                            onOpenChange={(open) => changePanel("history", open)}
-                            onSearch={submitSearch}
-                            onDelete={deleteSearch}
-                            onClear={clearHistory}
-                        />
                     </div>
+                    <button type="submit" className="search-but" id="search-button">
+                        <Icon name="magnifying-glass" /> Search
+                    </button>
+                    <SearchHistory
+                        items={items}
+                        isOpen={openPanel === "history"}
+                        inputRef={inputRef}
+                        onOpenChange={(open) => changePanel("history", open)}
+                        onSearch={submitSearch}
+                        onDelete={deleteSearch}
+                        onClear={clearHistory}
+                    />
                 </div>
                 {error && <p className="search-feedback" id="web-search-error" role="alert">{error}</p>}
             </form>

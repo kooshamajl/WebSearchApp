@@ -5,6 +5,7 @@ type SearchSuggestion = {
     type: "history" | "site";
     label: string;
     value: string;
+    icon: string;
 };
 
 const MAX_SUGGESTIONS = 6;
@@ -28,7 +29,9 @@ export function getSearchSuggestions(
     }).slice(0, MAX_SUGGESTIONS - historyMatches.length);
 
     return [
-        ...historyMatches.map<SearchSuggestion>(({ value }) => ({ type: "history", label: value, value })),
-        ...siteMatches.map<SearchSuggestion>(({ name, url }) => ({ type: "site", label: name, value: url })),
+        ...historyMatches.map<SearchSuggestion>(({ value }) => ({ type: "history", label: value, value, icon: "clock-rotate-left" })),
+        ...siteMatches.map<SearchSuggestion>(({ name, url, icon }) => ({
+            type: "site", label: name, value: url, icon: icon?.split(" ").at(-1)?.replace(/^fa-/, "") ?? "globe",
+        })),
     ];
 }

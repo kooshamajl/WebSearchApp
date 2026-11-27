@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import type { FormEvent } from "react";
+import Icon from "../components/common/Icon";
 import {
     ADVANCED_SEARCH_FIELDS,
     buildAdvancedSearchUrl,
@@ -31,22 +32,22 @@ export default function AdvancedSearch() {
     }
 
     return (
-        <div className="advanced-container search-page">
-            <h1 id="advanced-search-title">Advanced Search</h1>
+        <div className="advanced-container">
+            <h1>Find pages containing:</h1>
 
             <form
                 className="advanced-search-form"
                 role="search"
-                aria-labelledby="advanced-search-title"
+                aria-label="Advanced Search"
                 onSubmit={handleSubmit}
             >
                 {showError && (
-                    <p className="search-feedback" id="advanced-search-error" role="alert">Enter at least one search term.</p>
+                    <p id="advanced-search-error" role="alert">Enter at least one search term.</p>
                 )}
 
                 {ADVANCED_SEARCH_FIELDS.map(({ id, name, label }, index) => (
                     <div className="row" key={name}>
-                        <label htmlFor={id}>{label}</label>
+                        <label htmlFor={id}>{label}:</label>
                         <input
                             ref={index === 0 ? firstInput : undefined}
                             id={id}
@@ -64,7 +65,7 @@ export default function AdvancedSearch() {
                 ))}
 
                 <button type="submit" id="search-button" className="search-but">
-                    Advanced Search
+                    <Icon name="filter" /> Advanced Search
                 </button>
             </form>
         </div>

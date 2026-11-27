@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Icon from "../common/Icon";
 import { getAirQuality, getCurrentWeather, getForecastUrl, type AirQuality, type WeatherConditions } from "../../services/weather";
 const LEFT_METRICS = ["clouds", "feelsLike", "wind", "visibility"] as const;
 const RIGHT_METRICS = ["humidity", "uv", "aqi", "precip"] as const;
@@ -143,7 +144,9 @@ export default function WeatherWidget() {
             </div>
 
             <div className="weather-divider" aria-hidden="true" />
-            <a className="weather-forecast-link" href={getForecastUrl(reading.location)} target="_blank" rel="noopener">View forecast</a>
+            <a className="weather-forecast-link" href={getForecastUrl(reading.location)} target="_blank" rel="noopener">
+                View forecast <Icon name="arrow-right" />
+            </a>
             <small className="weather-attribution">
                 <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
                 {" · "}

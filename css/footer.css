@@ -82,8 +82,7 @@
 }
 
 
-.footer-date-card span,
-.footer-time-card span {
+:is(.footer-date-card, .footer-time-card) :is(span, time) {
 
   color: var(--label-text);
   font-size: 14px;
@@ -145,7 +144,8 @@
     transform .25s;
 }
 
-.widget-dropdown:hover {
+.widget-dropdown:not(.app-widget-dropdown):hover,
+.widget-dropdown.open {
 
   max-width: 620px;
 
@@ -162,7 +162,7 @@
   transform: translateY(-0.5px);
 }
 
-.widget-options span.active-widget {
+.widget-options :is(span, button).active-widget {
   color: #fff;
   font-weight: 600;
   background: rgba(91, 177, 198, 0.4);
@@ -194,12 +194,12 @@
     transform 0.25s ease 0.15s;
 }
 
-.widget-dropdown:hover .widget-options {
+:is(.widget-dropdown:not(.app-widget-dropdown):hover, .widget-dropdown.open) .widget-options {
   opacity: 1;
   transform: translateX(0);
 }
 
-.widget-options span {
+.widget-options :is(span, button) {
   padding: 2px 12px;
   border-radius: 8px;
   font-size: 14px;
@@ -210,8 +210,7 @@
     color 0.25s ease;
 }
 
-.widget-options span:hover,
-.widget-options span:focus-visible {
+.widget-options :is(span, button):is(:hover, :focus-visible) {
   background-color: rgba(86, 155, 172, 0.45);
   color: var(--link-hover-dark);
   outline: none;

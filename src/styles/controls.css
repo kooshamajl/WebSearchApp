@@ -9,9 +9,7 @@
   outline: var(--focus-ring);
   outline-offset: var(--focus-ring-offset);
 }
-
-.crypto-status button,
-.connection-refresh {
+.crypto-status button {
   min-height: var(--control-target);
   padding: 0 var(--space-2);
   border: 0;
@@ -21,4 +19,25 @@
   font: inherit;
   text-decoration: underline;
   cursor: pointer;
+}
+.ui-icon {
+    display: inline-block;
+    line-height: 1;
+}
+
+.ui-icon svg {
+    display: block;
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Icon from "../common/Icon";
 import { fetchCryptoHistory, getCryptoRange, makeDemoHistory, sampleCryptoChart, type CryptoTimeframe, type PricePoint } from "../../services/crypto";
 import CryptoChart from "./CryptoChart";
 
@@ -81,9 +82,9 @@ export default function CryptoWidget() {
     return (
         <div id="cryptoWidget" className="crypto-widget">
             <div className="crypto-header">
-                <span className="crypto-icon" aria-hidden="true">₿</span>
+                <span className="crypto-icon"><Icon name="bitcoin" /></span>
                 <div className="crypto-header-text">
-                    <p id="cryptoName">{isDemo ? "Bitcoin (Demo)" : "Bitcoin (BTC)"}</p>
+                    <p id="cryptoName" className={isDemo ? "demo-label" : undefined}>{isDemo ? "Bitcoin (Demo)" : "Bitcoin (BTC)"}</p>
                     {latest && <p id="cryptoPrice">{priceFormat.format(latest.price)}</p>}
                 </div>
             </div>
@@ -95,6 +96,7 @@ export default function CryptoWidget() {
             <div className="crypto-divider" aria-hidden="true" />
             <div id="cryptoChange">
                 {change !== null && <span className={change < 0 ? "trend-down" : "trend-up"}>
+                    <Icon name={change < 0 ? "arrow-down" : "arrow-up"} />{" "}
                     {change >= 0 ? "+" : ""}{change.toFixed(2)}%
                 </span>}
                 <div className="crypto-timeframe" role="group" aria-label="Price timeframe">
