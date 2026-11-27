@@ -130,7 +130,11 @@ export default function QuickLinksWidget() {
                 onClick={() => { if (!isOpen) { setError(null); setIsOpen(true); } }}><Icon name="plus" /></button>
 
             <form className={`quick-link-popover${isOpen ? " open" : ""}`} id="quickLinkPopover" ref={dialog}
-                role="dialog" aria-label="Add quick link" inert={!isOpen} onSubmit={handleSave}>
+                role="dialog" aria-label="Add quick link" inert={!isOpen} onSubmit={handleSave} onBlur={(event) => {
+                    if (!event.currentTarget.contains(event.relatedTarget) && event.relatedTarget !== addButton.current) {
+                        setIsOpen(false);
+                    }
+                }}>
                 <div className="quick-link-popover-row">
                     <label htmlFor="quickLinkName">Name</label>
                     <input type="text" id="quickLinkName" ref={nameInput} maxLength={24} autoComplete="off" placeholder="e.g. Amazon"

@@ -21,8 +21,17 @@ export function useDropdown() {
             if (event.target instanceof Node && !container.current?.contains(event.target)) close();
         }
 
+        function dismissHoveredDropdown(event: globalThis.KeyboardEvent) {
+            if (event.key === "Escape" && !event.isComposing && event.target instanceof Node &&
+                !container.current?.contains(event.target)) close();
+        }
+
         document.addEventListener("pointerdown", dismiss);
-        return () => document.removeEventListener("pointerdown", dismiss);
+        document.addEventListener("keydown", dismissHoveredDropdown);
+        return () => {
+            document.removeEventListener("pointerdown", dismiss);
+            document.removeEventListener("keydown", dismissHoveredDropdown);
+        };
     }, [isOpen]);
 
     return {
@@ -45,7 +54,7 @@ export function useDropdown() {
                 if (!event.currentTarget.contains(event.relatedTarget)) close();
             },
             onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-                if (event.key !== "Escape" || !isOpen) return;
+                if (event.key !== "Escape" || !isOpen || event.nativeEvent.isComposing) return;
                 event.preventDefault();
                 close();
                 trigger.current?.focus();

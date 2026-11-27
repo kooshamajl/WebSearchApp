@@ -27,7 +27,7 @@ export default function SearchHistory({
 
     useEffect(() => {
         function handleShortcut(event: globalThis.KeyboardEvent) {
-            if (event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey &&
+            if (!event.defaultPrevented && !event.isComposing && event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey &&
                 !event.repeat && event.key.toLowerCase() === "h") {
                 event.preventDefault();
                 onOpenChange(!isOpen);
@@ -59,7 +59,7 @@ export default function SearchHistory({
     }
 
     function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-        if (!isOpen) return;
+        if (!isOpen || event.nativeEvent.isComposing) return;
 
         if (event.key === "Escape") {
             event.preventDefault();
@@ -105,7 +105,11 @@ export default function SearchHistory({
     }
 
     return (
-        <div className="search-history" ref={rootRef} onKeyDown={handleKeyDown}>
+        <div className="search-history" ref={rootRef} onKeyDown={handleKeyDown} onBlur={(event) => {
+            if (isOpen && !event.currentTarget.contains(event.relatedTarget) && event.relatedTarget !== inputRef.current) {
+                onOpenChange(false);
+            }
+        }}>
             <button
                 ref={toggleRef}
                 type="button"

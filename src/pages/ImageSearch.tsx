@@ -29,7 +29,7 @@ export default function ImageSearch() {
         if (event.key === "Escape") {
             event.preventDefault();
             setShowSuggestion(false);
-        } else if (event.key === "Tab" || (event.key === "ArrowRight" && caretAtEnd)) {
+        } else if (event.key === "ArrowRight" && caretAtEnd) {
             event.preventDefault();
             setQuery(suggestion);
             setShowSuggestion(false);
@@ -90,7 +90,7 @@ export default function ImageSearch() {
                 </div>
 
                 <div className="image-search-suggestion-announcement" role="status">
-                    {suggestion && `Suggestion: ${suggestion}. Press Tab to accept.`}
+                    {suggestion && `Suggestion: ${suggestion}. Press Right Arrow at the end to accept.`}
                 </div>
                 {isInvalid && <p className="search-feedback" id="image-search-error" role="alert">Enter a search term.</p>}
 

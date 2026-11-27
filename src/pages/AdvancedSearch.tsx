@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import Icon from "../components/common/Icon";
 import {
@@ -10,6 +10,9 @@ import {
 export default function AdvancedSearch() {
     const [showError, setShowError] = useState(false);
     const firstInput = useRef<HTMLInputElement>(null);
+    const heading = useRef<HTMLHeadingElement>(null);
+
+    useEffect(() => heading.current?.focus({ preventScroll: true }), []);
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -33,7 +36,7 @@ export default function AdvancedSearch() {
 
     return (
         <div className="advanced-container">
-            <h1>Find pages containing:</h1>
+            <h1 ref={heading} tabIndex={-1}>Find pages containing:</h1>
 
             <form
                 className="advanced-search-form"

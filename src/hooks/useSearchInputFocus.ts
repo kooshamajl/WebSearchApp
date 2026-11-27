@@ -9,14 +9,14 @@ export function useSearchInputFocus(inputRef: RefObject<HTMLInputElement | null>
             const target = event.target;
 
             if (
-                event.key === "/" &&
+                event.key === "/" && !event.defaultPrevented && !event.isComposing &&
                 !event.ctrlKey &&
                 !event.altKey &&
                 !event.metaKey &&
                 !(target instanceof HTMLInputElement) &&
                 !(target instanceof HTMLTextAreaElement) &&
                 !(target instanceof HTMLSelectElement) &&
-                !(target instanceof HTMLElement && target.isContentEditable)
+                !(target instanceof HTMLElement && (target.isContentEditable || target.closest('[role="dialog"]')))
             ) {
                 event.preventDefault();
                 inputRef.current?.focus();

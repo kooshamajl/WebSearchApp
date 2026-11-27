@@ -41,3 +41,56 @@
     clip-path: inset(50%);
     white-space: nowrap;
 }
+
+.app-search-dropdown .search-menu a:focus-visible,
+html[data-theme] .app-layout .engine-menu li:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.app-layout .search-bar::placeholder,
+.app-layout .search-bar:focus::placeholder,
+.app-layout .autocomplete-list .ac-url,
+.app-layout .history-item-time {
+  opacity: 1;
+}
+
+html[data-theme="light"] .app-layout {
+  --search-field-placeholder: #425463;
+  --focus-ring: 2px solid #315a79;
+}
+
+html[data-theme="light"] .app-layout :is(#search-button, #toggleHistory, .history-toggle) {
+  background-color: #56778c;
+}
+
+html[data-theme="light"] .app-layout :is(#search-button, #toggleHistory, .history-toggle):hover {
+  background-color: var(--color-accent-hover);
+}
+
+html[data-theme="light"] .app-layout .autocomplete-list li mark { color: var(--color-accent-hover); }
+html[data-theme="light"] .app-footer .social-icons a { color: var(--color-text-muted); }
+
+.app-layout .weather-forecast-link { color: var(--text-dark); text-decoration: underline; }
+[data-theme="dark"] .app-layout .weather-forecast-link { color: var(--widget-text); }
+.app-layout .weather-forecast-link:hover { opacity: 1; }
+.app-layout .connection-widget #pingStatus { opacity: 1; color: var(--widget-text); }
+
+[data-theme="dark"] .app-layout .task-delete {
+  background: #853d3a;
+  border-radius: var(--radius-sm);
+  color: #fff0ee;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(.app-layout) { scroll-behavior: auto; }
+
+  .app-layout *, .app-layout *::before, .app-layout *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  .app-layout :is(.glass-widget, .search-bar, #search-button, .history-toggle) { transform: none; }
+}

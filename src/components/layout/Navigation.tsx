@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { Link, useLocation } from "react-router";
+import { Link, matchPath, useLocation } from "react-router";
 import { useDropdown } from "../../hooks/useDropdown";
 import Icon from "../common/Icon";
 
@@ -23,8 +23,9 @@ export default function Navigation() {
                 </button>
 
                 <div className="search-menu" id={menuId} inert={!isOpen}>
-                    {searchPages.filter(({ path }) => path !== pathname).map(({ path, label }) => (
-                        <Link key={path} to={path} onClick={() => {
+                    {searchPages.filter(({ path }) => !matchPath(path, pathname)).map(({ path, label }) => (
+                        <Link key={path} to={path} onClick={(event) => {
+                            if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
                             close();
                             trigger.current?.focus();
                         }}>{label}</Link>
