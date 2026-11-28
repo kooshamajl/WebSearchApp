@@ -98,7 +98,11 @@ npm run build
 npm run preview
 ```
 
-The build runs TypeScript checks and writes the static site to `dist/`. Use the preview URL to check the build locally. For production, publish the **contents of `dist/`** at the root of a static HTTPS site. Configure the host to serve existing files normally and return `index.html` for document requests to client routes such as `/image` and `/advanced` and the three former `/html/*.html` search URLs. The app redirects those old URLs and preserves query strings and fragments.
+The build runs TypeScript checks and writes the static site to `dist/`. Use the preview URL to check the build locally.
+
+For Netlify, import the repository with `main` as the production branch. [netlify.toml](netlify.toml) sets the Node.js version, build command, and publish directory. Vite copies [public/_redirects](public/_redirects) into `dist/` so Netlify can serve the React app at its search routes and at the three former HTML entry points. The app redirects those old URLs and preserves query strings and fragments.
+
+For another static HTTPS host, serve the contents of `dist/` at the site root. Use the paths in `_redirects` to configure equivalent rewrites to `index.html`. Serve assets directly so a missing asset returns a 404.
 
 After deploying, open `/image` and `/advanced` directly and reload them. Check that the backgrounds and icons render, and confirm that Weather, Crypto, and Ping can reach their providers from the deployed origin. HTTPS allows the browser to prompt for location access.
 
