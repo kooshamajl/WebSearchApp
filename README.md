@@ -1,138 +1,73 @@
-# 🔎 Modern Search Web App
+# 🔎 WebSearchApp
 
-A modern and minimal front-end search application built with **HTML, CSS, and JavaScript**.
-The project includes multiple search modes, dynamic widgets, theme support, search history, autocomplete, and a modular structure.
+WebSearchApp is a client-side search dashboard built with React, TypeScript, and Vite. It combines three search modes with a customizable widget panel, light and dark themes, and a footer clock.
 
-Developed as a hands-on project to strengthen **front-end development and UI/UX skills**.
+Developed as a hands-on project to strengthen front-end development and UI/UX skills.
 
----
+## Features
 
-## 📌 Features
+| Page | Route | What it does |
+| --- | --- | --- |
+| Web Search | `/` | Searches Google, Bing, or DuckDuckGo and opens direct web addresses. Autocomplete combines recent searches with a curated site list. The history menu keeps up to five distinct searches for replay or deletion. |
+| Image Search | `/image` | Opens Google Images and offers inline completions from recent image searches and curated suggestions. |
+| Advanced Search | `/advanced` | Builds a Google query with all words, an exact phrase, any words, and excluded words. |
 
-### 🔍 Search
+The footer switches between light and dark themes, Gregorian and Persian (Shamsi) dates, and 12-hour and 24-hour time. The app stores preferences, search history, tasks, and shortcuts in the browser's `localStorage` for the current origin.
 
-Three search modes are available:
+### Widgets
 
-* **Web Search**
-* **Image Search**
-* **Advanced Search**
+Choose a widget from the footer. The app loads it on demand and restores the selection on reload.
 
-The Web Search page supports multiple search engines:
+- **Weather** shows current Open-Meteo conditions, a choice of units and metrics, and a forecast link. It uses the browser's location when available and falls back to Tehran. Air-quality readings come from Open-Meteo with CAMS attribution when displayed.
+- **Crypto** charts Bitcoin prices from CoinGecko over 24 hours or 7 days. A failed refresh keeps the last successful reading, and an initial failure can show labeled demo data.
+- **Daily Tasks** tracks up to three tasks for the current day.
+- **Ping** reports browser HTTP latency to jsDelivr. It checks periodically while visible and supports a manual check.
+- **Quick Links** stores up to six shortcuts.
 
-* Google
-* Bing
-* DuckDuckGo
+## Screenshots
 
-Users can manually select their preferred search engine.
+**Web Search in light mode** with autocomplete and weather. The weather values shown are sample data.
 
-### 🧠 Advanced Search
+![Desktop Web Search with a GitHub suggestion and the weather widget](docs/screenshots/web-search-light.jpg)
 
-Supports:
+**Advanced Search in dark mode**
 
-* All these words
-* Exact word or phrase
-* Any of these words
-* None of these words
+![Desktop Advanced Search with example words and an exact phrase](docs/screenshots/advanced-search-dark.jpg)
 
-### 🌓 Theme Support
+**Image Search on mobile** with an inline completion and Quick Links.
 
-* Light / Dark mode
-* Theme preference stored in `localStorage`
-* Smooth theme transitions
+![Mobile Image Search in dark mode with a northern lights completion and Quick Links](docs/screenshots/image-search-mobile.jpg)
 
-### 🕓 Search History
+## Keyboard shortcuts
 
-* Stores the last 5 searches
-* Prevents duplicates
-* Re-search and delete individual entries
-* Toggle with button or **Ctrl + H**
-* Keyboard and screen-reader accessible
+| Key | Action |
+| --- | --- |
+| `/` | Focus the Web or Image Search field from outside editable controls. |
+| `Ctrl+H` | Toggle search history on Web Search. |
+| `↑` / `↓` | Move through open Web Search suggestions, history entries, or search engines. |
+| `Enter` | Submit the search, accept the highlighted suggestion, or activate a focused history item or engine. |
+| `→` | Accept the inline Image Search suggestion when the caret is at the end. |
+| `Esc` | Dismiss the current suggestion, menu, or Quick Links dialog. |
 
-### ✨ Autocomplete
+## Architecture and stack
 
-Suggestions are generated from:
+Vite serves `index.html` and builds the static production bundle. The React entry point in `src/main.tsx` mounts the theme provider and browser router. `src/App.tsx` maps routes to search pages inside a shared layout with navigation, the footer, and a lazy-loaded widget panel.
 
-* Search history with highlighted matches
-* A curated list of popular websites such as YouTube, GitHub, and Digikala
+| Path | Responsibility |
+| --- | --- |
+| `src/pages/` | Search views and form interactions |
+| `src/components/` | Layout, reusable controls, search UI, and widgets |
+| `src/context/` and `src/hooks/` | Theme state, persistence, focus, and shared interactions |
+| `src/services/` | Weather, Bitcoin, and connection requests |
+| `src/data/` and `src/utils/` | Search catalogs, URL construction, storage parsing, and formatting |
+| `css/`, `src/styles/`, and `src/assets/` | Shared CSS and design tokens, React-specific styles, and local images and icons |
+| `tests/` | Search utility tests and browser regression tests |
 
-Supports keyboard navigation (`↑`, `↓`, `Enter`, `Esc`) and mouse interaction.
+The frontend uses React Router for navigation, CSS for the glass-style controls and responsive layouts, Canvas for the Bitcoin chart, and local SVG icons. TypeScript checks source and test types, ESLint checks code and React Hooks, and Playwright drives browser tests.
 
-### 📅 Date Display
+## Installation and development
 
-The footer displays the current **Gregorian** and **Persian (Shamsi)** dates.
-The displayed format can be toggled by clicking the date.
-
-### 📦 Widget System
-
-Widgets are dynamically loaded using `fetch()`.
-
-Available widgets:
-
-* 🌤 Weather
-* 💰 Crypto — Bitcoin price and Canvas sparkline
-* ✅ Daily Tasks
-* ⚡ Ping
-* 🔗 Quick Links
-
-The selected widget is saved in `localStorage` and restored after reload.
-
----
-
-## 🛠 Technologies
-
-* HTML5
-* CSS3
-* Vanilla JavaScript (ES6+)
-* Fetch API
-* LocalStorage API
-* Canvas API
-* OpenWeatherMap API
-* CoinGecko API
-* Font Awesome
-* Google Fonts — Inter
-
----
-
-## 📂 Project Structure
-
-```text
-WebSearchApp/
-|-- index.html      # React app entry
-|-- src/            # React pages, components, services, and assets
-|-- css/            # Shared application styles
-|-- tests/          # Playwright tests
-`-- README.md
-```
-
-The modular structure keeps the project organized, maintainable, and easy to extend.
-
----
-
-## 🧩 Key Concepts
-
-* DOM Manipulation & Event Handling
-* Modular JavaScript
-* Async/Await & REST APIs
-* Local Storage
-* Canvas Data Visualization
-* Dynamic Component Loading
-* UI/UX Design
-* Accessibility & ARIA
-
----
-
-## 🎨 Design
-
-The interface follows a **minimal, clean, and modern** design approach with:
-
-* Glass-style widgets
-* Soft hover animations
-* Modern typography
-* Lightweight and readable structure
-
----
-
-## 🚀 How to Run
+Use Node.js 22.22.0 or later and npm. From a fresh checkout, run:
 
 ```bash
 git clone https://github.com/kooshamajl/WebSearchApp.git
@@ -141,49 +76,42 @@ npm ci
 npm run dev
 ```
 
-Open the URL printed by Vite.
+Open the URL printed by Vite, typically `http://127.0.0.1:3000`. The app runs without a backend or weather API key.
 
----
-
-## Testing
-
-Use Node.js 20.19 or newer on the 20.x line, or Node.js 22.12 or later. Run these commands from a fresh checkout.
+### Checks and tests
 
 ```bash
-npm ci
+npm run lint
+npm run build
 npx playwright install chromium --only-shell
 npm test
 ```
 
-If Microsoft Edge is already installed, run `npm ci` and `npm run test:edge` to use that browser.
+If Microsoft Edge is already installed, use `npm run test:edge` in place of the Chromium install and test commands. Run one spec with `npm test -- tests/search.spec.ts` or `npm run test:edge -- tests/search.spec.ts`.
 
-Run `npm run lint` to check the React source, tests, and tool configuration. Run `npm run build` to type-check and build the production app.
+Playwright starts a local Vite server on port 4176, isolates browser storage, and mocks external requests. It saves failure traces under `test-results/`.
 
-The suite starts a local Vite server on port 4176. It uses fixtures for search destinations and widget APIs along with isolated browser storage. Run a single spec with `npm test -- tests/search.spec.ts`. Failed browser tests save traces in `test-results/`.
+## Build and deployment
 
-## 🔐 Configuration & Security
+```bash
+npm run build
+npm run preview
+```
 
-The weather widget uses Open-Meteo. The app runs without a weather API key.
+The build runs TypeScript checks and writes the static site to `dist/`. Use the preview URL to check the build locally. For production, publish the **contents of `dist/`** at the root of a static HTTPS site. Configure the host to serve existing files normally and return `index.html` for document requests to client routes such as `/image` and `/advanced` and the three former `/html/*.html` search URLs. The app redirects those old URLs and preserves query strings and fragments.
 
----
+After deploying, open `/image` and `/advanced` directly and reload them. Check that the backgrounds and icons render, and confirm that Weather, Crypto, and Ping can reach their providers from the deployed origin. HTTPS allows the browser to prompt for location access.
 
-## 📈 Future Improvements
+## Future improvements
 
-* Support for multiple cryptocurrencies
-* Further mobile-responsiveness improvements
-* Settings panel for weather city and quick links
+- Support for multiple cryptocurrencies
+- Further mobile-responsiveness improvements
+- Settings panel for weather city and quick links
 
----
-
-## 👨‍💻 Author
+## Author
 
 **Koosha Majlessi**
 
-* GitHub: https://github.com/KooshaMajl
-* LinkedIn: https://www.linkedin.com/in/koosha-majlessi-3b609038b
-
----
-
-## 📚 Note
+[GitHub](https://github.com/KooshaMajl) · [LinkedIn](https://www.linkedin.com/in/koosha-majlessi-3b609038b)
 
 This project was developed as a practical learning experience. AI-assisted tools were occasionally used for brainstorming, debugging, and refining implementation details, while the overall architecture, structure, and development were completed independently.
