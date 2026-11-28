@@ -1,5 +1,17 @@
 import { expect, seedStorage, test } from "./browser";
 
+test("opens saved links to the former search pages", async ({ page }) => {
+    for (const [legacy, path, title] of [
+        ["web", "/", "Web Search"],
+        ["image", "/image", "Image Search"],
+        ["advanced", "/advanced", "Advanced Search"],
+    ]) {
+        await page.goto(`/html/${legacy}.html?source=bookmark#saved`);
+        await expect(page).toHaveURL(`${path}?source=bookmark#saved`);
+        await expect(page).toHaveTitle(`${title} | Web Search App`);
+    }
+});
+
 test("keeps the theme across keyboard navigation and reload", async ({ page }) => {
     await page.goto("/");
     const toggle = page.getByRole("button", { name: "Dark mode", exact: true });

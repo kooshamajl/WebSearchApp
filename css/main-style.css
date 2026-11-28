@@ -407,8 +407,7 @@ h3 {
   }
 
   .search-but,
-  #search-button,
-  #toggleHistory {
+  #search-button {
     margin-top: 0;
   }
 

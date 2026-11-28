@@ -24,7 +24,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         setTheme(nextTheme);
 
         try {
-            // Uses the same key as the bootstrap in index.html and the legacy footer.
+            // Uses the same key as the theme bootstrap in index.html.
             localStorage.setItem("theme", nextTheme);
         } catch {
             // The theme can still change for the current session.

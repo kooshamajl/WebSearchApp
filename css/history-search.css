@@ -1,6 +1,5 @@
 /* ============================
    Search History Button + Dropdown
-   Shared by the React and legacy search pages.
    ============================ */
 
 :is(#toggleHistory, .history-toggle) {
@@ -176,12 +175,6 @@
   background: var(--history-row-hover-bg);
 }
 
-#historyList li.history-item:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: -2px;
-  background: var(--history-row-hover-bg);
-}
-
 .delete-btn {
   flex: none;
   border: none;
@@ -303,20 +296,7 @@
    Responsive Adjustments
    ============================ */
 @media (max-width: 600px) {
-  /* #historyList uses a fixed 144px left margin to sit roughly under the
-     "History" button on desktop. Once .search-wrapper wraps its items on
-     narrow screens that fixed offset no longer lines up with anything,
-     so we drop it and just center the dropdown instead. */
-  #historyList {
-    margin-left: 0;
-    width: auto;
-    max-width: min(var(--history-width), calc(100vw - 32px));
-  }
-
-  /* This file loads after main-style.css, so its unconditional
-     margin-top: var(--search-control-offset) on #toggleHistory (same ID-selector specificity)
-     would otherwise win the cascade and override main-style.css's mobile
-     reset there, leaving History out of line with the Search button. */
+  /* Align the History and Search buttons when the search controls wrap. */
   :is(#toggleHistory, .history-toggle) {
     margin-top: 0;
   }

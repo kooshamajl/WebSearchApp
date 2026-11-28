@@ -97,50 +97,11 @@ The selected widget is saved in `localStorage` and restored after reload.
 
 ```text
 WebSearchApp/
-│
-├── html/
-│   ├── web.html
-│   ├── image.html
-│   ├── advanced.html
-│   ├── partials/
-│   │   └── footer.html
-│   └── widgets/
-│       ├── weather.html
-│       ├── crypto.html
-│       ├── DailyTask.html
-│       ├── ping.html
-│       └── quick-links.html
-│
-├── css/
-│   ├── main-style.css
-│   ├── tokens.css
-│   ├── dark-mode.css
-│   ├── widgets.css
-│   ├── history-search.css
-│   ├── search-engine.css
-│   └── footer.css
-│
-├── js/
-│   ├── search.js
-│   ├── search-engine.js
-│   ├── weather.js
-│   ├── crypto.js
-│   ├── DailyTask.js
-│   ├── ping.js
-│   ├── footer.js
-│   ├── footer-loader.js
-│   └── widget-loader.js
-│
-├── src/
-│   └── assets/
-│       ├── backgrounds/
-│       │   ├── light.jpg
-│       │   └── dark.jpg
-│       └── icons/
-│           ├── icon.png
-│           └── quick-link-icons.svg
-│
-└── README.md
+|-- index.html      # React app entry
+|-- src/            # React pages, components, services, and assets
+|-- css/            # Shared application styles
+|-- tests/          # Playwright tests
+`-- README.md
 ```
 
 The modular structure keeps the project organized, maintainable, and easy to extend.
@@ -173,35 +134,14 @@ The interface follows a **minimal, clean, and modern** design approach with:
 
 ## 🚀 How to Run
 
-Because the project uses `fetch()` to load widgets and the footer dynamically, it must be served through a **local web server** instead of opening files directly with `file://`.
-
-### Clone the repository
-
 ```bash
 git clone https://github.com/kooshamajl/WebSearchApp.git
+cd WebSearchApp
+npm ci
+npm run dev
 ```
 
-### Run with VS Code
-
-Use the **Live Server** extension and open:
-
-```text
-html/web.html
-```
-
-### Or use Python
-
-```bash
-python -m http.server 8000
-```
-
-Then open:
-
-```text
-http://localhost:8000/html/web.html
-```
-
-No backend, build step, or npm installation is required.
+Open the URL printed by Vite.
 
 ---
 
@@ -223,9 +163,7 @@ The suite starts a local Vite server on port 4176. It uses fixtures for search d
 
 ## 🔐 Configuration & Security
 
-The Weather widget uses an OpenWeatherMap API key directly in `js/weather.js`.
-
-Since the application is client-side only, the key is publicly visible. Use your own key for your copy of the project. For production, a backend or serverless proxy should be used to protect the key.
+The weather widget uses Open-Meteo. The app runs without a weather API key.
 
 ---
 
@@ -234,8 +172,6 @@ Since the application is client-side only, the key is publicly visible. Use your
 * Support for multiple cryptocurrencies
 * Further mobile-responsiveness improvements
 * Settings panel for weather city and quick links
-* Backend proxy for the weather API key
-* Possible migration to React
 
 ---
 
