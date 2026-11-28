@@ -1,15 +1,11 @@
-import ConnectionWidget from "./ConnectionWidget";
-import CryptoWidget from "./CryptoWidget";
-import DailyTasksWidget from "./DailyTasksWidget";
-import QuickLinksWidget from "./QuickLinksWidget";
-import WeatherWidget from "./WeatherWidget";
+import { lazy } from "react";
 
 export const WIDGETS = {
-    weather: { label: "Weather", title: "Weather", Component: WeatherWidget },
-    crypto: { label: "Crypto", title: "Crypto", Component: CryptoWidget },
-    DailyTask: { label: "Task", title: "Daily Tasks", Component: DailyTasksWidget },
-    "quick-links": { label: "Quick links", title: "Quick links", Component: QuickLinksWidget },
-    ping: { label: "Ping", title: "Connection", Component: ConnectionWidget },
+    weather: { label: "Weather", title: "Weather", Component: lazy(() => import("./WeatherWidget")) },
+    crypto: { label: "Crypto", title: "Crypto", Component: lazy(() => import("./CryptoWidget")) },
+    DailyTask: { label: "Task", title: "Daily Tasks", Component: lazy(() => import("./DailyTasksWidget")) },
+    "quick-links": { label: "Quick links", title: "Quick links", Component: lazy(() => import("./QuickLinksWidget")) },
+    ping: { label: "Ping", title: "Connection", Component: lazy(() => import("./ConnectionWidget")) },
 } as const;
 
 export type WidgetId = keyof typeof WIDGETS;

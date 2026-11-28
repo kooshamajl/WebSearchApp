@@ -15,9 +15,7 @@ type FooterProps = {
     onWidgetChange: (widget: WidgetId) => void;
 };
 
-export default function Footer({ activeWidget, onWidgetChange }: FooterProps) {
-    const widgetMenuId = useId();
-    const { isOpen, close, trigger, toggle, openOnHover, disclosureProps } = useDropdown();
+function FooterDateTime() {
     const [now, setNow] = useState(() => new Date());
     const [dateFormat, setDateFormat] = useStoredChoice(DATE_FORMAT_KEY, ["persian", "gregorian"]);
     const [clockFormat, setClockFormat] = useStoredChoice(CLOCK_FORMAT_KEY, ["24", "12"]);
@@ -38,19 +36,27 @@ export default function Footer({ activeWidget, onWidgetChange }: FooterProps) {
     const timestamp = now.toISOString();
 
     return (
+        <div className="footer-left">
+            <Button className="footer-date-card" aria-label="Toggle date format"
+                aria-describedby="full-date" icon="calendar-days" onClick={toggleDateFormat}>
+                <time key={dateFormat} className="value-pulse" id="full-date" dateTime={timestamp}>{formatFooterDate(now, dateFormat)}</time>
+            </Button>
+
+            <Button className="footer-time-card" aria-label="Toggle clock format"
+                aria-describedby="full-time" icon="clock" onClick={toggleClockFormat}>
+                <time key={clockFormat} className="value-pulse" id="full-time" dateTime={timestamp}>{formatFooterTime(now, clockFormat)}</time>
+            </Button>
+        </div>
+    );
+}
+
+export default function Footer({ activeWidget, onWidgetChange }: FooterProps) {
+    const widgetMenuId = useId();
+    const { isOpen, close, trigger, toggle, openOnHover, disclosureProps } = useDropdown();
+
+    return (
         <footer className="site-footer app-footer">
-            <div className="footer-left">
-                <Button className="footer-date-card" aria-label="Toggle date format"
-                    aria-describedby="full-date" icon="calendar-days" onClick={toggleDateFormat}>
-                    <time key={dateFormat} className="value-pulse" id="full-date" dateTime={timestamp}>{formatFooterDate(now, dateFormat)}</time>
-                </Button>
-
-                <Button className="footer-time-card" aria-label="Toggle clock format"
-                    aria-describedby="full-time" icon="clock" onClick={toggleClockFormat}>
-                    <time key={clockFormat} className="value-pulse" id="full-time" dateTime={timestamp}>{formatFooterTime(now, clockFormat)}</time>
-                </Button>
-            </div>
-
+            <FooterDateTime />
             <div className="footer-right">
                 <div className={`widget-dropdown app-widget-dropdown${isOpen ? " open" : ""}`} {...disclosureProps}
                     onPointerLeave={(event) => {

@@ -83,7 +83,6 @@ test("renders the Bitcoin chart and persists its timeframe", async ({ page, base
 test("rechecks the connection on demand with a bodyless request", async ({ page, baseURL }) => {
     await seedStorage(page, baseURL, { activeWidget: "ping" });
     await page.clock.install({ time: new Date("2026-01-15T12:00:00Z") });
-    await page.clock.pauseAt(new Date("2026-01-15T12:00:01Z"));
     const requests: { method: string; body: string | null }[] = [];
     let status = 503;
     await page.route("https://cdn.jsdelivr.net/**", (route) => {
@@ -93,6 +92,7 @@ test("rechecks the connection on demand with a bodyless request", async ({ page,
     await page.goto("/");
     const panel = page.getByRole("region", { name: "Connection" });
     await expect(panel.getByRole("status")).toHaveText("CDN check failed");
+    await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
     const refresh = panel.getByRole("button", { name: "Check connection" });
     await expect(refresh).toHaveAttribute("aria-disabled", "false");
     const initialChecks = requests.length;
@@ -102,4 +102,52 @@ test("rechecks the connection on demand with a bodyless request", async ({ page,
     await expect(refresh).toHaveAccessibleDescription(/HTTP latency to jsDelivr \d+ ms (Excellent|Normal|Bad)/);
     expect(requests).toHaveLength(initialChecks + 1);
     for (const request of requests) expect(request).toEqual({ method: "HEAD", body: null });
+});
+
+test("pauses connection polling while hidden and resumes when visible", async ({ page, baseURL }) => {
+    await seedStorage(page, baseURL, { activeWidget: "ping" });
+    await page.clock.install({ time: new Date("2026-01-15T12:00:00Z") });
+    let checks = 0;
+    await page.route("https://cdn.jsdelivr.net/**", (route) => {
+        checks++;
+        return route.fulfill({ status: 200 });
+    });
+    await page.goto("/");
+    const refresh = page.getByRole("button", { name: "Check connection" });
+    await expect(refresh).toHaveAccessibleDescription(/HTTP latency to jsDelivr \d+ ms/);
+    await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
+    const initialChecks = checks;
+
+    await page.evaluate(() => {
+        Object.defineProperty(document, "hidden", { configurable: true, value: true });
+        document.dispatchEvent(new Event("visibilitychange"));
+    });
+    await page.clock.runFor(12000);
+    expect(checks).toBe(initialChecks);
+
+    await page.evaluate(() => {
+        Object.defineProperty(document, "hidden", { configurable: true, value: false });
+        document.dispatchEvent(new Event("visibilitychange"));
+    });
+    await expect.poll(() => checks).toBe(initialChecks + 1);
+    await expect(refresh).toHaveAttribute("aria-disabled", "false");
+    await page.getByRole("button", { name: "Widgets", exact: true }).press("Enter");
+    await page.getByRole("button", { name: "Task", exact: true }).press("Enter");
+    await expect(page.getByRole("region", { name: "Daily Tasks" })).toBeVisible();
+    await expect(refresh).toHaveCount(0);
+    await page.clock.runFor(12000);
+    expect(checks).toBe(initialChecks + 1);
+});
+
+test("keeps the widget menu usable when a widget module fails to load", async ({ page, baseURL }) => {
+    await seedStorage(page, baseURL, { activeWidget: "weather" });
+    await page.route("**/WeatherWidget.tsx*", (route) => route.abort());
+    await page.goto("/");
+    const weather = page.getByRole("region", { name: "Weather" });
+    await expect(weather.getByRole("alert")).toHaveText("Could not load this widget.");
+    await expect(weather.getByRole("button", { name: "Reload page" })).toBeVisible();
+
+    await page.getByRole("button", { name: "Widgets", exact: true }).press("Enter");
+    await page.getByRole("button", { name: "Task", exact: true }).press("Enter");
+    await expect(page.getByRole("textbox", { name: "New task" })).toBeVisible();
 });

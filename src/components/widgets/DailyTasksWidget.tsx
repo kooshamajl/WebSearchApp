@@ -22,7 +22,7 @@ export default function DailyTasksWidget() {
     const focusAfterUpdate = useRef<"input" | "last-task" | null>(null);
     const { content, captureSize } = useWidgetResize("height");
 
-    const { tasks } = taskList;
+    const { date: taskDate, tasks } = taskList;
     const limitReached = tasks.length >= DAILY_TASK_LIMIT;
 
     useEffect(() => {
@@ -35,8 +35,10 @@ export default function DailyTasksWidget() {
             nextMidnight.setHours(24, 0, 0, 0);
 
             // Catch up if midnight passed while the browser was sleeping.
-            const latest = loadTaskList(date);
-            setTaskList((previous) => previous.date === date ? previous : latest);
+            if (date !== taskDate) {
+                const latest = loadTaskList(date);
+                setTaskList((previous) => previous.date === date ? previous : latest);
+            }
             window.clearTimeout(timer);
             timer = window.setTimeout(scheduleReset, Math.max(1, nextMidnight.getTime() - now.getTime()));
         }
@@ -47,7 +49,7 @@ export default function DailyTasksWidget() {
             window.clearTimeout(timer);
             window.removeEventListener("focus", scheduleReset);
         };
-    }, []);
+    }, [taskDate]);
 
     useLayoutEffect(() => {
         const target = focusAfterUpdate.current;

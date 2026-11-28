@@ -43,6 +43,7 @@ export default function ConnectionWidget() {
         }
 
         async function checkConnection() {
+            if (document.hidden) return;
             if (!navigator.onLine) {
                 goOffline();
                 return;
@@ -67,20 +68,33 @@ export default function ConnectionWidget() {
                     pending = undefined;
                     setIsChecking(false);
                     setMeasurement((count) => count + 1);
-                    if (navigator.onLine) refreshTimer = window.setTimeout(checkConnection, REFRESH_MS);
+                    if (navigator.onLine && !document.hidden) {
+                        refreshTimer = window.setTimeout(checkConnection, REFRESH_MS);
+                    }
                 }
+            }
+        }
+
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                cancelCheck();
+                setIsChecking(false);
+            } else {
+                void checkConnection();
             }
         }
 
         refresh.current = checkConnection;
         window.addEventListener("online", checkConnection);
         window.addEventListener("offline", goOffline);
+        document.addEventListener("visibilitychange", handleVisibilityChange);
         void checkConnection();
 
         return () => {
             refresh.current = null;
             window.removeEventListener("online", checkConnection);
             window.removeEventListener("offline", goOffline);
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
             cancelCheck();
         };
     }, []);
