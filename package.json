@@ -4,7 +4,8 @@
   "description": "A modern and minimal front-end search application built with **HTML, CSS, and JavaScript**.\r The project includes multiple search modes, dynamic widgets, theme support, search history, autocomplete, and a modular structure.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "playwright test --project=chromium",
+    "test:edge": "playwright test --project=edge",
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
@@ -27,6 +28,7 @@
     "react-router": "^8.5.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "@types/react": "^19.3.3",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.3.0",

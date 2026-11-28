@@ -205,6 +205,20 @@ No backend, build step, or npm installation is required.
 
 ---
 
+## Testing
+
+Use Node.js 20.19 or newer on the 20.x line, or Node.js 22.12 or later. Run these commands from a fresh checkout.
+
+```bash
+npm ci
+npx playwright install chromium --only-shell
+npm test
+```
+
+If Microsoft Edge is already installed, run `npm ci` and `npm run test:edge` to use that browser.
+
+The suite starts a local Vite server on port 4176. It uses fixtures for search destinations and widget APIs along with isolated browser storage. Run a single spec with `npm test -- tests/search.spec.ts`. Failed browser tests save traces in `test-results/`.
+
 ## 🔐 Configuration & Security
 
 The Weather widget uses an OpenWeatherMap API key directly in `js/weather.js`.
