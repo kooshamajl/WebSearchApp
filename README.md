@@ -217,6 +217,8 @@ npm test
 
 If Microsoft Edge is already installed, run `npm ci` and `npm run test:edge` to use that browser.
 
+Run `npm run lint` to check the React source, tests, and tool configuration. Run `npm run build` to type-check and build the production app.
+
 The suite starts a local Vite server on port 4176. It uses fixtures for search destinations and widget APIs along with isolated browser storage. Run a single spec with `npm test -- tests/search.spec.ts`. Failed browser tests save traces in `test-results/`.
 
 ## 🔐 Configuration & Security

@@ -14,6 +14,7 @@ export const SEARCH_ENGINES = {
 };
 
 export type SearchEngine = keyof typeof SEARCH_ENGINES;
+export const SEARCH_ENGINE_IDS = Object.keys(SEARCH_ENGINES) as SearchEngine[];
 
 export const DEFAULT_ENGINE: SearchEngine = "google";
 export const ENGINE_STORAGE_KEY = "selectedSearchEngine";
@@ -22,7 +23,7 @@ export function getSelectedEngine(): SearchEngine {
     try {
         const stored = localStorage.getItem(ENGINE_STORAGE_KEY);
 
-        if (stored && Object.hasOwn(SEARCH_ENGINES, stored)) return stored as SearchEngine;
+        return SEARCH_ENGINE_IDS.find((engine) => engine === stored) ?? DEFAULT_ENGINE;
     } catch {
         // Use the default engine when storage is unavailable.
     }

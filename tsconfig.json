@@ -6,10 +6,14 @@
         "moduleResolution": "Bundler",
         "jsx": "react-jsx",
         "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "verbatimModuleSyntax": true,
         "noEmit": true,
         "isolatedModules": true,
         "skipLibCheck": true,
         "types": ["vite/client"]
     },
-    "include": ["src", "tests", "playwright.config.ts"]
+    "include": ["src", "tests", "playwright.config.ts", "vite.config.ts"]
 }

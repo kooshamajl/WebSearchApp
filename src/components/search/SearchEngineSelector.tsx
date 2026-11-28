@@ -1,9 +1,6 @@
-import { useEffect, useId, useRef } from "react";
-import type { KeyboardEvent } from "react";
-import { SEARCH_ENGINES, type SearchEngine } from "../../data/searchEngines";
+import { useEffect, useId, useRef, type KeyboardEvent } from "react";
+import { SEARCH_ENGINES, SEARCH_ENGINE_IDS, type SearchEngine } from "../../data/searchEngines";
 import Icon from "../common/Icon";
-
-const engines = Object.keys(SEARCH_ENGINES) as SearchEngine[];
 
 function EngineIcon({ engine }: { engine: SearchEngine }) {
     if (engine === "google") return <Icon name="google" />;
@@ -17,14 +14,14 @@ function EngineIcon({ engine }: { engine: SearchEngine }) {
     );
 }
 
-type Props = {
+type SearchEngineSelectorProps = {
     value: SearchEngine;
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
     onChange: (engine: SearchEngine) => void;
 };
 
-export default function SearchEngineSelector({ value, isOpen, onOpenChange, onChange }: Props) {
+export default function SearchEngineSelector({ value, isOpen, onOpenChange, onChange }: SearchEngineSelectorProps) {
     const id = useId();
     const root = useRef<HTMLDivElement>(null);
     const trigger = useRef<HTMLButtonElement>(null);
@@ -50,7 +47,11 @@ export default function SearchEngineSelector({ value, isOpen, onOpenChange, onCh
             case "Home": items[0].focus(); break;
             case "End": items[items.length - 1].focus(); break;
             case " ":
-            case "Enter": if (index >= 0) choose(engines[index]); break;
+            case "Enter": {
+                const engine = SEARCH_ENGINE_IDS[index];
+                if (engine) choose(engine);
+                break;
+            }
             case "Escape": onOpenChange(false); trigger.current?.focus(); break;
             default: return;
         }
@@ -90,7 +91,7 @@ export default function SearchEngineSelector({ value, isOpen, onOpenChange, onCh
             </button>
             <ul id={id} className="engine-menu" aria-label="Search engines" role="listbox"
                 ref={options} inert={!isOpen} onKeyDown={handleKeys}>
-                {engines.map((engine) => (
+                {SEARCH_ENGINE_IDS.map((engine) => (
                     <li key={engine} role="option" tabIndex={-1} aria-selected={engine === value}
                         onClick={() => choose(engine)}>
                         <span className="engine-menu-icon"><EngineIcon engine={engine} /></span>

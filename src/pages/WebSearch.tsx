@@ -57,6 +57,7 @@ export default function WebSearch() {
         }
         if (/^[a-z][a-z\d+.-]*:\/\//i.test(value) || /^https?:/i.test(value)) {
             const url = URL.canParse(value) ? new URL(value) : null;
+            // eslint-disable-next-line no-control-regex -- Reject raw control characters before using the parsed URL.
             if (!/^https?:\/\/[^/]/i.test(value) || /[\s\\\u0000-\u001f]/.test(value) ||
                 !url?.hostname || url.username || url.password) {
                 setError("Enter a valid HTTP or HTTPS address.");

@@ -1,7 +1,7 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 import Icon from "../common/Icon";
-import type { KeyboardEvent, RefObject } from "react";
 import type { SearchHistoryItem } from "../../hooks/useSearchHistory";
+
 type SearchHistoryProps = {
     items: SearchHistoryItem[];
     isOpen: boolean;
@@ -74,7 +74,7 @@ export default function SearchHistory({
         if (buttons.length === 0) return;
 
         event.preventDefault();
-        const row = (event.target as HTMLElement).closest(".history-item");
+        const row = event.target instanceof Element ? event.target.closest(".history-item") : null;
         const index = buttons.findIndex((button) => button.closest(".history-item") === row);
         const nextIndex = event.key === "ArrowDown"
             ? Math.min(index + 1, buttons.length - 1)

@@ -17,7 +17,7 @@ const DEFAULT_LINKS: QuickLink[] = [
 ];
 
 function parseHttpUrl(value: string): URL | null {
-    // Reject characters the URL parser would silently remove or reinterpret.
+    // eslint-disable-next-line no-control-regex -- Reject characters the URL parser would silently remove or reinterpret.
     if (!/^https?:\/\/[^/?#]/i.test(value) || /[\s\\\u0000-\u001f\u007f]/.test(value)) return null;
 
     try {

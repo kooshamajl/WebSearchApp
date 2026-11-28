@@ -3,20 +3,6 @@ type WeatherLocation = Coordinates & { label: string };
 
 const DEFAULT_LOCATION: WeatherLocation = { latitude: 35.69, longitude: 51.39, label: "Tehran" };
 
-type CurrentWeatherResponse = {
-    current?: {
-        temperature_2m?: number | null;
-        cloud_cover?: number | null;
-        apparent_temperature?: number | null;
-        wind_speed_10m?: number | null;
-        visibility?: number | null;
-        relative_humidity_2m?: number | null;
-    };
-    hourly?: { precipitation?: (number | null)[] };
-};
-
-type AirQualityResponse = { current?: { uv_index?: number | null; us_aqi?: number | null } };
-
 export type WeatherConditions = {
     location: WeatherLocation;
     temperature: number;
@@ -32,6 +18,10 @@ export type AirQuality = { uv: number | null; aqi: number | null };
 
 function finiteNumber(value: unknown): number | null {
     return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+    return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 function coordinateParams({ latitude, longitude }: Coordinates) {
@@ -92,8 +82,10 @@ async function fetchCurrentWeather(location: WeatherLocation, signal: AbortSigna
     params.set("hourly", "precipitation");
     params.set("forecast_hours", "1");
 
-    const response = await fetchJson(`https://api.open-meteo.com/v1/forecast?${params}`, signal) as CurrentWeatherResponse | null;
-    const current = response?.current;
+    const response = await fetchJson(`https://api.open-meteo.com/v1/forecast?${params}`, signal);
+    const current = isRecord(response) && isRecord(response.current) ? response.current : null;
+    const hourly = isRecord(response) && isRecord(response.hourly) ? response.hourly : null;
+    const precipitation: unknown = Array.isArray(hourly?.precipitation) ? hourly.precipitation[0] : null;
     const temperature = finiteNumber(current?.temperature_2m);
     if (temperature === null) throw new Error("Weather response is missing temperature");
 
@@ -105,7 +97,7 @@ async function fetchCurrentWeather(location: WeatherLocation, signal: AbortSigna
         wind: finiteNumber(current?.wind_speed_10m),
         visibility: finiteNumber(current?.visibility),
         humidity: finiteNumber(current?.relative_humidity_2m),
-        precip: finiteNumber(response?.hourly?.precipitation?.[0]),
+        precip: finiteNumber(precipitation),
     };
 }
 
@@ -127,8 +119,9 @@ export async function getCurrentWeather(signal: AbortSignal): Promise<WeatherCon
 export async function getAirQuality(location: Coordinates, signal: AbortSignal): Promise<AirQuality> {
     const params = coordinateParams(location);
     params.set("current", "uv_index,us_aqi");
-    const response = await fetchJson(`https://air-quality-api.open-meteo.com/v1/air-quality?${params}`, signal) as AirQualityResponse | null;
-    return { uv: finiteNumber(response?.current?.uv_index), aqi: finiteNumber(response?.current?.us_aqi) };
+    const response = await fetchJson(`https://air-quality-api.open-meteo.com/v1/air-quality?${params}`, signal);
+    const current = isRecord(response) && isRecord(response.current) ? response.current : null;
+    return { uv: finiteNumber(current?.uv_index), aqi: finiteNumber(current?.us_aqi) };
 }
 
 export function getForecastUrl(location: Coordinates): string {

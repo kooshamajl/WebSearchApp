@@ -6,7 +6,10 @@ import { ThemeProvider } from "./context/ThemeContext";
 
 import "./styles/app.css";
 
-createRoot(document.getElementById("root")!).render(
+const root = document.getElementById("root");
+if (!root) throw new Error("Missing application root");
+
+createRoot(root).render(
     <StrictMode>
         <ThemeProvider>
             <BrowserRouter>

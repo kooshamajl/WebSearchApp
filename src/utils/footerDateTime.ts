@@ -1,5 +1,5 @@
-export type DateFormat = "persian" | "gregorian";
-export type ClockFormat = "24" | "12";
+type DateFormat = "persian" | "gregorian";
+type ClockFormat = "24" | "12";
 
 const gregorianDate = new Intl.DateTimeFormat("en-US", {
     calendar: "gregory", weekday: "long", year: "numeric", month: "long", day: "numeric",

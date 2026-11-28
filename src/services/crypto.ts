@@ -1,7 +1,5 @@
 export type PricePoint = { timestamp: number; price: number };
-export type CryptoTimeframe = "24h" | "7d";
-
-type MarketChartResponse = { prices?: unknown };
+type CryptoTimeframe = "24h" | "7d";
 
 const HOUR_MS = 60 * 60 * 1000;
 const CHART_POINTS = 45;
@@ -11,9 +9,9 @@ export async function fetchCryptoHistory(signal: AbortSignal): Promise<PricePoin
     const response = await fetch(MARKET_URL, { signal });
     if (!response.ok) throw new Error(`Bitcoin price request failed (${response.status})`);
 
-    const data = await response.json() as MarketChartResponse | null;
+    const data: unknown = await response.json();
     const prices = new Map<number, number>();
-    if (Array.isArray(data?.prices)) {
+    if (data !== null && typeof data === "object" && "prices" in data && Array.isArray(data.prices)) {
         for (const row of data.prices as unknown[]) {
             if (!Array.isArray(row)) continue;
             const [timestamp, price] = row as unknown[];
