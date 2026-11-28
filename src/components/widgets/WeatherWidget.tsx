@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Icon from "../common/Icon";
+import { useStoredChoice } from "../../hooks/useStoredChoice";
 import { getAirQuality, getCurrentWeather, getForecastUrl, type AirQuality, type WeatherConditions } from "../../services/weather";
 const LEFT_METRICS = ["clouds", "feelsLike", "wind", "visibility"] as const;
 const RIGHT_METRICS = ["humidity", "uv", "aqi", "precip"] as const;
@@ -16,23 +17,6 @@ const labels: Record<Metric, string> = {
     clouds: "Clouds", feelsLike: "Feels Like", wind: "Wind", visibility: "Visibility",
     humidity: "Humidity", uv: "UV Index", aqi: "AQI", precip: "Precip (1 hr)",
 };
-
-function readPreference<T extends string>(key: string, options: readonly [T, ...T[]]): T {
-    try {
-        const saved = localStorage.getItem(key);
-        return options.find((option) => option === saved) ?? options[0];
-    } catch {
-        return options[0];
-    }
-}
-
-function savePreference(key: string, value: string) {
-    try {
-        localStorage.setItem(key, value);
-    } catch {
-        // The controls still work when storage is unavailable.
-    }
-}
 
 function nextMetric<T extends Metric>(options: readonly T[], current: T): T {
     return options[(options.indexOf(current) + 1) % options.length];
@@ -61,9 +45,9 @@ function formatMetric(metric: Metric, reading: Reading, unit: Unit): string {
 export default function WeatherWidget() {
     const [weather, setWeather] = useState<WeatherState>({ status: "loading" });
     const [attempt, setAttempt] = useState(0);
-    const [unit, setUnit] = useState<Unit>(() => readPreference(UNIT_KEY, ["C", "F"]));
-    const [left, setLeft] = useState(() => readPreference(LEFT_METRIC_KEY, LEFT_METRICS));
-    const [right, setRight] = useState(() => readPreference(RIGHT_METRIC_KEY, RIGHT_METRICS));
+    const [unit, setUnit] = useStoredChoice(UNIT_KEY, ["C", "F"]);
+    const [left, setLeft] = useStoredChoice(LEFT_METRIC_KEY, LEFT_METRICS);
+    const [right, setRight] = useStoredChoice(RIGHT_METRIC_KEY, RIGHT_METRICS);
     const [changed, setChanged] = useState({ temperature: false, left: false, right: false });
 
     useEffect(() => {
@@ -121,7 +105,6 @@ export default function WeatherWidget() {
                     const next = unit === "C" ? "F" : "C";
                     setUnit(next);
                     setChanged((previous) => ({ ...previous, temperature: true }));
-                    savePreference(UNIT_KEY, next);
                 }}>
                     <span key={unit} className={changed.temperature ? "value-pulse" : undefined}>{temperature}</span>{" "}
                     <span className="weather-unit">°{unit}</span>
@@ -136,7 +119,6 @@ export default function WeatherWidget() {
                     const next = nextMetric(LEFT_METRICS, left);
                     setLeft(next);
                     setChanged((previous) => ({ ...previous, left: true }));
-                    savePreference(LEFT_METRIC_KEY, next);
                 }}>
                     <span className="weather-detail-label">{labels[left]}</span>
                     <span key={left} className={`weather-detail-value${changed.left ? " value-pulse" : ""}`}>{leftValue}</span>
@@ -146,7 +128,6 @@ export default function WeatherWidget() {
                     const next = nextMetric(RIGHT_METRICS, right);
                     setRight(next);
                     setChanged((previous) => ({ ...previous, right: true }));
-                    savePreference(RIGHT_METRIC_KEY, next);
                 }}>
                     <span className="weather-detail-label">{labels[right]}</span>
                     <span key={right} className={`weather-detail-value${changed.right ? " value-pulse" : ""}`}>{rightValue}</span>

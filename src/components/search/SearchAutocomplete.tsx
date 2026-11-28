@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Icon from "../common/Icon";
+import SearchInput from "./SearchInput";
 import type { KeyboardEvent, RefObject } from "react";
 import type { SearchHistoryItem } from "../../hooks/useSearchHistory";
 import { getSearchSuggestions } from "../../utils/searchSuggestions";
@@ -78,11 +79,9 @@ export default function SearchAutocomplete({
 
     return (
         <div className="search-autocomplete" ref={rootRef}>
-            <input
+            <SearchInput
                 ref={inputRef}
                 id={inputId}
-                className="search-bar"
-                type="text"
                 placeholder="Search or enter a URL"
                 aria-label="Search or enter a URL"
                 aria-invalid={!!errorId}
@@ -92,7 +91,6 @@ export default function SearchAutocomplete({
                 aria-controls={listId}
                 aria-expanded={expanded}
                 aria-activedescendant={suggestions[activeIndex] ? `${listId}-${activeIndex}` : undefined}
-                autoComplete="off"
                 value={query}
                 onChange={(event) => {
                     setActiveIndex(-1);

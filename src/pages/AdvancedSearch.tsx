@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
-import Icon from "../components/common/Icon";
+import SearchButton from "../components/search/SearchButton";
+import SearchInput from "../components/search/SearchInput";
 import {
     ADVANCED_SEARCH_FIELDS,
     buildAdvancedSearchUrl,
@@ -51,14 +52,11 @@ export default function AdvancedSearch() {
                 {ADVANCED_SEARCH_FIELDS.map(({ id, name, label }, index) => (
                     <div className="row" key={name}>
                         <label htmlFor={id}>{label}:</label>
-                        <input
+                        <SearchInput
                             ref={index === 0 ? firstInput : undefined}
                             id={id}
                             name={name}
-                            className="search-bar"
-                            type="text"
                             maxLength={50}
-                            autoComplete="off"
                             aria-describedby={index === 0 && showError ? "advanced-search-error" : undefined}
                             onChange={(event) => {
                                 if (event.target.value.trim()) setShowError(false);
@@ -67,9 +65,7 @@ export default function AdvancedSearch() {
                     </div>
                 ))}
 
-                <button type="submit" id="search-button" className="search-but">
-                    <Icon name="filter" /> Advanced Search
-                </button>
+                <SearchButton icon="filter">Advanced Search</SearchButton>
             </form>
         </div>
     );

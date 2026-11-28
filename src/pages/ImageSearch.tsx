@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
-import Icon from "../components/common/Icon";
+import SearchButton from "../components/search/SearchButton";
+import SearchInput from "../components/search/SearchInput";
 import type { FormEvent, KeyboardEvent } from "react";
 import { useSearchInputFocus } from "../hooks/useSearchInputFocus";
 import {
@@ -55,18 +56,15 @@ export default function ImageSearch() {
             <h1 className="visually-hidden" id="image-search-title">Image Search</h1>
             <form className="image-search-form" role="search" aria-labelledby="image-search-title" onSubmit={handleSubmit}>
                 <div className="image-search-wrap">
-                    <input
+                    <SearchInput
                         ref={inputRef}
                         id="imageSearchInput"
-                        className="search-bar"
-                        type="text"
                         name="q"
                         placeholder="Search Google Images..."
                         aria-label="Search Google Images"
                         aria-autocomplete="inline"
                         aria-invalid={isInvalid}
                         aria-describedby={isInvalid ? "image-search-error" : undefined}
-                        autoComplete="off"
                         maxLength={50}
                         value={query}
                         onChange={(event) => {
@@ -95,9 +93,7 @@ export default function ImageSearch() {
                 {isInvalid && <p className="search-feedback" id="image-search-error" role="alert">Enter a search term.</p>}
 
                 <div>
-                    <button type="submit" id="search-button" className="search-but">
-                        <Icon name="image" /> Image Search
-                    </button>
+                    <SearchButton icon="image">Image Search</SearchButton>
                 </div>
             </form>
         </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Icon from "../common/Icon";
-import { fetchCryptoHistory, getCryptoRange, makeDemoHistory, sampleCryptoChart, type CryptoTimeframe, type PricePoint } from "../../services/crypto";
+import { fetchCryptoHistory, getCryptoRange, makeDemoHistory, sampleCryptoChart, type PricePoint } from "../../services/crypto";
+import { useStoredChoice } from "../../hooks/useStoredChoice";
 import CryptoChart from "./CryptoChart";
 
 const TIMEFRAME_KEY = "cryptoTimeframe";
@@ -13,16 +14,8 @@ const priceFormat = new Intl.NumberFormat("en-US", {
 
 type CryptoSnapshot = { history: PricePoint[]; status: "current" | "stale" | "demo" };
 
-function readTimeframe(): CryptoTimeframe {
-    try {
-        return localStorage.getItem(TIMEFRAME_KEY) === "7d" ? "7d" : "24h";
-    } catch {
-        return "24h";
-    }
-}
-
 export default function CryptoWidget() {
-    const [timeframe, setTimeframe] = useState(readTimeframe);
+    const [timeframe, selectTimeframe] = useStoredChoice(TIMEFRAME_KEY, TIMEFRAMES);
     const [snapshot, setSnapshot] = useState<CryptoSnapshot | null>(null);
     const [attempt, setAttempt] = useState(0);
     const [retrying, setRetrying] = useState(false);
@@ -64,15 +57,6 @@ export default function CryptoWidget() {
             request?.abort();
         };
     }, [attempt]);
-
-    function selectTimeframe(selected: CryptoTimeframe) {
-        setTimeframe(selected);
-        try {
-            localStorage.setItem(TIMEFRAME_KEY, selected);
-        } catch {
-            // The selected timeframe still applies while the widget is open.
-        }
-    }
 
     const range = snapshot ? getCryptoRange(snapshot.history, timeframe) : [];
     const latest = snapshot?.history.at(-1);

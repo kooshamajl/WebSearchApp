@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { isWidgetId, type WidgetId } from "../data/widgets";
+import { isWidgetId, type WidgetId } from "../components/widgets/widgetRegistry";
 
 const STORAGE_KEY = "activeWidget";
 

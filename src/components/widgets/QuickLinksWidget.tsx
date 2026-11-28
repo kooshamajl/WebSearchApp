@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import Icon from "../common/Icon";
+import IconButton from "../common/IconButton";
 import type { FormEvent } from "react";
 import iconSprite from "../../assets/icons/quick-link-icons.svg?url";
 import { useWidgetResize } from "../../hooks/useWidgetResize";
@@ -124,10 +124,10 @@ export default function QuickLinksWidget() {
             )}
 
             <span className="quick-link-divider" aria-hidden="true" />
-            <button type="button" className="quick-link-add-btn" ref={addButton} aria-label="Add quick link"
+            <IconButton className="quick-link-add-btn" ref={addButton} icon="plus" aria-label="Add quick link"
                 aria-haspopup="dialog" aria-expanded={isOpen} aria-controls="quickLinkPopover"
                 disabled={limitReached} title={limitReached ? `Limit reached (${QUICK_LINK_LIMIT})` : "Add quick link"}
-                onClick={() => { if (!isOpen) { setError(null); setIsOpen(true); } }}><Icon name="plus" /></button>
+                onClick={() => { if (!isOpen) { setError(null); setIsOpen(true); } }} />
 
             <form className={`quick-link-popover${isOpen ? " open" : ""}`} id="quickLinkPopover" ref={dialog}
                 role="dialog" aria-label="Add quick link" inert={!isOpen} onSubmit={handleSave} onBlur={(event) => {

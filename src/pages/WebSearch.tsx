@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import type { FormEvent } from "react";
-import Icon from "../components/common/Icon";
+import SearchButton from "../components/search/SearchButton";
 
 import SearchAutocomplete from "../components/search/SearchAutocomplete";
 import SearchEngineSelector from "../components/search/SearchEngineSelector";
@@ -103,9 +103,7 @@ export default function WebSearch() {
                             onChange={handleEngineChange}
                         />
                     </div>
-                    <button type="submit" className="search-but" id="search-button">
-                        <Icon name="magnifying-glass" /> Search
-                    </button>
+                    <SearchButton icon="magnifying-glass">Search</SearchButton>
                     <SearchHistory
                         items={items}
                         isOpen={openPanel === "history"}

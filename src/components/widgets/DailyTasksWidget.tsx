@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Icon from "../common/Icon";
+import IconButton from "../common/IconButton";
 import type { FormEvent } from "react";
 import { useWidgetResize } from "../../hooks/useWidgetResize";
 import { DAILY_TASK_LIMIT, TASK_TEXT_LIMIT, getTaskDateKey, readDailyTasks, saveDailyTasks, type DailyTask } from "../../utils/dailyTasks";
@@ -133,9 +134,7 @@ export default function DailyTasksWidget() {
                             setDraft(event.target.value);
                             if (event.target.value.trim()) setShowError(false);
                         }} />
-                    <button id="taskAddBtn" type="submit" className="task-add-btn" aria-label="Add task" disabled={limitReached}>
-                        <Icon name="plus" />
-                    </button>
+                    <IconButton id="taskAddBtn" type="submit" className="task-add-btn" icon="plus" aria-label="Add task" disabled={limitReached} />
                 </div>
                 {showError && <p id="task-input-error" role="alert">Enter a task of up to {TASK_TEXT_LIMIT} characters.</p>}
             </form>
